@@ -106,8 +106,8 @@ public class CompanyDao {
 		return myCompany;
 	}
 
-	public HashMap<Integer, String> selectAllCompanies() {
-		HashMap<Integer, String> myList = new HashMap<>();
+	public HashMap<Integer, Company> selectAllCompanies() {
+		HashMap<Integer, Company> myList = new HashMap<>();
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		String sql = "SELECT * FROM company";
@@ -119,7 +119,8 @@ public class CompanyDao {
 			ResultSet rs = myPreStmt.executeQuery();
 			while (rs.next()) {
 
-				myList.put(rs.getInt("id"), rs.getString("name"));
+				myList.put(rs.getInt("id"),
+						new Company(rs.getInt("id"), rs.getString("name")));
 			}
 		} catch (SQLException e) {
 		} finally {

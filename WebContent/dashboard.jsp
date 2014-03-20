@@ -32,8 +32,9 @@
 					<td><c:out value="${computer.name}" /></td>
 					<td><c:out value="${computer.introduced}" /></td>
 					<td><c:out value="${computer.discontinued}" /></td>
-					<c:if test="${computer.companyId != null }"></c:if>
+					<c:if test="${computer.companyId != null }">
 						<td><c:out value="${companies.get(computer.companyId).name}" /></td>
+					</c:if>
 				</tr>
 			</c:forEach>
 		</tbody>
