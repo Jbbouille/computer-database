@@ -1,6 +1,6 @@
 Computer-Database
 -----------------------------------------	
-This repository is a training. It will help me to become badass in Java.
+This repository is a training. It will help me to become a badass in Java.
 
 Roadmap of this project dispo on : http://goo.gl/KJpx02
 
