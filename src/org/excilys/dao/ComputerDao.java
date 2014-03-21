@@ -11,7 +11,8 @@ import org.excilys.util.Utilities;
 
 public class ComputerDao {
 
-	ConnectionManager manager = ConnectionManager.getInstance();
+	private ConnectionManager manager = ConnectionManager.getInstance();
+	private static ComputerDao instance;
 
 	public void insertComputer(Computer myComputer) {
 		Connection myCon = null;
@@ -32,7 +33,7 @@ public class ComputerDao {
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
 		} finally {
-			closeAll(myPreStmt, myCon);
+			ConnectionManager.closeAll(myPreStmt, myCon, null);
 		}
 	}
 
@@ -50,7 +51,7 @@ public class ComputerDao {
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
 		} finally {
-			closeAll(myPreStmt, myCon);
+			ConnectionManager.closeAll(myPreStmt, myCon, null);
 		}
 	}
 
@@ -74,27 +75,18 @@ public class ComputerDao {
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
 		} finally {
-			closeAll(myPreStmt, myCon);
+			ConnectionManager.closeAll(myPreStmt, myCon, null);
 		}
 	}
 
-	private void closeAll(PreparedStatement myPreStmt, Connection myCon) {
-
-		try {
-			if (myPreStmt != null)
-				myPreStmt.close();
-			if (myCon != null)
-				myPreStmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public Computer selectComputer(int id) {
 		Computer myComputer = null;
 
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
+		ResultSet mySet = null;
+		
 		String sql = "SELECT * FROM computer WHERE id = ?";
 
 		try {
@@ -103,16 +95,16 @@ public class ComputerDao {
 
 			myPreStmt.setInt(1, id);
 
-			ResultSet rs = myPreStmt.executeQuery();
-			rs.next();
+			mySet = myPreStmt.executeQuery();
+			mySet.next();
 
-			myComputer = new Computer(rs.getInt("id"), rs.getString("name"),
-					Utilities.stringToDateSQl(rs.getString("introduced")),
-					Utilities.stringToDateSQl(rs.getString("discontinued")),
-					rs.getInt("company_id"));
+			myComputer = new Computer(mySet.getInt("id"), mySet.getString("name"),
+					Utilities.stringToDateSQl(mySet.getString("introduced")),
+					Utilities.stringToDateSQl(mySet.getString("discontinued")),
+					mySet.getInt("company_id"));
 		} catch (SQLException e) {
 		} finally {
-			closeAll(myPreStmt, myCon);
+			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
 		}
 
 		return myComputer;
@@ -120,31 +112,42 @@ public class ComputerDao {
 
 	public ArrayList<Computer> selectAllComputers() {
 		ArrayList<Computer> myList = new ArrayList<>();
+		
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
+		ResultSet mySet = null;
 		String sql = "SELECT * FROM computer";
 
 		try {
 			myCon = manager.createConnection();
 			myPreStmt = myCon.prepareStatement(sql);
 
-			ResultSet rs = myPreStmt.executeQuery();
-			while (rs.next()) {
+			mySet = myPreStmt.executeQuery();
+			while (mySet.next()) {
 
 				Computer myComputer = new Computer(
-						rs.getInt("id"),
-						rs.getString("name"),
-						rs.getDate("introduced"),
-						rs.getDate("discontinued"),
-						rs.getInt("company_id"));
+						mySet.getInt("id"),
+						mySet.getString("name"),
+						mySet.getDate("introduced"),
+						mySet.getDate("discontinued"),
+						mySet.getInt("company_id"));
 
 				myList.add(myComputer);
 			}
 		} catch (SQLException e) {
 		} finally {
-			closeAll(myPreStmt, myCon);
+			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
 		}
+		
 		return myList;
-
 	}
+	
+	public static ComputerDao getInstance() {
+		if (instance == null) instance = new ComputerDao();
+		return instance;
+	}
+
+	protected ComputerDao() {
+	}
+	
 }

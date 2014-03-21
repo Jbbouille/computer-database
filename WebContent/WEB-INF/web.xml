@@ -7,12 +7,12 @@
 	<servlet>
 		<description>
 		</description>
-		<display-name>TestServlet</display-name>
-		<servlet-name>TestServlet</servlet-name>
-		<servlet-class>org.excilys.servlet.ServletDashboard</servlet-class>
+		<display-name>Dashboard</display-name>
+		<servlet-name>Dashboard</servlet-name>
+		<servlet-class>org.excilys.servlet.Dashboard</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>TestServlet</servlet-name>
+		<servlet-name>Dashboard</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	<resource-ref>

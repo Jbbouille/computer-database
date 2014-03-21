@@ -1,6 +1,8 @@
 package org.excilys.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.naming.Context;
@@ -13,9 +15,7 @@ public class ConnectionManager {
 	private static ConnectionManager instance;
 
 	public static ConnectionManager getInstance() {
-		if (instance == null) {
-			instance = new ConnectionManager();
-		}
+		if (instance == null) instance = new ConnectionManager();
 		return instance;
 	}
 
@@ -35,5 +35,15 @@ public class ConnectionManager {
 			e.printStackTrace();
 		}
 		return mConnection;
+	}
+	
+	protected static void closeAll(PreparedStatement myPreStmt, Connection myCon, ResultSet mySet) {
+		try {
+			if (myCon != null) myCon.close();
+			if (mySet != null) mySet.close();
+			if (myPreStmt != null) myPreStmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -42,6 +42,14 @@ public class Computer {
 		this.companyId = companyId;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Computer(int id, String name, Date introduced, Date discontinued,
 			int companyId) {
 		super();
@@ -52,24 +60,25 @@ public class Computer {
 		this.companyId = companyId;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
-		return super.equals(obj);
+		if(obj == null) return false;
+		Computer comp = (Computer) obj;
+		if(this.id == comp.id ) return true;
+		else return false;
 	}
-
+	
+	@Override
+	public int hashCode() {
+		return this.companyId;
+	}
+	
 	@Override
 	public String toString() {
-		return "Computer -- id :" + id +", Name :"+name+ ", Introduced :" + introduced
-				+ ", Discontinued :" + discontinued;
+		return "Computer -- id :" + id + ", Name :" + name + ", Introduced :"
+				+ introduced + ", Discontinued :" + discontinued;
 	}
 
+	public Computer() {
+	}
 }

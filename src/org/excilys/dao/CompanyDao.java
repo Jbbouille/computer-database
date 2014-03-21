@@ -4,15 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.excilys.model.Company;
 
 public class CompanyDao {
 
-	ConnectionManager manager = ConnectionManager.getInstance();
-
+	private ConnectionManager manager = ConnectionManager.getInstance();
+	private static CompanyDao instance;
+	
 	public void insertCompany(Company myCompany) {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
@@ -27,7 +27,7 @@ public class CompanyDao {
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
 		} finally {
-			closeAll(myPreStmt, myCon);
+			ConnectionManager.closeAll(myPreStmt, myCon, null);
 		}
 	}
 
@@ -45,7 +45,7 @@ public class CompanyDao {
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
 		} finally {
-			closeAll(myPreStmt, myCon);
+			ConnectionManager.closeAll(myPreStmt, myCon, null);
 		}
 	}
 
@@ -65,19 +65,7 @@ public class CompanyDao {
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
 		} finally {
-			closeAll(myPreStmt, myCon);
-		}
-	}
-
-	private void closeAll(PreparedStatement myPreStmt, Connection myCon) {
-
-		try {
-			if (myPreStmt != null)
-				myPreStmt.close();
-			if (myCon != null)
-				myPreStmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			ConnectionManager.closeAll(myPreStmt, myCon, null);
 		}
 	}
 
@@ -86,6 +74,7 @@ public class CompanyDao {
 
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
+		ResultSet mySet = null;
 		String sql = "SELECT * FROM company WHERE id = ?";
 
 		try {
@@ -94,38 +83,48 @@ public class CompanyDao {
 
 			myPreStmt.setInt(1, id);
 
-			ResultSet rs = myPreStmt.executeQuery();
-			rs.next();
+			mySet = myPreStmt.executeQuery();
+			mySet.next();
 
-			myCompany = new Company(rs.getInt("id"), rs.getString("name"));
+			myCompany = new Company(mySet.getInt("id"), mySet.getString("name"));
 		} catch (SQLException e) {
 		} finally {
-			closeAll(myPreStmt, myCon);
+			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
 		}
 
 		return myCompany;
 	}
 
-	public HashMap<Integer, String> selectAllCompanies() {
-		HashMap<Integer, String> myList = new HashMap<>();
+	public HashMap<Integer, Company> selectAllCompanies() {
+		HashMap<Integer, Company> myList = new HashMap<>();
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
+		ResultSet mySet = null;
 		String sql = "SELECT * FROM company";
 
 		try {
 			myCon = manager.createConnection();
 			myPreStmt = myCon.prepareStatement(sql);
 
-			ResultSet rs = myPreStmt.executeQuery();
-			while (rs.next()) {
+			mySet = myPreStmt.executeQuery();
+			while (mySet.next()) {
 
-				myList.put(rs.getInt("id"), rs.getString("name"));
+				myList.put(mySet.getInt("id"), new Company(mySet.getInt("id"),
+						mySet.getString("name")));
 			}
 		} catch (SQLException e) {
 		} finally {
-			closeAll(myPreStmt, myCon);
+			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
 		}
+		
 		return myList;
+	}
+	
+	public static CompanyDao getInstance() {
+		if (instance == null) instance = new CompanyDao();
+		return instance;
+	}
 
+	protected CompanyDao() {
 	}
 }

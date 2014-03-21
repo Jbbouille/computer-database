@@ -1,7 +1,9 @@
 <jsp:include page="include/header.jsp" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
 <section id="main">
-	<h1 id="homeTitle">456 Computers found</h1>
+	<h1 id="homeTitle"><c:out value="${fn:length(Computers)} Computers Found"></c:out></h1>
 	<div id="actions">
 		<form action="" method="GET">
 			<input type="search" id="searchbox" name="search" value=""
@@ -32,8 +34,9 @@
 					<td><c:out value="${computer.name}" /></td>
 					<td><c:out value="${computer.introduced}" /></td>
 					<td><c:out value="${computer.discontinued}" /></td>
-					<c:if test="${computer.companyId != null }"></c:if>
+					<c:if test="${computer.companyId != null }">
 						<td><c:out value="${companies.get(computer.companyId).name}" /></td>
+					</c:if>
 				</tr>
 			</c:forEach>
 		</tbody>
