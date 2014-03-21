@@ -12,7 +12,7 @@ public class CompanyDao {
 
 	private ConnectionManager manager = ConnectionManager.getInstance();
 	private static CompanyDao instance;
-	
+
 	public void insertCompany(Company myCompany) {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
@@ -111,15 +111,19 @@ public class CompanyDao {
 
 				myList.put(mySet.getInt("id"), new Company(mySet.getInt("id"),
 						mySet.getString("name")));
+
+				myList.put(mySet.getInt("id"),
+						new Company(mySet.getInt("id"), mySet.getString("name")));
+
 			}
 		} catch (SQLException e) {
 		} finally {
 			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
 		}
-		
+
 		return myList;
 	}
-	
+
 	public static CompanyDao getInstance() {
 		if (instance == null) instance = new CompanyDao();
 		return instance;
