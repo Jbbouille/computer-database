@@ -4,46 +4,43 @@
 
 <section id="main">
 	<h1>Add Computer</h1>
-	<form action="addcomputer" method="POST">
-		<fieldset>
-			<div class="clearfix">
-				<label for="name">Computer name:</label>
-				<div class="input">
-					<input type="text" name="name" />
-					<span class="help-inline">Required</span>
+
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<form action="addcomputer" method="POST">
+				<div class="form-group">
+					<label for="name">Name</label> <input type="text"
+						class="form-control" id="name" placeholder="Enter name">
 				</div>
-			</div>
-	
-			<div class="clearfix">
-				<label for="introduced">Introduced date:</label>
-				<div class="input">
-					<input type="date" name="introducedDate"/>
-					<span class="help-inline">YYYY-MM-DD</span>
+				<div class="form-group">
+					<label for="date">Introduced</label> <input type=date
+						class="form-control" id="introducedDate"
+						placeholder="date introduced">
 				</div>
-			</div>
-			<div class="clearfix">
-				<label for="discontinued">Discontinued date:</label>
-				<div class="input">
-					<input type="date" name="discontinuedDate"/>
-					<span class="help-inline">YYYY-MM-DD</span>
+				<div class="form-group">
+					<label for="exampleInputPassword1">Discontinued</label> <input
+						type="password" class="form-control" id="discontinuedDate"
+						placeholder="date discontinued">
 				</div>
-			</div>
-			<div class="clearfix">
 				<label for="company">Company Name:</label>
-				<div class="input">
-					<select name="company">
-					<c:forEach var="company" items="${companies}">
-						<option value="${company.key}"><c:out value="${company.value.name}" /></option>
+				<div class="controls">
+					<select class="form-control" name="company">
+						<option value=""></option>
+						<c:forEach var="company" items="${companies}">
+							<option value="${company.key}"><c:out
+									value="${company.value.name}" /></option>
 						</c:forEach>
 					</select>
 				</div>
-			</div>
-		</fieldset>
-		<div class="actions">
-			<input type="submit" value="Add" class="btn primary">
-			or <a href="dashboard" class="btn">Cancel</a>
+				<br>
+				<button type="submit" class="btn btn-default">Submit</button>
+				or <a class="btn btn-success" id="cancel" href="dashboard">Cancel</a>
+			</form>
+
 		</div>
-	</form>
+	</div>
+
+
 </section>
 
 <jsp:include page="include/footer.jsp" />

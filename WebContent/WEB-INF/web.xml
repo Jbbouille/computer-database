@@ -18,6 +18,17 @@
 		<servlet-name>AddComputer</servlet-name>
 		<servlet-class>org.excilys.servlet.AddComputer</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ModifyComputer</display-name>
+		<servlet-name>ModifyComputer</servlet-name>
+		<servlet-class>org.excilys.servlet.ModifyComputer</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ModifyComputer</servlet-name>
+		<url-pattern>/modifycomputer</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>AddComputer</servlet-name>
 		<url-pattern>/addcomputer</url-pattern>

@@ -33,7 +33,7 @@
 			<c:set var="companie" value="${companies}"></c:set>
 			<c:forEach var="computer" items="${computers}">
 				<tr>
-					<td><c:out value="${computer.name}" /></td>
+					<td><a href="modifycomputer?id=${computer.id}"><c:out value="${computer.name}" /></a></td>
 					<td><c:out value="${computer.introduced}" /></td>
 					<td><c:out value="${computer.discontinued}" /></td>
 					<c:if test="${computer.companyId != null }">
