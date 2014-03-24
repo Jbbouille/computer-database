@@ -11,6 +11,17 @@
 		<servlet-name>Dashboard</servlet-name>
 		<servlet-class>org.excilys.servlet.Dashboard</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>AddComputer</display-name>
+		<servlet-name>AddComputer</servlet-name>
+		<servlet-class>org.excilys.servlet.AddComputer</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddComputer</servlet-name>
+		<url-pattern>/addcomputer</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Dashboard</servlet-name>
 		<url-pattern>/dashboard</url-pattern>

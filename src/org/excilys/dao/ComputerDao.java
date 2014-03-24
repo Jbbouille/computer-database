@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.excilys.model.Computer;
 
-public interface ComputerDaoInterface {
+public interface ComputerDao {
 	
 	public void insertComputer(Computer myComputer);
 	

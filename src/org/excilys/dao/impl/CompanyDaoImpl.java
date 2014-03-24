@@ -4,37 +4,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 
-import org.excilys.dao.ComputerDaoInterface;
-import org.excilys.model.Computer;
-import org.excilys.util.Utilities;
+import org.excilys.dao.CompanyDao;
+import org.excilys.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ComputerDao implements ComputerDaoInterface {
-	
-	static final Logger LOG = LoggerFactory.getLogger(ComputerDao.class);
+public class CompanyDaoImpl implements CompanyDao {
+
+	static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
 	private ConnectionManager manager = ConnectionManager.getInstance();
-	private static ComputerDao instance;
+	private static CompanyDaoImpl instance;
 
 	@Override
-	public void insertComputer(Computer myComputer) {
+	public void insertCompany(Company myCompany) {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
-		String sql = "INSERT INTO computer-database-db.computer (id, name, introduced, discontinued, company_id) VALUES (NULL, ?, ?, ?, ?)";
+		String sql = "INSERT INTO computer-database-db.company (id, name) VALUES (NULL, ?)";
 		LOG.debug("requete : " + sql);
 
 		try {
 			myCon = manager.createConnection();
 			myPreStmt = myCon.prepareStatement(sql);
 
-			myPreStmt.setString(1, myComputer.getName());
-			myPreStmt.setString(2,
-					Utilities.dateSQLtoString(myComputer.getIntroduced()));
-			myPreStmt.setString(3,
-					Utilities.dateSQLtoString(myComputer.getDiscontinued()));
-			myPreStmt.setInt(4, myComputer.getCompanyId());
+			myPreStmt.setString(1, myCompany.getName());
 
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
@@ -45,17 +39,17 @@ public class ComputerDao implements ComputerDaoInterface {
 	}
 
 	@Override
-	public void deleteComputer(Computer myComputer) {
+	public void deleteCompany(Company myCompany) {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
-		String sql = "DELETE FROM computer-database-db.computer WHERE computer.id = ?";
+		String sql = "DELETE FROM computer-database-db.company WHERE company.id = ?";
 		LOG.debug("requete : " + sql);
-
+		
 		try {
 			myCon = manager.createConnection();
 			myPreStmt = myCon.prepareStatement(sql);
 
-			myPreStmt.setInt(1, myComputer.getId());
+			myPreStmt.setInt(1, myCompany.getId());
 
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
@@ -66,23 +60,19 @@ public class ComputerDao implements ComputerDaoInterface {
 	}
 
 	@Override
-	public void updateComputer(Computer myComputer) {
+	public void updateCompany(Company myCompany) {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
-		String sql = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE computer.id = ?";
+		String sql = "UPDATE comany SET id = ?, name = ? WHERE company.id = ?";
 		LOG.debug("requete : " + sql);
-
+		
 		try {
 			myCon = manager.createConnection();
 			myPreStmt = myCon.prepareStatement(sql);
 
-			myPreStmt.setInt(1, myComputer.getId());
-			myPreStmt.setString(2, myComputer.getName());
-			myPreStmt.setString(3,
-					Utilities.dateSQLtoString(myComputer.getIntroduced()));
-			myPreStmt.setString(4,
-					Utilities.dateSQLtoString(myComputer.getDiscontinued()));
-			myPreStmt.setInt(5, myComputer.getId());
+			myPreStmt.setInt(1, myCompany.getId());
+			myPreStmt.setString(2, myCompany.getName());
+			myPreStmt.setInt(3, myCompany.getId());
 
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
@@ -93,16 +83,15 @@ public class ComputerDao implements ComputerDaoInterface {
 	}
 
 	@Override
-	public Computer selectComputer(int id) {
-		Computer myComputer = null;
+	public Company selectCompany(int id) {
+		Company myCompany = null;
 
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
-		
-		String sql = "SELECT * FROM computer WHERE id = ?";
+		String sql = "SELECT * FROM company WHERE id = ?";
 		LOG.debug("requete : " + sql);
-
+		
 		try {
 			myCon = manager.createConnection();
 			myPreStmt = myCon.prepareStatement(sql);
@@ -112,29 +101,25 @@ public class ComputerDao implements ComputerDaoInterface {
 			mySet = myPreStmt.executeQuery();
 			mySet.next();
 
-			myComputer = new Computer(mySet.getInt("id"), mySet.getString("name"),
-					Utilities.stringToDateSQl(mySet.getString("introduced")),
-					Utilities.stringToDateSQl(mySet.getString("discontinued")),
-					mySet.getInt("company_id"));
+			myCompany = new Company(mySet.getInt("id"), mySet.getString("name"));
 		} catch (SQLException e) {
 			LOG.error("Error in execution of resquest :"+e);
 		} finally {
 			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
 		}
 
-		return myComputer;
+		return myCompany;
 	}
-	
+
 	@Override
-	public ArrayList<Computer> selectAllComputers() {
-		ArrayList<Computer> myList = new ArrayList<>();
-		
+	public HashMap<Integer, Company> selectAllCompanies() {
+		HashMap<Integer, Company> myList = new HashMap<>();
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
-		String sql = "SELECT * FROM computer";
+		String sql = "SELECT * FROM company";
 		LOG.debug("requete : " + sql);
-
+		
 		try {
 			myCon = manager.createConnection();
 			myPreStmt = myCon.prepareStatement(sql);
@@ -142,30 +127,25 @@ public class ComputerDao implements ComputerDaoInterface {
 			mySet = myPreStmt.executeQuery();
 			while (mySet.next()) {
 
-				Computer myComputer = new Computer(
-						mySet.getInt("id"),
-						mySet.getString("name"),
-						mySet.getDate("introduced"),
-						mySet.getDate("discontinued"),
-						mySet.getInt("company_id"));
+				myList.put(mySet.getInt("id"), new Company(mySet.getInt("id"),
+						mySet.getString("name")));
 
-				myList.add(myComputer);
 			}
 		} catch (SQLException e) {
 			LOG.error("Error in execution of resquest :"+e);
 		} finally {
 			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
 		}
-		
+
 		return myList;
 	}
-	
-	public static ComputerDao getInstance() {
-		if (instance == null) instance = new ComputerDao();
+
+	public static CompanyDaoImpl getInstance() {
+		if (instance == null)
+			instance = new CompanyDaoImpl();
 		return instance;
 	}
 
-	protected ComputerDao() {
+	protected CompanyDaoImpl() {
 	}
-	
 }

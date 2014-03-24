@@ -12,7 +12,7 @@
 				placeholder="Search name" class="form-control"> <input type="submit"
 				id="searchsubmit" value="Filter by name" class="btn btn-primary">
 		</form>
-		<a class="btn btn-success" id="add" href="addComputer.jsp">Add
+		<a class="btn btn-success" id="add" href="addcomputer">Add
 			Computer</a>
 	</div>
 

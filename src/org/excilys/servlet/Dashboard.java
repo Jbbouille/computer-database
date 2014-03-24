@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.excilys.dao.impl.CompanyDao;
-import org.excilys.dao.impl.ComputerDao;
+import org.excilys.service.impl.CompanyServiceImpl;
+import org.excilys.service.impl.ComputerServiceImpl;
 
 public class Dashboard extends HttpServlet {
 
@@ -18,11 +18,11 @@ public class Dashboard extends HttpServlet {
 
 		resp.setContentType("text/html");
 		
-		ComputerDao mComputerDao = ComputerDao.getInstance();
-		CompanyDao mCompanyDao = CompanyDao.getInstance();
-
-		req.setAttribute("computers", mComputerDao.selectAllComputers());
-		req.setAttribute("companies", mCompanyDao.selectAllCompanies());
+		ComputerServiceImpl mComputerService = new ComputerServiceImpl();
+		CompanyServiceImpl mCompanyService = new CompanyServiceImpl();
+		
+		req.setAttribute("computers", mComputerService.selectAllComputers());
+		req.setAttribute("companies", mCompanyService.selectAllCompanies());
 
 		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req,
 				resp);

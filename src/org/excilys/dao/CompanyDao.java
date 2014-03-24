@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import org.excilys.model.Company;
 
-public interface CompanyDaoInterface {
+public interface CompanyDao {
 
 	public void insertCompany(Company myCompany);
 	
