@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.excilys.dao.CompanyDao;
-import org.excilys.dao.ComputerDao;
+import org.excilys.dao.impl.CompanyDao;
+import org.excilys.dao.impl.ComputerDao;
 
 public class Dashboard extends HttpServlet {
 
@@ -24,7 +24,7 @@ public class Dashboard extends HttpServlet {
 		req.setAttribute("computers", mComputerDao.selectAllComputers());
 		req.setAttribute("companies", mCompanyDao.selectAllCompanies());
 
-		getServletContext().getRequestDispatcher("/dashboard.jsp").forward(req,
+		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req,
 				resp);
 	}
 }

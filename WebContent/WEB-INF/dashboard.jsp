@@ -3,18 +3,20 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <section id="main">
-	<h1 id="homeTitle"><c:out value="${fn:length(Computers)} Computers Found"></c:out></h1>
+	<h1 id="homeTitle">
+		<c:out value="${fn:length(computers)} Computers Found"></c:out>
+	</h1>
 	<div id="actions">
-		<form action="" method="GET">
+		<form action="" method="GET" class="form-inline">
 			<input type="search" id="searchbox" name="search" value=""
-				placeholder="Search name"> <input type="submit"
-				id="searchsubmit" value="Filter by name" class="btn primary">
+				placeholder="Search name" class="form-control"> <input type="submit"
+				id="searchsubmit" value="Filter by name" class="btn btn-primary">
 		</form>
-		<a class="btn success" id="add" href="addComputer.jsp">Add
+		<a class="btn btn-success" id="add" href="addComputer.jsp">Add
 			Computer</a>
 	</div>
 
-	<table class="computers zebra-striped">
+	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
 				<!-- Variable declarations for passing labels as parameters -->
@@ -28,14 +30,14 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:set var="companies" value="${Companies}"></c:set>
-			<c:forEach var="computer" items="${Computers}">
+			<c:set var="companie" value="${companies}"></c:set>
+			<c:forEach var="computer" items="${computers}">
 				<tr>
 					<td><c:out value="${computer.name}" /></td>
 					<td><c:out value="${computer.introduced}" /></td>
 					<td><c:out value="${computer.discontinued}" /></td>
 					<c:if test="${computer.companyId != null }">
-						<td><c:out value="${companies.get(computer.companyId).name}" /></td>
+						<td><c:out value="${companie.get(computer.companyId).name}" /></td>
 					</c:if>
 				</tr>
 			</c:forEach>

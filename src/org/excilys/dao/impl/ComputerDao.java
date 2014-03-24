@@ -1,4 +1,4 @@
-package org.excilys.dao;
+package org.excilys.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,18 +6,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.excilys.dao.ComputerDaoInterface;
 import org.excilys.model.Computer;
 import org.excilys.util.Utilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class ComputerDao {
-
+public class ComputerDao implements ComputerDaoInterface {
+	
+	static final Logger LOG = LoggerFactory.getLogger(ComputerDao.class);
 	private ConnectionManager manager = ConnectionManager.getInstance();
 	private static ComputerDao instance;
 
+	@Override
 	public void insertComputer(Computer myComputer) {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		String sql = "INSERT INTO computer-database-db.computer (id, name, introduced, discontinued, company_id) VALUES (NULL, ?, ?, ?, ?)";
+		LOG.debug("requete : " + sql);
 
 		try {
 			myCon = manager.createConnection();
@@ -32,15 +38,18 @@ public class ComputerDao {
 
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
+			LOG.error("Error in execution of resquest :"+e);
 		} finally {
 			ConnectionManager.closeAll(myPreStmt, myCon, null);
 		}
 	}
 
+	@Override
 	public void deleteComputer(Computer myComputer) {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		String sql = "DELETE FROM computer-database-db.computer WHERE computer.id = ?";
+		LOG.debug("requete : " + sql);
 
 		try {
 			myCon = manager.createConnection();
@@ -50,15 +59,18 @@ public class ComputerDao {
 
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
+			LOG.error("Error in execution of resquest :"+e);
 		} finally {
 			ConnectionManager.closeAll(myPreStmt, myCon, null);
 		}
 	}
 
+	@Override
 	public void updateComputer(Computer myComputer) {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		String sql = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE computer.id = ?";
+		LOG.debug("requete : " + sql);
 
 		try {
 			myCon = manager.createConnection();
@@ -74,12 +86,13 @@ public class ComputerDao {
 
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
+			LOG.error("Error in execution of resquest :"+e);
 		} finally {
 			ConnectionManager.closeAll(myPreStmt, myCon, null);
 		}
 	}
 
-
+	@Override
 	public Computer selectComputer(int id) {
 		Computer myComputer = null;
 
@@ -88,6 +101,7 @@ public class ComputerDao {
 		ResultSet mySet = null;
 		
 		String sql = "SELECT * FROM computer WHERE id = ?";
+		LOG.debug("requete : " + sql);
 
 		try {
 			myCon = manager.createConnection();
@@ -103,13 +117,15 @@ public class ComputerDao {
 					Utilities.stringToDateSQl(mySet.getString("discontinued")),
 					mySet.getInt("company_id"));
 		} catch (SQLException e) {
+			LOG.error("Error in execution of resquest :"+e);
 		} finally {
 			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
 		}
 
 		return myComputer;
 	}
-
+	
+	@Override
 	public ArrayList<Computer> selectAllComputers() {
 		ArrayList<Computer> myList = new ArrayList<>();
 		
@@ -117,6 +133,7 @@ public class ComputerDao {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT * FROM computer";
+		LOG.debug("requete : " + sql);
 
 		try {
 			myCon = manager.createConnection();
@@ -135,6 +152,7 @@ public class ComputerDao {
 				myList.add(myComputer);
 			}
 		} catch (SQLException e) {
+			LOG.error("Error in execution of resquest :"+e);
 		} finally {
 			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
 		}
