@@ -4,7 +4,7 @@
 
 <section id="main">
 	<h1 id="homeTitle">
-		<c:out value="${fn:length(computers)} Computers Found"></c:out>
+		<c:out value="${numberOfComputers} Computers Found"></c:out>
 	</h1>
 	<div id="actions">
 		<form action="" method="GET" class="form-inline">

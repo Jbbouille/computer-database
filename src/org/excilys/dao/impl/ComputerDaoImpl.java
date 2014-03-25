@@ -30,16 +30,25 @@ public class ComputerDaoImpl implements ComputerDao {
 			myPreStmt = myCon.prepareStatement(sql);
 
 			myPreStmt.setString(1, myComputer.getName());
-			
-			if(myComputer.getDiscontinued() == null) myPreStmt.setNull(3, Types.NULL);
-			else myPreStmt.setString(3,Utilities.dateSQLtoString(myComputer.getDiscontinued()));
-			
-			if(myComputer.getIntroduced() == null) myPreStmt.setNull(2, Types.NULL);
-			else myPreStmt.setString(2,Utilities.dateSQLtoString(myComputer.getIntroduced()));
-						
-			if(myComputer.getCompanyId() == -1) myPreStmt.setNull(4, Types.NULL);
-			else myPreStmt.setInt(4, myComputer.getCompanyId());
-			
+
+			if (myComputer.getDiscontinued() == null)
+				myPreStmt.setNull(3, Types.NULL);
+			else
+				myPreStmt
+						.setString(3, Utilities.dateSQLtoString(myComputer
+								.getDiscontinued()));
+
+			if (myComputer.getIntroduced() == null)
+				myPreStmt.setNull(2, Types.NULL);
+			else
+				myPreStmt.setString(2,
+						Utilities.dateSQLtoString(myComputer.getIntroduced()));
+
+			if (myComputer.getCompanyId() == -1)
+				myPreStmt.setNull(4, Types.NULL);
+			else
+				myPreStmt.setInt(4, myComputer.getCompanyId());
+
 			LOG.debug("request : " + myPreStmt.toString());
 			myPreStmt.execute();
 		} catch (SQLException e) {
@@ -83,15 +92,24 @@ public class ComputerDaoImpl implements ComputerDao {
 
 			myPreStmt.setInt(1, myComputer.getId());
 			myPreStmt.setString(2, myComputer.getName());
-			
-			if(myComputer.getDiscontinued() == null) myPreStmt.setNull(4, Types.NULL);
-			else myPreStmt.setString(4,Utilities.dateSQLtoString(myComputer.getDiscontinued()));
-			
-			if(myComputer.getIntroduced() == null) myPreStmt.setNull(3, Types.NULL);
-			else myPreStmt.setString(3,Utilities.dateSQLtoString(myComputer.getIntroduced()));
-						
-			if(myComputer.getCompanyId() == -1) myPreStmt.setNull(5, Types.NULL);
-			else myPreStmt.setInt(5, myComputer.getCompanyId());
+
+			if (myComputer.getDiscontinued() == null)
+				myPreStmt.setNull(4, Types.NULL);
+			else
+				myPreStmt
+						.setString(4, Utilities.dateSQLtoString(myComputer
+								.getDiscontinued()));
+
+			if (myComputer.getIntroduced() == null)
+				myPreStmt.setNull(3, Types.NULL);
+			else
+				myPreStmt.setString(3,
+						Utilities.dateSQLtoString(myComputer.getIntroduced()));
+
+			if (myComputer.getCompanyId() == -1)
+				myPreStmt.setNull(5, Types.NULL);
+			else
+				myPreStmt.setInt(5, myComputer.getCompanyId());
 
 			myPreStmt.setInt(6, myComputer.getId());
 
@@ -172,4 +190,66 @@ public class ComputerDaoImpl implements ComputerDao {
 	protected ComputerDaoImpl() {
 	}
 
+	@Override
+	public ArrayList<Computer> selectPartsComputers(int startLimit, int finLimit) {
+		ArrayList<Computer> myList = new ArrayList<>();
+
+		Connection myCon = null;
+		PreparedStatement myPreStmt = null;
+		ResultSet mySet = null;
+		String sql = "SELECT * FROM computer LIMIT ?,?";
+		LOG.debug("requete : " + sql);
+
+		try {
+			myCon = manager.createConnection();
+			myPreStmt = myCon.prepareStatement(sql);
+
+			myPreStmt.setInt(1, startLimit);
+			myPreStmt.setInt(2, finLimit);
+
+			mySet = myPreStmt.executeQuery();
+			while (mySet.next()) {
+
+				Computer myComputer = new Computer(mySet.getInt("id"),
+						mySet.getString("name"), mySet.getDate("introduced"),
+						mySet.getDate("discontinued"),
+						mySet.getInt("company_id"));
+
+				myList.add(myComputer);
+			}
+		} catch (SQLException e) {
+			LOG.error("Error in execution of request :" + e);
+		} finally {
+			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
+		}
+
+		return myList;
+	}
+
+	@Override
+	public int countNumberComputers() {
+		int number = 0;
+
+		Connection myCon = null;
+		PreparedStatement myPreStmt = null;
+		ResultSet mySet = null;
+		String sql = "SELECT count(*) FROM computer ";
+		LOG.debug("requete : " + sql);
+
+		try {
+			myCon = manager.createConnection();
+			myPreStmt = myCon.prepareStatement(sql);
+
+			mySet = myPreStmt.executeQuery();
+			mySet.next();
+			number = mySet.getInt(1);
+
+		} catch (SQLException e) {
+			LOG.error("Error in execution of request :" + e);
+		} finally {
+			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
+		}
+
+		return number;
+	}
 }

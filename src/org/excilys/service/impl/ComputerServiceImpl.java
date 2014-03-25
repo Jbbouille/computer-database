@@ -33,7 +33,27 @@ public class ComputerServiceImpl implements ComputerService {
 		return DaoFactory.getInstanceComputerDao().selectAllComputers();
 	}
 	
-	protected ComputerServiceImpl(){
+	@Override
+	public ArrayList<Computer> selectPartsComputers(int startLimit, int numberOfRow) {
+		return DaoFactory.getInstanceComputerDao().selectPartsComputers(startLimit, numberOfRow);
+	}
+
+	@Override
+	public int countNumberComputers() {
+		return DaoFactory.getInstanceComputerDao().countNumberComputers();
+	}
+
+	@Override
+	public double numberPage(int numberComputers, int numberOfRow) {
+		return Math.ceil(numberComputers / numberOfRow);
+	}
+
+	@Override
+	public int getStartLimit(int idPage, int numberOfRow) {
+		return (idPage-1)*numberOfRow;
+	}
+
+	protected ComputerServiceImpl() {
 		
 	}
 }

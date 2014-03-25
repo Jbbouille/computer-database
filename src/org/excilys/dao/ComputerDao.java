@@ -16,4 +16,8 @@ public interface ComputerDao {
 	
 	public ArrayList<Computer> selectAllComputers();
 
+	public ArrayList<Computer> selectPartsComputers(int startLimit, int finLimit);
+	
+	public int countNumberComputers();
+
 }
