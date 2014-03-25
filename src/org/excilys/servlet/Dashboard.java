@@ -7,8 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.excilys.service.impl.CompanyServiceImpl;
-import org.excilys.service.impl.ComputerServiceImpl;
+import org.excilys.service.impl.ServiceFactory;
 
 public class Dashboard extends HttpServlet {
 
@@ -18,11 +17,8 @@ public class Dashboard extends HttpServlet {
 
 		resp.setContentType("text/html");
 		
-		ComputerServiceImpl mComputerService = new ComputerServiceImpl();
-		CompanyServiceImpl mCompanyService = new CompanyServiceImpl();
-		
-		req.setAttribute("computers", mComputerService.selectAllComputers());
-		req.setAttribute("companies", mCompanyService.selectAllCompanies());
+		req.setAttribute("computers", ServiceFactory.getComputerServ().selectAllComputers());
+		req.setAttribute("companies", ServiceFactory.getCompanyServ().selectAllCompanies());
 
 		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req,
 				resp);

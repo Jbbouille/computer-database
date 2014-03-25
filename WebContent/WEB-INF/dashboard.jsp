@@ -27,6 +27,7 @@
 				<th>Discontinued Date</th>
 				<!-- Table header for Company -->
 				<th>Company</th>
+				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -39,6 +40,7 @@
 					<c:if test="${computer.companyId != null }">
 						<td><c:out value="${companie.get(computer.companyId).name}" /></td>
 					</c:if>
+					<td><a href="deletecomputer?id=${computer.id}" class="btn btn-warning">Delete</a>
 				</tr>
 			</c:forEach>
 		</tbody>

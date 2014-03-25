@@ -8,8 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.excilys.model.Computer;
-import org.excilys.service.impl.CompanyServiceImpl;
-import org.excilys.service.impl.ComputerServiceImpl;
+import org.excilys.service.impl.ServiceFactory;
 import org.excilys.util.Utilities;
 
 public class AddComputer extends HttpServlet {
@@ -17,17 +16,19 @@ public class AddComputer extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
-		ComputerServiceImpl mService = new ComputerServiceImpl();
-		
+			
 		Computer myComputer = new Computer();
-		
-		myComputer.setIntroduced(Utilities.stringToDateSQl(req.getParameter("introducedDate")));
-		myComputer.setDiscontinued(Utilities.stringToDateSQl(req.getParameter("discontinuedDate")));
+
 		myComputer.setName(req.getParameter("name"));
+	
 		myComputer.setCompanyId(Integer.valueOf(req.getParameter("company")));
+
+		if(!(req.getParameter("introducedDate").equals(""))) myComputer.setIntroduced(Utilities.stringToDate(req.getParameter("introducedDate")));
+		if(!(req.getParameter("discontinuedDate").equals(""))) myComputer.setDiscontinued(Utilities.stringToDate(req.getParameter("discontinuedDate")));
 		
-		mService.insertComputer(myComputer);
+		ServiceFactory.getComputerServ().insertComputer(myComputer);
+		
+		resp.sendRedirect("dashboard");
 		
 	}
 
@@ -37,9 +38,7 @@ public class AddComputer extends HttpServlet {
 
 		resp.setContentType("text/html");
 
-		CompanyServiceImpl mService = new CompanyServiceImpl();
-
-		req.setAttribute("companies", mService.selectAllCompanies());
+		req.setAttribute("companies", ServiceFactory.getCompanyServ().selectAllCompanies());
 
 		getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp")
 				.forward(req, resp);

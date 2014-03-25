@@ -7,11 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.excilys.model.Computer;
 import org.excilys.service.impl.ServiceFactory;
-import org.excilys.util.Utilities;
 
-public class ModifyComputer extends HttpServlet {
+public class DeleteComputer extends HttpServlet {
 
 	private int id;
 
@@ -20,16 +18,8 @@ public class ModifyComputer extends HttpServlet {
 			throws ServletException, IOException {
 		
 		resp.setContentType("text/html");
-		
-		Computer myComputer = new Computer();
-		
-		myComputer.setId(id);
-		myComputer.setName(req.getParameter("name"));
-		myComputer.setCompanyId(Integer.valueOf(req.getParameter("company")));
-		if(!(req.getParameter("introducedDate").equals(""))) myComputer.setIntroduced(Utilities.stringToDate(req.getParameter("introducedDate")));
-		if(!(req.getParameter("discontinuedDate").equals(""))) myComputer.setDiscontinued(Utilities.stringToDate(req.getParameter("discontinuedDate")));
 
-		ServiceFactory.getComputerServ().updateComputer(myComputer);
+		ServiceFactory.getComputerServ().deleteComputer(ServiceFactory.getComputerServ().selectComputer(id));
 		
 		resp.sendRedirect("dashboard");
 	}
@@ -41,11 +31,10 @@ public class ModifyComputer extends HttpServlet {
 		resp.setContentType("text/html");
 
 		id = Integer.valueOf(req.getParameter("id"));
-
-		req.setAttribute("companies", ServiceFactory.getCompanyServ().selectAllCompanies());
+		
 		req.setAttribute("computer", ServiceFactory.getComputerServ().selectComputer(id));
 
-		getServletContext().getRequestDispatcher("/WEB-INF/modifyComputer.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/deleteComputer.jsp")
 				.forward(req, resp);
 	}
 }

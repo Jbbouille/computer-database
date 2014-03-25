@@ -3,28 +3,28 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <section id="main">
-	<h1>Add Computer</h1>
+	<h1>Update Computer</h1>
 	<c:set var="computer" value="${computer}"></c:set>
-	<form action="addcomputer" method="POST">
+	<form action="modifycomputer" method="POST">
 		<div class="form-group">
 			<label for="name">Name</label> <input type="text"
-				class="form-control" id="name" placeholder="Enter name"
+				class="form-control" name="name" placeholder="Enter name"
 				value="${computer.name}">
 		</div>
 		<div class="form-group">
-			<label for="text">Introduced</label> <input type=date
-				class="form-control" id="introducedDate"
-				placeholder="date introduced" value="${computer.introduced}">
+			<label for="text">Introduced</label> <input type=text
+				class="form-control" name="introducedDate"
+				placeholder="date introduced" value="${computer.introduced}" id="datepickerIntroduced">
 		</div>
 		<div class="form-group">
-			<label for="exampleInputPassword1">Discontinued</label> <input
-				type="text" class="form-control" id="discontinuedDate"
-				placeholder="date discontinued" value="${computer.discontinued}">
+			<label for="text">Discontinued</label> <input
+				type="text" class="form-control" name="discontinuedDate"
+				placeholder="date discontinued" value="${computer.discontinued}" id="datepickerDiscontinued">
 		</div>
 		<label for="company">Company Name:</label>
 		<div class="controls">
 			<select class="form-control" name="company">
-				<option value=""></option>
+				<option value="-1"></option>
 				<c:forEach var="company" items="${companies}">
 					<option ${computer.companyId == company.key ? 'selected':''} value="${company.key}">
 						<c:out value="${company.value.name}" />
@@ -36,7 +36,6 @@
 		<button type="submit" class="btn btn-default">Submit</button>
 		or <a class="btn btn-success" id="cancel" href="dashboard">Cancel</a>
 	</form>
-
 </section>
 
 <jsp:include page="include/footer.jsp" />

@@ -8,24 +8,25 @@
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<form action="addcomputer" method="POST">
+			
 				<div class="form-group">
 					<label for="name">Name</label> <input type="text"
-						class="form-control" id="name" placeholder="Enter name">
+						class="form-control" name="name" placeholder="Enter name">
 				</div>
 				<div class="form-group">
-					<label for="date">Introduced</label> <input type=date
-						class="form-control" id="introducedDate"
-						placeholder="date introduced">
+					<label for="introduced">Introduced</label> <input type=text
+						class="form-control" name="introducedDate"
+						placeholder="date introduced" id="datepickerIntroduced">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1">Discontinued</label> <input
-						type="password" class="form-control" id="discontinuedDate"
-						placeholder="date discontinued">
+					<label for="discontinued">Discontinued</label> <input type="text"
+						class="form-control" name="discontinuedDate"
+						placeholder="date discontinued" id="datepickerDiscontinued">
 				</div>
 				<label for="company">Company Name:</label>
 				<div class="controls">
 					<select class="form-control" name="company">
-						<option value=""></option>
+						<option value="-1"></option>
 						<c:forEach var="company" items="${companies}">
 							<option value="${company.key}"><c:out
 									value="${company.value.name}" /></option>

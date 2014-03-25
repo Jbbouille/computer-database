@@ -15,7 +15,6 @@ public class CompanyDaoImpl implements CompanyDao {
 
 	static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
 	private ConnectionManager manager = ConnectionManager.getInstance();
-	private static CompanyDaoImpl instance;
 
 	@Override
 	public void insertCompany(Company myCompany) {
@@ -138,12 +137,6 @@ public class CompanyDaoImpl implements CompanyDao {
 		}
 
 		return myList;
-	}
-
-	public static CompanyDaoImpl getInstance() {
-		if (instance == null)
-			instance = new CompanyDaoImpl();
-		return instance;
 	}
 
 	protected CompanyDaoImpl() {

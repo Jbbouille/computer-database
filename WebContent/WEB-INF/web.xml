@@ -25,6 +25,17 @@
 		<servlet-name>ModifyComputer</servlet-name>
 		<servlet-class>org.excilys.servlet.ModifyComputer</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>DeleteComputer</display-name>
+		<servlet-name>DeleteComputer</servlet-name>
+		<servlet-class>org.excilys.servlet.DeleteComputer</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteComputer</servlet-name>
+		<url-pattern>/deletecomputer</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ModifyComputer</servlet-name>
 		<url-pattern>/modifycomputer</url-pattern>
