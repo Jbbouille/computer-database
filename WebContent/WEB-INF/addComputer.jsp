@@ -7,7 +7,7 @@
 
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<form action="addcomputer" method="POST">
+			<form  id="frm" action="addcomputer" method="POST">
 			
 				<div class="form-group">
 					<label for="name">Name</label> <input type="text"

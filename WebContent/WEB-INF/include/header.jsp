@@ -11,16 +11,11 @@
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
-<script src="//code.jquery.com/jquery-1.9.1.js"></script>
-<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<script>
-	$(function() {
-		$("#datepickerIntroduced").datepicker({ dateFormat: "yy-mm-dd" });
-	});
-	$(function() {
-		$("#datepickerDiscontinued").datepicker({ dateFormat: "yy-mm-dd" });
-	});
-</script>
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript"></script>
 </head>
 <body>
 	<nav class="navbar navbar-default" role="navigation">
