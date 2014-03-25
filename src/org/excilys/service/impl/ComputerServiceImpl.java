@@ -45,12 +45,12 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public double numberPage(int numberComputers, int numberOfRow) {
-		return Math.ceil(numberComputers / numberOfRow);
+		return Math.ceil(numberComputers / numberOfRow)+1;
 	}
 
 	@Override
 	public int getStartLimit(int idPage, int numberOfRow) {
-		return (idPage-1)*numberOfRow;
+		return ((idPage-1)*numberOfRow);
 	}
 
 	protected ComputerServiceImpl() {

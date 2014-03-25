@@ -9,12 +9,17 @@
 	<div id="actions">
 		<form action="" method="GET" class="form-inline">
 			<input type="search" id="searchbox" name="search" value=""
-				placeholder="Search name" class="form-control"> <input type="submit"
-				id="searchsubmit" value="Filter by name" class="btn btn-primary">
+				placeholder="Search name" class="form-control"> <input
+				type="submit" id="searchsubmit" value="Filter by name"
+				class="btn btn-primary">
 		</form>
 		<a class="btn btn-success" id="add" href="addcomputer">Add
 			Computer</a>
+
+		<jsp:include page="include/pagination.jsp" />
 	</div>
+
+
 
 	<table class="table table-striped table-hover">
 		<thead>
@@ -34,13 +39,15 @@
 			<c:set var="companie" value="${companies}"></c:set>
 			<c:forEach var="computer" items="${computers}">
 				<tr>
-					<td><a href="modifycomputer?id=${computer.id}"><c:out value="${computer.name}" /></a></td>
+					<td><a href="modifycomputer?id=${computer.id}"><c:out
+								value="${computer.name}" /></a></td>
 					<td><c:out value="${computer.introduced}" /></td>
 					<td><c:out value="${computer.discontinued}" /></td>
 					<c:if test="${computer.companyId != null }">
 						<td><c:out value="${companie.get(computer.companyId).name}" /></td>
 					</c:if>
-					<td><a href="deletecomputer?id=${computer.id}" class="btn btn-warning">Delete</a>
+					<td><a href="deletecomputer?id=${computer.id}"
+						class="btn btn-warning">Delete</a>
 				</tr>
 			</c:forEach>
 		</tbody>
