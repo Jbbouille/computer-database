@@ -10,14 +10,15 @@
 	<div id="actions">
 		<form action="dashboard" method="GET" class="form-inline">
 			<input type="search" id="searchbox" name="search"
-				placeholder="Search name" class="form-control" value="${search}"> <input
-				type="submit" id="searchsubmit" value="Filter by name"
+				placeholder="Search name" class="form-control" value="${search}">
+			<input type="submit" id="searchsubmit" value="Filter by name"
 				class="btn btn-primary">
 		</form>
 		<a class="btn btn-success" id="add" href="addcomputer">Add
 			Computer</a>
 		<m:pagination currentPage="${currentPage}"
-			numberOfPages="${numberOfPages}" search="${search}"></m:pagination>
+			numberOfPages="${numberOfPages}" search="${search}"
+			orderBy="${orderby}" bool="${bool}"></m:pagination>
 	</div>
 
 
@@ -25,11 +26,29 @@
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
-				<th><a href="dashboard?search=${search}&orderby=name">Computer Name</a></th>
-				<th><a href="dashboard?search=${search}&orderby=introduced">Introduced Date</a></th>
-				<th><a href="dashboard?search=${search}&orderby=discontinued">Discontinued Date</a></th>
-				<th><a href="dashboard?search=${search}&orderby=company">Company</a></th>
-				<th>Action</th>
+				<c:choose>
+					<c:when test="${bool==true}">
+						<th><a href="dashboard?search=${search}&orderby=name&bool=false">Computer
+								Name</a></th>
+						<th><a href="dashboard?search=${search}&orderby=introduced&bool=false">Introduced
+								Date</a></th>
+						<th><a href="dashboard?search=${search}&orderby=discontinued&bool=false">Discontinued
+								Date</a></th>
+						<th><a href="dashboard?search=${search}&orderby=company&bool=false">Company</a></th>
+						<th>Action</th>
+					</c:when>
+					<c:otherwise>
+						<th><a href="dashboard?search=${search}&orderby=name&bool=true">Computer
+								Name</a></th>
+						<th><a href="dashboard?search=${search}&orderby=introduced&bool=true">Introduced
+								Date</a></th>
+						<th><a href="dashboard?search=${search}&orderby=discontinued&bool=true">Discontinued
+								Date</a></th>
+						<th><a href="dashboard?search=${search}&orderby=company&bool=true">Company</a></th>
+						<th>Action</th>
+					</c:otherwise>
+				</c:choose>
+
 			</tr>
 		</thead>
 		<tbody>

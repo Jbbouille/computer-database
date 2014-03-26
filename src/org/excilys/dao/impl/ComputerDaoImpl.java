@@ -256,23 +256,24 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	public ArrayList<Computer> selectPartsSearchComputers(String myName,
-			int startLimit, int finLimit) {
+	public ArrayList<Computer> selectPartsSearchComputers(String myName, String myOrder, int startLimit, int numberOfRow) {
 		ArrayList<Computer> myList = new ArrayList<>();
 
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
-		String sql = "SELECT * FROM computer WHERE name like ? LIMIT ?,?";
+		StringBuilder sql = new StringBuilder(); 
+		sql.append("SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name like ? OR company.name like ? ORDER BY ").append(myOrder).append(" LIMIT ?,?");
 		LOG.debug("requete : " + sql);
 
 		try {
 			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql);
+			myPreStmt = myCon.prepareStatement(sql.toString());
 
 			myPreStmt.setString(1, "%" + myName + "%");
-			myPreStmt.setInt(2, startLimit);
-			myPreStmt.setInt(3, finLimit);
+			myPreStmt.setString(2, "%" + myName + "%");
+			myPreStmt.setInt(3, startLimit);
+			myPreStmt.setInt(4, numberOfRow);
 
 			LOG.debug(myPreStmt.toString());
 			mySet = myPreStmt.executeQuery();

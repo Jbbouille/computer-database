@@ -5,6 +5,8 @@
 <%@ attribute name="numberOfPages" required="true" type="Integer" %>
 <%@ attribute name="currentPage" required="true" type="Integer" %>
 <%@ attribute name="search" required="true" type="String" %>
+<%@ attribute name="orderBy" required="true" type="String" %>
+<%@ attribute name="bool" required="true" type="Boolean" %>
 
 <ul class="pagination">
 	<c:choose>
@@ -12,17 +14,17 @@
 			<li class="disabled"><a href="#"><span>&laquo;</span></a></li>
 		</c:when>
 		<c:otherwise>
-			<li><a href="dashboard?orderby=${orderby}&search=${search}&page=${currentPage -1}">&laquo;</a></li>
+			<li><a href="dashboard?orderby=${orderBy}&bool=${bool}&search=${search}&page=${currentPage -1}">&laquo;</a></li>
 		</c:otherwise>
 	</c:choose>
 	<c:forEach var="i" begin="1" end="${numberOfPages}">
 		<c:choose>
 			<c:when test="${currentPage == i}">
-				<li class="active"><a href="dashboard?orderby=${orderby}&search=${search}&page=${i}">${i}<span
+				<li class="active"><a href="dashboard?orderby=${orderBy}&bool=${bool}&search=${search}&page=${i}">${i}<span
 						class="sr-only">(current)</span></a></li>
 			</c:when>
 			<c:otherwise>
-				<li><a href="dashboard?orderby=${orderby}&search=${search}&page=${i}">${i}</a></li>
+				<li><a href="dashboard?orderby=${orderBy}&bool=${bool}&search=${search}&page=${i}">${i}</a></li>
 			</c:otherwise>
 		</c:choose>
 	</c:forEach>
@@ -31,7 +33,7 @@
 			<li class="disabled"><a href="#"><span>&raquo;</span></a></li>
 		</c:when>
 		<c:otherwise>
-			<li><a href="dashboard?orderby=${orderby}&search=${search}&page=${currentPage +1}">&raquo;</a></li>
+			<li><a href="dashboard?orderby=${orderBy}&bool=${bool}&search=${search}&page=${currentPage +1}">&raquo;</a></li>
 		</c:otherwise>
 	</c:choose>
 

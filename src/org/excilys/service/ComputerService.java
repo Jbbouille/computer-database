@@ -25,6 +25,8 @@ public interface ComputerService {
 
 	public int getStartLimit(int idPage, int numberOfRow);
 
-	public ArrayList<Computer> searchComputer(String myName, int startLimit,
-			int finLimit);
+	public ArrayList<Computer> searchComputer(String myName, String myOrder, int startLimit,
+			int numberOfRow);
+	
+	public String getOrderBy(String myOrder, Boolean desc);
 }

@@ -20,7 +20,6 @@ public interface ComputerDao {
 
 	public int countNumberComputers(String myName);
 
-	public ArrayList<Computer> selectPartsSearchComputers(String myName,
-			int startLimit, int finLimit);
+	public ArrayList<Computer> selectPartsSearchComputers(String myName, String myOrder, int startLimit, int numberOfRow);
 
 }

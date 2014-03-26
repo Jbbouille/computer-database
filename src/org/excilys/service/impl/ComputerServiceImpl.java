@@ -60,9 +60,41 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public ArrayList<Computer> searchComputer(String myName, int startLimit,
-			int finLimit) {
+	public ArrayList<Computer> searchComputer(String myName, String myOrder,
+			int startLimit, int numberOfRow) {
 		return DaoFactory.getInstanceComputerDao().selectPartsSearchComputers(
-				myName, startLimit, finLimit);
+				myName, myOrder, startLimit, numberOfRow);
+	}
+
+	@Override
+	public String getOrderBy(String myOrder, Boolean desc) {
+
+		StringBuilder myStringBuilder = new StringBuilder();
+		
+		switch (myOrder.toLowerCase()) {
+		case "name":
+			myStringBuilder.append("computer.name");
+
+			break;
+		case "introduced":
+			myStringBuilder.append("computer.introduced");
+
+			break;
+		case "discontinued":
+			myStringBuilder.append( "computer.discontinued");
+
+			break;
+		case "company":
+			myStringBuilder.append("company.name");
+
+			break;
+		default:
+			myStringBuilder.append("computer.name");
+			break;
+		}
+		
+		if (desc) myStringBuilder.append(" DESC");
+		
+		return myStringBuilder.toString();
 	}
 }
