@@ -25,14 +25,10 @@
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
-				<!-- Variable declarations for passing labels as parameters -->
-				<!-- Table header for Computer Name -->
-				<th>Computer Name</th>
-				<th>Introduced Date</th>
-				<!-- Table header for Discontinued Date -->
-				<th>Discontinued Date</th>
-				<!-- Table header for Company -->
-				<th>Company</th>
+				<th><a href="dashboard?search=${search}&orderby=name">Computer Name</a></th>
+				<th><a href="dashboard?search=${search}&orderby=introduced">Introduced Date</a></th>
+				<th><a href="dashboard?search=${search}&orderby=discontinued">Discontinued Date</a></th>
+				<th><a href="dashboard?search=${search}&orderby=company">Company</a></th>
 				<th>Action</th>
 			</tr>
 		</thead>
