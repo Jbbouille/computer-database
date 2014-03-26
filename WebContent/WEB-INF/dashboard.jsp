@@ -8,16 +8,16 @@
 		<c:out value="${numberOfComputers} Computers Found"></c:out>
 	</h1>
 	<div id="actions">
-		<form action="" method="GET" class="form-inline">
-			<input type="search" id="searchbox" name="search" value=""
-				placeholder="Search name" class="form-control"> <input
+		<form action="dashboard" method="GET" class="form-inline">
+			<input type="search" id="searchbox" name="search"
+				placeholder="Search name" class="form-control" value="${search}"> <input
 				type="submit" id="searchsubmit" value="Filter by name"
 				class="btn btn-primary">
 		</form>
 		<a class="btn btn-success" id="add" href="addcomputer">Add
 			Computer</a>
 		<m:pagination currentPage="${currentPage}"
-			numberOfPages="${numberOfPages}"></m:pagination>
+			numberOfPages="${numberOfPages}" search="${search}"></m:pagination>
 	</div>
 
 

@@ -227,19 +227,21 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	public int countNumberComputers() {
+	public int countNumberComputers(String myName) {
 		int number = 0;
 
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
-		String sql = "SELECT count(*) FROM computer ";
+		String sql = "SELECT count(*) FROM computer WHERE name like ?";
 		LOG.debug("requete : " + sql);
 
 		try {
 			myCon = manager.createConnection();
 			myPreStmt = myCon.prepareStatement(sql);
 
+			myPreStmt.setString(1, "%" + myName + "%");
+			
 			mySet = myPreStmt.executeQuery();
 			mySet.next();
 			number = mySet.getInt(1);
@@ -251,5 +253,44 @@ public class ComputerDaoImpl implements ComputerDao {
 		}
 
 		return number;
+	}
+
+	@Override
+	public ArrayList<Computer> selectPartsSearchComputers(String myName,
+			int startLimit, int finLimit) {
+		ArrayList<Computer> myList = new ArrayList<>();
+
+		Connection myCon = null;
+		PreparedStatement myPreStmt = null;
+		ResultSet mySet = null;
+		String sql = "SELECT * FROM computer WHERE name like ? LIMIT ?,?";
+		LOG.debug("requete : " + sql);
+
+		try {
+			myCon = manager.createConnection();
+			myPreStmt = myCon.prepareStatement(sql);
+
+			myPreStmt.setString(1, "%" + myName + "%");
+			myPreStmt.setInt(2, startLimit);
+			myPreStmt.setInt(3, finLimit);
+
+			LOG.debug(myPreStmt.toString());
+			mySet = myPreStmt.executeQuery();
+			while (mySet.next()) {
+
+				Computer myComputer = new Computer(mySet.getInt("id"),
+						mySet.getString("name"), mySet.getDate("introduced"),
+						mySet.getDate("discontinued"),
+						mySet.getInt("company_id"));
+
+				myList.add(myComputer);
+			}
+		} catch (SQLException e) {
+			LOG.error("Error in execution of request :" + e);
+		} finally {
+			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
+		}
+
+		return myList;
 	}
 }

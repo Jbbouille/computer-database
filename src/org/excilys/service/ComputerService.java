@@ -16,11 +16,15 @@ public interface ComputerService {
 
 	public ArrayList<Computer> selectAllComputers();
 
-	public ArrayList<Computer> selectPartsComputers(int startLimit, int numberOfRow);
-	
-	public int countNumberComputers();
-	
+	public ArrayList<Computer> selectPartsComputers(int startLimit,
+			int numberOfRow);
+
+	public int countNumberComputers(String myName);
+
 	public double numberPage(int numberComputers, int numberOfRow);
-	
+
 	public int getStartLimit(int idPage, int numberOfRow);
+
+	public ArrayList<Computer> searchComputer(String myName, int startLimit,
+			int finLimit);
 }

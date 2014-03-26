@@ -2,8 +2,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
-<%@ attribute name="currentPage" required="true" type="Integer" %>
 <%@ attribute name="numberOfPages" required="true" type="Integer" %>
+<%@ attribute name="currentPage" required="true" type="Integer" %>
+<%@ attribute name="search" required="true" type="String" %>
 
 <ul class="pagination">
 	<c:choose>
@@ -11,17 +12,17 @@
 			<li class="disabled"><a href="#"><span>&laquo;</span></a></li>
 		</c:when>
 		<c:otherwise>
-			<li><a href="dashboard?page=${currentPage -1}">&laquo;</a></li>
+			<li><a href="dashboard?search=${search}&page=${currentPage -1}">&laquo;</a></li>
 		</c:otherwise>
 	</c:choose>
 	<c:forEach var="i" begin="1" end="${numberOfPages}">
 		<c:choose>
 			<c:when test="${currentPage == i}">
-				<li class="active"><a href="dashboard?page=${i}">${i}<span
+				<li class="active"><a href="dashboard?search=${search}&page=${i}">${i}<span
 						class="sr-only">(current)</span></a></li>
 			</c:when>
 			<c:otherwise>
-				<li><a href="dashboard?page=${i}">${i}</a></li>
+				<li><a href="dashboard?search=${search}&page=${i}">${i}</a></li>
 			</c:otherwise>
 		</c:choose>
 	</c:forEach>
@@ -30,7 +31,7 @@
 			<li class="disabled"><a href="#"><span>&raquo;</span></a></li>
 		</c:when>
 		<c:otherwise>
-			<li><a href="dashboard?page=${currentPage +1}">&raquo;</a></li>
+			<li><a href="dashboard?search=${search}&page=${currentPage +1}">&raquo;</a></li>
 		</c:otherwise>
 	</c:choose>
 
