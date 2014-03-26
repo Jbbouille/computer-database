@@ -28,9 +28,10 @@ public class Dashboard extends HttpServlet {
 		if (req.getParameter("page") == null) page = 1;
 		else page = Integer.valueOf(req.getParameter("page"));
 
+		
+		
 		if (req.getParameter("search") == null) {
-			req.setAttribute("computers", myService.selectPartsComputers(
-					myService.getStartLimit(page, NUMBER_OF_COMPUTER_BY_PAGE),
+			req.setAttribute("computers", myService.selectPartsComputers(ServiceFactory.getComputerServ().getStartLimit(page, NUMBER_OF_COMPUTER_BY_PAGE),
 					NUMBER_OF_COMPUTER_BY_PAGE));
 
 			req.setAttribute("numberOfComputers",
@@ -41,7 +42,7 @@ public class Dashboard extends HttpServlet {
 		} else {
 
 			ArrayList<Computer> myListComputers = myService.searchComputer(req
-					.getParameter("search"), page, NUMBER_OF_COMPUTER_BY_PAGE);
+					.getParameter("search"), ServiceFactory.getComputerServ().getStartLimit(page, NUMBER_OF_COMPUTER_BY_PAGE), NUMBER_OF_COMPUTER_BY_PAGE);
 
 			req.setAttribute("computers", myListComputers);
 
