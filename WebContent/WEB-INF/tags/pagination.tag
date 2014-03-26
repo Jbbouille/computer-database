@@ -1,11 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
+<%@ attribute name="currentPage" required="true" type="Integer" %>
+<%@ attribute name="numberOfPages" required="true" type="Integer" %>
+
 <ul class="pagination">
 	<c:choose>
-		<c:when test="${currentPage == 1}">
+		<c:when test="${currentPage le 1}">
 			<li class="disabled"><a href="#"><span>&laquo;</span></a></li>
 		</c:when>
 		<c:otherwise>
@@ -24,7 +26,7 @@
 		</c:choose>
 	</c:forEach>
 	<c:choose>
-		<c:when test="${currentPage == 20 }">
+		<c:when test="${currentPage ge numberOfPages }">
 			<li class="disabled"><a href="#"><span>&raquo;</span></a></li>
 		</c:when>
 		<c:otherwise>

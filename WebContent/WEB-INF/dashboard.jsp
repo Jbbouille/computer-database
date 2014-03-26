@@ -1,6 +1,7 @@
 <jsp:include page="include/header.jsp" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib prefix="m" tagdir="/WEB-INF/tags"%>
 
 <section id="main">
 	<h1 id="homeTitle">
@@ -15,8 +16,8 @@
 		</form>
 		<a class="btn btn-success" id="add" href="addcomputer">Add
 			Computer</a>
-
-		<jsp:include page="include/pagination.jsp" />
+		<m:pagination currentPage="${currentPage}"
+			numberOfPages="${numberOfPages}"></m:pagination>
 	</div>
 
 
