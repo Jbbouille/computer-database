@@ -154,76 +154,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		return myComputer;
 	}
 
-	@Override
-	public ArrayList<Computer> selectAllComputers() {
-		ArrayList<Computer> myList = new ArrayList<>();
-
-		Connection myCon = null;
-		PreparedStatement myPreStmt = null;
-		ResultSet mySet = null;
-		String sql = "SELECT * FROM computer";
-		LOG.debug("requete : " + sql);
-
-		try {
-			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql);
-
-			mySet = myPreStmt.executeQuery();
-			while (mySet.next()) {
-
-				Computer myComputer = new Computer(mySet.getInt("id"),
-						mySet.getString("name"), mySet.getDate("introduced"),
-						mySet.getDate("discontinued"),
-						mySet.getInt("company_id"));
-
-				myList.add(myComputer);
-			}
-		} catch (SQLException e) {
-			LOG.error("Error in execution of request :" + e);
-		} finally {
-			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
-		}
-
-		return myList;
-	}
-
 	protected ComputerDaoImpl() {
-	}
-
-	@Override
-	public ArrayList<Computer> selectPartsComputers(int startLimit, int finLimit) {
-		ArrayList<Computer> myList = new ArrayList<>();
-
-		Connection myCon = null;
-		PreparedStatement myPreStmt = null;
-		ResultSet mySet = null;
-		String sql = "SELECT * FROM computer LIMIT ?,?";
-		LOG.debug("requete : " + sql);
-
-		try {
-			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql);
-
-			myPreStmt.setInt(1, startLimit);
-			myPreStmt.setInt(2, finLimit);
-
-			mySet = myPreStmt.executeQuery();
-			while (mySet.next()) {
-
-				Computer myComputer = new Computer(mySet.getInt("id"),
-						mySet.getString("name"), mySet.getDate("introduced"),
-						mySet.getDate("discontinued"),
-						mySet.getInt("company_id"));
-
-				myList.add(myComputer);
-			}
-		} catch (SQLException e) {
-			LOG.error("Error in execution of request :" + e);
-		} finally {
-			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
-		}
-
-		return myList;
 	}
 
 	@Override
@@ -241,7 +172,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			myPreStmt = myCon.prepareStatement(sql);
 
 			myPreStmt.setString(1, "%" + myName + "%");
-			
+
 			mySet = myPreStmt.executeQuery();
 			mySet.next();
 			number = mySet.getInt(1);
@@ -256,14 +187,17 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	public ArrayList<Computer> selectPartsSearchComputers(String myName, String myOrder, int startLimit, int numberOfRow) {
+	public ArrayList<Computer> selectPartsSearchComputers(String myName,
+			String myOrder, int startLimit, int numberOfRow) {
 		ArrayList<Computer> myList = new ArrayList<>();
 
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
-		StringBuilder sql = new StringBuilder(); 
-		sql.append("SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name like ? OR company.name like ? ORDER BY ").append(myOrder).append(" LIMIT ?,?");
+		StringBuilder sql = new StringBuilder();
+		sql.append(
+				"SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name like ? OR company.name like ? ORDER BY ")
+				.append(myOrder).append(" LIMIT ?,?");
 		LOG.debug("requete : " + sql);
 
 		try {

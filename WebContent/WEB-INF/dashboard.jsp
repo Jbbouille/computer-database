@@ -28,24 +28,32 @@
 			<tr>
 				<c:choose>
 					<c:when test="${bool==true}">
-						<th><a href="dashboard?search=${search}&orderby=name&bool=false">Computer
+						<th class="col-md-2"><a
+							href="dashboard?search=${search}&orderby=name&bool=false">Computer
 								Name</a></th>
-						<th><a href="dashboard?search=${search}&orderby=introduced&bool=false">Introduced
+						<th class="col-md-2"><a
+							href="dashboard?search=${search}&orderby=introduced&bool=false">Introduced
 								Date</a></th>
-						<th><a href="dashboard?search=${search}&orderby=discontinued&bool=false">Discontinued
+						<th class="col-md-2"><a
+							href="dashboard?search=${search}&orderby=discontinued&bool=false">Discontinued
 								Date</a></th>
-						<th><a href="dashboard?search=${search}&orderby=company&bool=false">Company</a></th>
-						<th>Action</th>
+						<th class="col-md-2"><a
+							href="dashboard?search=${search}&orderby=company&bool=false">Company</a></th>
+						<th class="col-md-2">Action</th>
 					</c:when>
 					<c:otherwise>
-						<th><a href="dashboard?search=${search}&orderby=name&bool=true">Computer
+						<th class="col-md-2"><a
+							href="dashboard?search=${search}&orderby=name&bool=true">Computer
 								Name</a></th>
-						<th><a href="dashboard?search=${search}&orderby=introduced&bool=true">Introduced
+						<th class="col-md-2"><a
+							href="dashboard?search=${search}&orderby=introduced&bool=true">Introduced
 								Date</a></th>
-						<th><a href="dashboard?search=${search}&orderby=discontinued&bool=true">Discontinued
+						<th class="col-md-2"><a
+							href="dashboard?search=${search}&orderby=discontinued&bool=true">Discontinued
 								Date</a></th>
-						<th><a href="dashboard?search=${search}&orderby=company&bool=true">Company</a></th>
-						<th>Action</th>
+						<th class="col-md-2"><a
+							href="dashboard?search=${search}&orderby=company&bool=true">Company</a></th>
+						<th class="col-md-2">Action</th>
 					</c:otherwise>
 				</c:choose>
 
@@ -55,14 +63,14 @@
 			<c:set var="companie" value="${companies}"></c:set>
 			<c:forEach var="computer" items="${computers}">
 				<tr>
-					<td><a href="modifycomputer?id=${computer.id}"><c:out
+					<td class="col-md-2"><a href="modifycomputer?id=${computer.id}"><c:out
 								value="${computer.name}" /></a></td>
-					<td><c:out value="${computer.introduced}" /></td>
-					<td><c:out value="${computer.discontinued}" /></td>
+					<td class="col-md-2"><c:out value="${computer.introduced}" /></td>
+					<td class="col-md-2"><c:out value="${computer.discontinued}" /></td>
 					<c:if test="${computer.companyId != null }">
 						<td><c:out value="${companie.get(computer.companyId).name}" /></td>
 					</c:if>
-					<td><a href="deletecomputer?id=${computer.id}"
+					<td class="col-md-2"><a href="deletecomputer?id=${computer.id}"
 						class="btn btn-warning">Delete</a>
 				</tr>
 			</c:forEach>

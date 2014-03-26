@@ -14,12 +14,9 @@ public interface ComputerDao {
 
 	public Computer selectComputer(int id);
 
-	public ArrayList<Computer> selectAllComputers();
-
-	public ArrayList<Computer> selectPartsComputers(int startLimit, int finLimit);
-
 	public int countNumberComputers(String myName);
 
-	public ArrayList<Computer> selectPartsSearchComputers(String myName, String myOrder, int startLimit, int numberOfRow);
+	public ArrayList<Computer> selectPartsSearchComputers(String myName,
+			String myOrder, int startLimit, int numberOfRow);
 
 }

@@ -10,11 +10,11 @@ public class Utilities {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return formatter.format(myDate);
 	}
-	
+
 	public static Date stringToDate(String myString) {
 		Date myDate = null;
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		
+
 		try {
 			myDate = formatter.parse(myString);
 		} catch (ParseException e) {

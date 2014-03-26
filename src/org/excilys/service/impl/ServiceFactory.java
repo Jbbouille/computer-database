@@ -1,19 +1,17 @@
 package org.excilys.service.impl;
 
-
 public class ServiceFactory {
-	
-	
+
 	private static ServiceFactory instanceFactory;
 	private static ComputerServiceImpl instanceComputerServ;
 	private static CompanyServiceImpl instanceCompanyServ;
 
-
 	public static ServiceFactory getInstance() {
-		if (instanceFactory == null) instanceFactory = new ServiceFactory();
+		if (instanceFactory == null)
+			instanceFactory = new ServiceFactory();
 		return instanceFactory;
 	}
-	
+
 	private ServiceFactory() {
 	}
 
@@ -22,7 +20,7 @@ public class ServiceFactory {
 			instanceComputerServ = new ComputerServiceImpl();
 		return instanceComputerServ;
 	}
-	
+
 	public static CompanyServiceImpl getCompanyServ() {
 		if (instanceCompanyServ == null)
 			instanceCompanyServ = new CompanyServiceImpl();

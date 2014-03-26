@@ -36,8 +36,6 @@ public class AddComputer extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		resp.setContentType("text/html");
-
 		req.setAttribute("companies", ServiceFactory.getCompanyServ().selectAllCompanies());
 
 		getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp")

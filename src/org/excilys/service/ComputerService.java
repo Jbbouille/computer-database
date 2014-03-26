@@ -14,11 +14,6 @@ public interface ComputerService {
 
 	public Computer selectComputer(int id);
 
-	public ArrayList<Computer> selectAllComputers();
-
-	public ArrayList<Computer> selectPartsComputers(int startLimit,
-			int numberOfRow);
-
 	public int countNumberComputers(String myName);
 
 	public double numberPage(int numberComputers, int numberOfRow);

@@ -29,18 +29,6 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public ArrayList<Computer> selectAllComputers() {
-		return DaoFactory.getInstanceComputerDao().selectAllComputers();
-	}
-
-	@Override
-	public ArrayList<Computer> selectPartsComputers(int startLimit,
-			int numberOfRow) {
-		return DaoFactory.getInstanceComputerDao().selectPartsComputers(
-				startLimit, numberOfRow);
-	}
-
-	@Override
 	public int countNumberComputers(String myName) {
 		return DaoFactory.getInstanceComputerDao().countNumberComputers(myName);
 	}
@@ -55,10 +43,6 @@ public class ComputerServiceImpl implements ComputerService {
 		return ((idPage - 1) * numberOfRow);
 	}
 
-	protected ComputerServiceImpl() {
-
-	}
-
 	@Override
 	public ArrayList<Computer> searchComputer(String myName, String myOrder,
 			int startLimit, int numberOfRow) {
@@ -70,7 +54,7 @@ public class ComputerServiceImpl implements ComputerService {
 	public String getOrderBy(String myOrder, Boolean desc) {
 
 		StringBuilder myStringBuilder = new StringBuilder();
-		
+
 		switch (myOrder.toLowerCase()) {
 		case "name":
 			myStringBuilder.append("computer.name");
@@ -81,7 +65,7 @@ public class ComputerServiceImpl implements ComputerService {
 
 			break;
 		case "discontinued":
-			myStringBuilder.append( "computer.discontinued");
+			myStringBuilder.append("computer.discontinued");
 
 			break;
 		case "company":
@@ -92,9 +76,14 @@ public class ComputerServiceImpl implements ComputerService {
 			myStringBuilder.append("computer.name");
 			break;
 		}
-		
-		if (desc) myStringBuilder.append(" DESC");
-		
+
+		if (desc)
+			myStringBuilder.append(" DESC");
+
 		return myStringBuilder.toString();
+	}
+
+	protected ComputerServiceImpl() {
+
 	}
 }
