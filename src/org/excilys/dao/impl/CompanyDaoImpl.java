@@ -11,8 +11,9 @@ import org.excilys.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CompanyDaoImpl implements CompanyDao {
-
+public enum CompanyDaoImpl implements CompanyDao {
+	INSTANCE;
+	
 	static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
 	private ConnectionManager manager = ConnectionManager.getInstance();
 
@@ -170,8 +171,5 @@ public class CompanyDaoImpl implements CompanyDao {
 		}
 
 		return number;
-	}
-	
-	protected CompanyDaoImpl() {
 	}
 }

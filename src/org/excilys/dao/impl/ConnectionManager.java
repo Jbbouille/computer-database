@@ -13,18 +13,13 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConnectionManager {
-
+public enum ConnectionManager {
+	INSTANCE;
+	
 	static final Logger LOG = LoggerFactory.getLogger(ConnectionManager.class);
-	private static ConnectionManager instance;
-
 
 	public static ConnectionManager getInstance() {
-		if (instance == null) instance = new ConnectionManager();
-		return instance;
-	}
-
-	private ConnectionManager() {
+		return ConnectionManager.INSTANCE;
 	}
 
 	public Connection createConnection() {
@@ -51,5 +46,8 @@ public class ConnectionManager {
 		} catch (SQLException e) {
 			LOG.error("CANNOT close connections : " + e);
 		}
+	}
+
+	private ConnectionManager() {
 	}
 }

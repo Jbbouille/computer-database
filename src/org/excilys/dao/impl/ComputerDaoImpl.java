@@ -13,8 +13,9 @@ import org.excilys.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ComputerDaoImpl implements ComputerDao {
-
+public enum ComputerDaoImpl implements ComputerDao {
+	INSTANCE;
+	
 	static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
 	private ConnectionManager manager = ConnectionManager.getInstance();
 
@@ -230,8 +231,5 @@ public class ComputerDaoImpl implements ComputerDao {
 		}
 
 		return myList;
-	}
-
-	protected ComputerDaoImpl() {
 	}
 }

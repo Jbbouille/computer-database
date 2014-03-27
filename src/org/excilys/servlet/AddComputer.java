@@ -19,11 +19,12 @@ public class AddComputer extends HttpServlet {
 			throws ServletException, IOException {
 
 		Computer myComputer = new Computer();
-
-		if (ServiceFactory.getComputerServ().checkForm(
-				req.getParameter("name"), req.getParameter("introducedDate"),
-				req.getParameter("discontinuedDate"),
-				Integer.valueOf(req.getParameter("company")))) {
+		
+		req = ServiceFactory.getComputerServ().validateForm(req);
+		
+		boolean mybool = (Boolean) req.getAttribute("checkForm");
+		
+		if (mybool) {
 			
 			myComputer.setName(req.getParameter("name"));
 
@@ -41,15 +42,15 @@ public class AddComputer extends HttpServlet {
 
 			resp.sendRedirect("dashboard");
 		} else {
-
-			req = ServiceFactory.getComputerServ().validateForm(req.getParameter("name"),
-					req.getParameter("introducedDate"),
-					req.getParameter("discontinuedDate"),
-					Integer.valueOf(req.getParameter("company")), req);
-
-			getServletContext()
-					.getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(
-							req, resp);
+			
+			req.setAttribute("name", req.getParameter("name"));
+			req.setAttribute("introducedDate", req.getParameter("introducedDate"));
+			req.setAttribute("discontinuedDate", req.getParameter("discontinuedDate"));
+			req.setAttribute("companyParam", req.getParameter("company"));
+			req.setAttribute("companies", ServiceFactory.getCompanyServ()
+					.selectCompanies());
+			
+			getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(req, resp);
 		}
 	}
 

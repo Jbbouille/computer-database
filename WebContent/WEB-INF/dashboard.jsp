@@ -20,40 +20,21 @@
 			numberOfPages="${numberOfPages}" search="${search}"
 			orderBy="${orderby}" bool="${bool}"></m:pagination>
 	</div>
-
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
-				<c:choose>
-					<c:when test="${bool==true}">
-						<th class="col-md-2"><a
-							href="dashboard?search=${search}&orderby=name&bool=false">Computer
-								Name</a></th>
-						<th class="col-md-2"><a
-							href="dashboard?search=${search}&orderby=introduced&bool=false">Introduced
-								Date</a></th>
-						<th class="col-md-2"><a
-							href="dashboard?search=${search}&orderby=discontinued&bool=false">Discontinued
-								Date</a></th>
-						<th class="col-md-2"><a
-							href="dashboard?search=${search}&orderby=company&bool=false">Company</a></th>
-						<th class="col-md-2">Action</th>
-					</c:when>
-					<c:otherwise>
-						<th class="col-md-2"><a
-							href="dashboard?search=${search}&orderby=name&bool=true">Computer
-								Name</a></th>
-						<th class="col-md-2"><a
-							href="dashboard?search=${search}&orderby=introduced&bool=true">Introduced
-								Date</a></th>
-						<th class="col-md-2"><a
-							href="dashboard?search=${search}&orderby=discontinued&bool=true">Discontinued
-								Date</a></th>
-						<th class="col-md-2"><a
-							href="dashboard?search=${search}&orderby=company&bool=true">Company</a></th>
-						<th class="col-md-2">Action</th>
-					</c:otherwise>
-				</c:choose>
+				<th class="col-md-2"><a
+					href="dashboard?search=${search}&orderby=name&bool=${orderby=='name' ? !bool:'false'}">Computer
+						Name</a></th>
+				<th class="col-md-2"><a
+					href="dashboard?search=${search}&orderby=introduced&bool=${orderby=='introduced' ? !bool:'false'}">Introduced
+						Date</a></th>
+				<th class="col-md-2"><a
+					href="dashboard?search=${search}&orderby=discontinued&bool=${orderby=='discontinued' ? !bool:'false'}">Discontinued
+						Date</a></th>
+				<th class="col-md-2"><a
+					href="dashboard?search=${search}&orderby=company&bool=${orderby=='company' ? !bool:'false'}">Company</a></th>
+				<th class="col-md-2">Action</th>
 			</tr>
 		</thead>
 		<tbody>

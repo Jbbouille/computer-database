@@ -6,8 +6,9 @@ import org.excilys.dao.impl.DaoFactory;
 import org.excilys.model.Company;
 import org.excilys.service.CompanyService;
 
-public class CompanyServiceImpl implements CompanyService {
-
+public enum CompanyServiceImpl implements CompanyService {
+	INSTANCE;
+	
 	@Override
 	public void insertCompany(Company myCompany) {
 		DaoFactory.getInstanceCompanyDao().insertCompany(myCompany);
@@ -36,8 +37,5 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public int countCompanies() {
 		return DaoFactory.getInstanceCompanyDao().countCompanies();
-	}
-
-	protected CompanyServiceImpl(){
 	}
 }

@@ -1,28 +1,17 @@
 package org.excilys.dao.impl;
 
-public class DaoFactory {
+public enum DaoFactory {
+	INSTANCE;
 	
-	private static DaoFactory instanceFactory;
-	private static ComputerDaoImpl instanceComputerDao;
-	private static CompanyDaoImpl instanceCompanyDao;
-
 	public static DaoFactory getInstance() {
-		if (instanceFactory == null) instanceFactory = new DaoFactory();
-		return instanceFactory;
+		return DaoFactory.INSTANCE;
 	}
 
 	public static ComputerDaoImpl getInstanceComputerDao() {
-		if (instanceComputerDao == null)
-			instanceComputerDao = new ComputerDaoImpl();
-		return instanceComputerDao;
+		return ComputerDaoImpl.INSTANCE;
 	}
 	
 	public static CompanyDaoImpl getInstanceCompanyDao() {
-		if (instanceCompanyDao == null)
-			instanceCompanyDao = new CompanyDaoImpl();
-		return instanceCompanyDao;
-	}
-	
-	private DaoFactory() {
+		return CompanyDaoImpl.INSTANCE;
 	}
 }

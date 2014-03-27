@@ -2,6 +2,7 @@ package org.excilys.service.impl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,8 +11,11 @@ import org.excilys.model.Computer;
 import org.excilys.service.ComputerService;
 import org.excilys.util.Utilities;
 
-public class ComputerServiceImpl implements ComputerService {
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
+public enum ComputerServiceImpl implements ComputerService {
+	INSTANCE;
+	
 	@Override
 	public void insertComputer(Computer myComputer) {
 		DaoFactory.getInstanceComputerDao().insertComputer(myComputer);
@@ -87,62 +91,41 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public HttpServletRequest validateForm(String name, String introduced,
-			String discontinued, int companyId, HttpServletRequest req) {
-
+	public HttpServletRequest validateForm(HttpServletRequest req) {
+		
 		int numberCompanies = ServiceFactory.getCompanyServ().countCompanies();
 
-		if (name.length() < 2)
+		if (req.getParameter("name").length() < 2) {
 			req.setAttribute("errorName", "Please enter at least 2 characters.");
+			req.setAttribute("checkForm", false);
+		}
 
+		if(req.getParameter("introducedDate").equals("") == false){
 		try {
-			Utilities.stringToDate(introduced);
+			Utilities.stringToDate(req.getParameter("introducedDate"));
 		} catch (ParseException e) {
 			req.setAttribute("errorIntroduced",
 					"Please enter a date in the format yyyy-mm-dd.");
+			req.setAttribute("checkForm", false);
 		}
-
+		}
+		
+		if(req.getParameter("discontinuedDate").equals("") == false){
 		try {
-			Utilities.stringToDate(discontinued);
+			Utilities.stringToDate(req.getParameter("discontinuedDate"));
 		} catch (ParseException e) {
 			req.setAttribute("errorDiscontinued",
 					"Please enter a date in the format yyyy-mm-dd.");
+			req.setAttribute("checkForm", false);
 		}
-
-		if (companyId > numberCompanies || companyId < -1)
+		}
+		
+		if (Integer.valueOf(req.getParameter("company")) > numberCompanies || Integer.valueOf(req.getParameter("company")) < -1){
 			req.setAttribute("errorCompany",
 					"Please enter a company id in a range.");
+			req.setAttribute("checkForm", false);
+		}
 
 		return req;
-	}
-
-	@Override
-	public boolean checkForm(String name, String introduced,
-			String discontinued, int companyId) {
-		int numberCompanies = ServiceFactory.getCompanyServ().countCompanies();
-
-		if (name.length() < 2)
-			return false;
-
-		try {
-			Utilities.stringToDate(introduced);
-		} catch (ParseException e) {
-			return false;
-		}
-
-		try {
-			Utilities.stringToDate(discontinued);
-		} catch (ParseException e) {
-			return false;
-		}
-
-		if (companyId > numberCompanies || companyId < -1)
-			return false;
-
-		return true;
-	}
-	
-	protected ComputerServiceImpl() {
-		
 	}
 }
