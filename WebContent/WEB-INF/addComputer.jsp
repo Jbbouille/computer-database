@@ -11,7 +11,7 @@
 
 				<div class="form-group">
 					<label for="name">Name</label> <input type="text"
-						class="form-control" name="name" placeholder="Enter name">
+						class="form-control" name="name" placeholder="Enter name" value="${name}">
 					<c:if test="${errorName != null}">
 						<label class="error" for="name">
 							<c:out value="${errorName}"></c:out>
@@ -21,7 +21,7 @@
 				<div class="form-group">
 					<label for="introduced">Introduced</label> <input type=text
 						class="form-control" name="introducedDate"
-						placeholder="date introduced" id="datepickerIntroduced">
+						placeholder="date introduced" id="datepickerIntroduced" value="${introducedDate}">
 					<c:if test="${errorIntroduced != null}">
 						<label class="error" for="datepickerIntroduced">
 							<c:out value="${errorIntroduced}"></c:out>
@@ -31,7 +31,7 @@
 				<div class="form-group">
 					<label for="discontinued">Discontinued</label> <input type="text"
 						class="form-control" name="discontinuedDate"
-						placeholder="date discontinued" id="datepickerDiscontinued">
+						placeholder="date discontinued" id="datepickerDiscontinued" value="${discontinuedDate}">
 					<c:if test="${errorDiscontinued != null}">
 						<label class="error" for="datepickerDiscontinued">
 							<c:out value="${errorDiscontinued}"></c:out>

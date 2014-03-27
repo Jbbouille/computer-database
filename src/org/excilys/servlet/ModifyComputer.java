@@ -14,38 +14,69 @@ import org.excilys.util.Utilities;
 
 public class ModifyComputer extends HttpServlet {
 
-	private int id;
-
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
-		Computer myComputer = new Computer();
-		
-		myComputer.setId(id);
-		myComputer.setName(req.getParameter("name"));
-		myComputer.setCompanyId(Integer.valueOf(req.getParameter("company")));
-		
-		try {
-			if(!(req.getParameter("introducedDate").equals("")))myComputer.setIntroduced(Utilities.stringToDate(req.getParameter("introducedDate")));
-			if(!(req.getParameter("discontinuedDate").equals(""))) myComputer.setDiscontinued(Utilities.stringToDate(req.getParameter("discontinuedDate")));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}	;
 
-		ServiceFactory.getComputerServ().updateComputer(myComputer);
-		
-		resp.sendRedirect("dashboard");
+		int id = Integer.valueOf(req.getParameter("idComputer"));
+
+		if (ServiceFactory.getComputerServ().checkForm(
+				req.getParameter("name"), req.getParameter("introducedDate"),
+				req.getParameter("discontinuedDate"),
+				Integer.valueOf(req.getParameter("company")))) {
+
+			Computer myComputer = new Computer();
+
+			myComputer.setId(id);
+			myComputer.setName(req.getParameter("name"));
+			myComputer.setCompanyId(Integer.valueOf(req.getParameter("company")));
+
+			try {
+				if (!(req.getParameter("introducedDate").equals("")))
+					myComputer.setIntroduced(Utilities.stringToDate(req
+							.getParameter("introducedDate")));
+				if (!(req.getParameter("discontinuedDate").equals("")))
+					myComputer.setDiscontinued(Utilities.stringToDate(req
+							.getParameter("discontinuedDate")));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			ServiceFactory.getComputerServ().updateComputer(myComputer);
+
+			resp.sendRedirect("dashboard");
+		} else {
+
+			Computer myComputer = ServiceFactory.getComputerServ()
+					.selectComputer(id);
+
+			myComputer.setId(id);
+			myComputer.setName(req.getParameter("name"));
+			myComputer
+					.setCompanyId(Integer.valueOf(req.getParameter("company")));
+
+			req.setAttribute("computer", myComputer);
+
+			req = ServiceFactory.getComputerServ().validateForm(req.getParameter("name"),
+					req.getParameter("introducedDate"),
+					req.getParameter("discontinuedDate"),
+					Integer.valueOf(req.getParameter("company")), req);
+
+			getServletContext().getRequestDispatcher(
+					"/WEB-INF/modifyComputer.jsp").forward(req, resp);
+		}
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		id = Integer.valueOf(req.getParameter("id"));
+		int id = Integer.valueOf(req.getParameter("id"));
 
-		req.setAttribute("companies", ServiceFactory.getCompanyServ().selectCompanies());
-		req.setAttribute("computer", ServiceFactory.getComputerServ().selectComputer(id));
+		req.setAttribute("companies", ServiceFactory.getCompanyServ()
+				.selectCompanies());
+		req.setAttribute("computer", ServiceFactory.getComputerServ()
+				.selectComputer(id));
 
 		getServletContext().getRequestDispatcher("/WEB-INF/modifyComputer.jsp")
 				.forward(req, resp);

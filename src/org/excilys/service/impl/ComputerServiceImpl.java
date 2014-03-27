@@ -3,6 +3,8 @@ package org.excilys.service.impl;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.excilys.dao.impl.DaoFactory;
 import org.excilys.model.Computer;
 import org.excilys.service.ComputerService;
@@ -46,10 +48,10 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public ArrayList<Computer> selectComputers(String myLikeParam, String myOrder,
-			int startLimit, int numberOfRow) {
-		return DaoFactory.getInstanceComputerDao().selectComputers(
-				myLikeParam, myOrder, startLimit, numberOfRow);
+	public ArrayList<Computer> selectComputers(String myLikeParam,
+			String myOrder, int startLimit, int numberOfRow) {
+		return DaoFactory.getInstanceComputerDao().selectComputers(myLikeParam,
+				myOrder, startLimit, numberOfRow);
 	}
 
 	@Override
@@ -78,35 +80,69 @@ public class ComputerServiceImpl implements ComputerService {
 			break;
 		}
 
-		if (desc) myStringBuilder.append(" DESC");
+		if (desc)
+			myStringBuilder.append(" DESC");
 
 		return myStringBuilder.toString();
 	}
 
-	protected ComputerServiceImpl() {
-
-	}
-
 	@Override
-	public int validateForm(String name, String introduced, String discontinued, int companyId) {
-		int numberCompanies =  ServiceFactory.getCompanyServ().countCompanies();
-		
-		if(name.length() < 2) return 1;
-		
+	public HttpServletRequest validateForm(String name, String introduced,
+			String discontinued, int companyId, HttpServletRequest req) {
+
+		int numberCompanies = ServiceFactory.getCompanyServ().countCompanies();
+
+		if (name.length() < 2)
+			req.setAttribute("errorName", "Please enter at least 2 characters.");
+
 		try {
 			Utilities.stringToDate(introduced);
 		} catch (ParseException e) {
-			return 2;
+			req.setAttribute("errorIntroduced",
+					"Please enter a date in the format yyyy-mm-dd.");
 		}
-		
+
 		try {
 			Utilities.stringToDate(discontinued);
 		} catch (ParseException e) {
-			return 3;
+			req.setAttribute("errorDiscontinued",
+					"Please enter a date in the format yyyy-mm-dd.");
 		}
+
+		if (companyId > numberCompanies || companyId < -1)
+			req.setAttribute("errorCompany",
+					"Please enter a company id in a range.");
+
+		return req;
+	}
+
+	@Override
+	public boolean checkForm(String name, String introduced,
+			String discontinued, int companyId) {
+		int numberCompanies = ServiceFactory.getCompanyServ().countCompanies();
+
+		if (name.length() < 2)
+			return false;
+
+		try {
+			Utilities.stringToDate(introduced);
+		} catch (ParseException e) {
+			return false;
+		}
+
+		try {
+			Utilities.stringToDate(discontinued);
+		} catch (ParseException e) {
+			return false;
+		}
+
+		if (companyId > numberCompanies || companyId < -1)
+			return false;
+
+		return true;
+	}
+	
+	protected ComputerServiceImpl() {
 		
-		if(companyId > numberCompanies || companyId < -1) return 4;
-		
-		return 0;
 	}
 }

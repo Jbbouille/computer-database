@@ -2,6 +2,8 @@ package org.excilys.service;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.excilys.model.Computer;
 
 public interface ComputerService {
@@ -20,10 +22,14 @@ public interface ComputerService {
 
 	public int getStartLimit(int idPage, int numberOfRow);
 
-	public ArrayList<Computer> selectComputers(String myLikeParam, String myOrder, int startLimit,
-			int numberOfRow);
-	
+	public ArrayList<Computer> selectComputers(String myLikeParam,
+			String myOrder, int startLimit, int numberOfRow);
+
 	public String getOrderBy(String myOrder, Boolean desc);
+
+	public HttpServletRequest validateForm(String name, String introduced,
+			String discontinued, int companyId, HttpServletRequest req);
 	
-	public int validateForm(String name, String introduced, String discontinued, int companyId);
+	public boolean checkForm(String name, String introduced,
+			String discontinued, int companyId);
 }

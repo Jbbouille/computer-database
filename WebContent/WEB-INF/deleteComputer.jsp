@@ -8,6 +8,7 @@
 	<form action="deletecomputer" method="POST">
 		<button type="submit" class="btn btn-default">Delete</button>
 		or <a class="btn btn-success" id="cancel" href="dashboard">Cancel</a>
+		<input type="hidden" name="idComputer" value="${computer.id}">
 	</form>
 </section>
 
