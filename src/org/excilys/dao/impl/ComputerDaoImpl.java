@@ -23,7 +23,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		String sql = "INSERT INTO computer VALUES (null, ?, ?, ?, ?)";
-		LOG.debug("prepare request : " + sql);
+		LOG.debug("requete sql non-prepare : " + sql);
 
 		try {
 			myCon = manager.createConnection();
@@ -49,7 +49,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			else
 				myPreStmt.setInt(4, myComputer.getCompanyId());
 
-			LOG.debug("request : " + myPreStmt.toString());
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			myPreStmt.execute();
 		} catch (SQLException e) {
 			LOG.error("Error in execution of request :" + e);
@@ -63,7 +63,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		String sql = "DELETE FROM computer WHERE computer.id = ?";
-		LOG.debug("requete : " + sql);
+		LOG.debug("requete sql non-prepare : " + sql);
 
 		try {
 			myCon = manager.createConnection();
@@ -71,6 +71,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
 			myPreStmt.setInt(1, myComputer.getId());
 
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
 			LOG.error("Error in execution of request :" + e);
@@ -84,7 +85,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		String sql = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE computer.id = ?";
-		LOG.debug("requete : " + sql);
+		LOG.debug("requete sql non-prepare : " + sql);
 
 		try {
 			myCon = manager.createConnection();
@@ -113,7 +114,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
 			myPreStmt.setInt(6, myComputer.getId());
 
-			LOG.debug(myPreStmt.toString());
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
 			LOG.error("Error in execution of request :" + e);
@@ -131,7 +132,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		ResultSet mySet = null;
 
 		String sql = "SELECT * FROM computer WHERE id = ?";
-		LOG.debug("requete : " + sql);
+		LOG.debug("requete sql non-prepare : " + sql);
 
 		try {
 			myCon = manager.createConnection();
@@ -139,6 +140,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
 			myPreStmt.setInt(1, id);
 
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			mySet = myPreStmt.executeQuery();
 			mySet.next();
 
@@ -154,9 +156,6 @@ public class ComputerDaoImpl implements ComputerDao {
 		return myComputer;
 	}
 
-	protected ComputerDaoImpl() {
-	}
-
 	@Override
 	public int countNumberComputers(String myName) {
 		int number = 0;
@@ -165,7 +164,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT count(*) FROM computer WHERE name like ?";
-		LOG.debug("requete : " + sql);
+		LOG.debug("requete sql non-prepare : " + sql);
 
 		try {
 			myCon = manager.createConnection();
@@ -173,10 +172,11 @@ public class ComputerDaoImpl implements ComputerDao {
 
 			myPreStmt.setString(1, "%" + myName + "%");
 
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			mySet = myPreStmt.executeQuery();
+			
 			mySet.next();
 			number = mySet.getInt(1);
-
 		} catch (SQLException e) {
 			LOG.error("Error in execution of request :" + e);
 		} finally {
@@ -187,7 +187,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	public ArrayList<Computer> selectPartsSearchComputers(String myName,
+	public ArrayList<Computer> selectComputers(String myLikeParam,
 			String myOrder, int startLimit, int numberOfRow) {
 		ArrayList<Computer> myList = new ArrayList<>();
 
@@ -198,19 +198,22 @@ public class ComputerDaoImpl implements ComputerDao {
 		sql.append(
 				"SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name like ? OR company.name like ? ORDER BY ")
 				.append(myOrder).append(" LIMIT ?,?");
-		LOG.debug("requete : " + sql);
+		
+		LOG.debug("requete sql non-prepare : " + sql);
 
 		try {
 			myCon = manager.createConnection();
 			myPreStmt = myCon.prepareStatement(sql.toString());
 
-			myPreStmt.setString(1, "%" + myName + "%");
-			myPreStmt.setString(2, "%" + myName + "%");
+			myPreStmt.setString(1, "%" + myLikeParam + "%");
+			myPreStmt.setString(2, "%" + myLikeParam + "%");
 			myPreStmt.setInt(3, startLimit);
 			myPreStmt.setInt(4, numberOfRow);
 
-			LOG.debug(myPreStmt.toString());
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
+			
 			mySet = myPreStmt.executeQuery();
+			
 			while (mySet.next()) {
 
 				Computer myComputer = new Computer(mySet.getInt("id"),
@@ -227,5 +230,8 @@ public class ComputerDaoImpl implements ComputerDao {
 		}
 
 		return myList;
+	}
+
+	protected ComputerDaoImpl() {
 	}
 }

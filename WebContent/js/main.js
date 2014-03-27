@@ -10,7 +10,6 @@ $(function() {
 		});
 	});
 	$( document ).ready(function() {
-		console.log( "ready!" );
 		$.validator
 		.addMethod(
 				"dateControl",
@@ -34,7 +33,6 @@ $('#frm').validate({
 		}
 	}
 });
-console.log( "ready2" );
 		});
 	
 });

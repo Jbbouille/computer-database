@@ -12,9 +12,6 @@ public class ServiceFactory {
 		return instanceFactory;
 	}
 
-	private ServiceFactory() {
-	}
-
 	public static ComputerServiceImpl getComputerServ() {
 		if (instanceComputerServ == null)
 			instanceComputerServ = new ComputerServiceImpl();
@@ -27,4 +24,6 @@ public class ServiceFactory {
 		return instanceCompanyServ;
 	}
 
+	private ServiceFactory() {
+	}
 }

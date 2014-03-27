@@ -1,6 +1,7 @@
 package org.excilys.servlet;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,8 +26,12 @@ public class ModifyComputer extends HttpServlet {
 		myComputer.setName(req.getParameter("name"));
 		myComputer.setCompanyId(Integer.valueOf(req.getParameter("company")));
 		
-		if(!(req.getParameter("introducedDate").equals(""))) myComputer.setIntroduced(Utilities.stringToDate(req.getParameter("introducedDate")));
-		if(!(req.getParameter("discontinuedDate").equals(""))) myComputer.setDiscontinued(Utilities.stringToDate(req.getParameter("discontinuedDate")));
+		try {
+			if(!(req.getParameter("introducedDate").equals("")))myComputer.setIntroduced(Utilities.stringToDate(req.getParameter("introducedDate")));
+			if(!(req.getParameter("discontinuedDate").equals(""))) myComputer.setDiscontinued(Utilities.stringToDate(req.getParameter("discontinuedDate")));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	;
 
 		ServiceFactory.getComputerServ().updateComputer(myComputer);
 		
@@ -39,7 +44,7 @@ public class ModifyComputer extends HttpServlet {
 
 		id = Integer.valueOf(req.getParameter("id"));
 
-		req.setAttribute("companies", ServiceFactory.getCompanyServ().selectAllCompanies());
+		req.setAttribute("companies", ServiceFactory.getCompanyServ().selectCompanies());
 		req.setAttribute("computer", ServiceFactory.getComputerServ().selectComputer(id));
 
 		getServletContext().getRequestDispatcher("/WEB-INF/modifyComputer.jsp")

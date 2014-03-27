@@ -11,15 +11,11 @@ public class Utilities {
 		return formatter.format(myDate);
 	}
 
-	public static Date stringToDate(String myString) {
+	public static Date stringToDate(String myString) throws ParseException {
 		Date myDate = null;
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-		try {
 			myDate = formatter.parse(myString);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
 
 		return myDate;
 	}

@@ -37,14 +37,14 @@ public class Dashboard extends HttpServlet {
 		if (req.getParameter("search") == null) search = "";
 		else search = req.getParameter("search");
 
-		myNumberOfPage = myService.numberPage(
-				myService.countNumberComputers(search),
+		myNumberOfPage = myService.numberOfPage(
+				myService.countNumberOfComputers(search),
 				NUMBER_OF_COMPUTER_BY_PAGE);
 			
 		if ((req.getParameter("page") == null) || Double.valueOf(req.getParameter("page")) > myNumberOfPage || Double.valueOf(req.getParameter("page")) < 0) page = 1;
 		else page = Integer.valueOf(req.getParameter("page"));
 
-		ArrayList<Computer> myListComputers = myService.searchComputer(search,
+		ArrayList<Computer> myListComputers = myService.selectComputers(search,
 				myService.getOrderBy(orderBy, desc),
 				myService.getStartLimit(page, NUMBER_OF_COMPUTER_BY_PAGE),
 				NUMBER_OF_COMPUTER_BY_PAGE);
@@ -52,14 +52,14 @@ public class Dashboard extends HttpServlet {
 		req.setAttribute("computers", myListComputers);
 		req.setAttribute("search", search);
 		req.setAttribute("numberOfComputers",
-				myService.countNumberComputers(search));
-		req.setAttribute("numberOfPages", myService.numberPage(
-				myService.countNumberComputers(search),
+				myService.countNumberOfComputers(search));
+		req.setAttribute("numberOfPages", myService.numberOfPage(
+				myService.countNumberOfComputers(search),
 				NUMBER_OF_COMPUTER_BY_PAGE));
 		req.setAttribute("orderby", orderBy);
 		req.setAttribute("bool", desc);
 		req.setAttribute("companies", ServiceFactory.getCompanyServ()
-				.selectAllCompanies());
+				.selectCompanies());
 		req.setAttribute("currentPage", page);
 
 		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp")

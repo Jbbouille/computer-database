@@ -14,14 +14,16 @@ public interface ComputerService {
 
 	public Computer selectComputer(int id);
 
-	public int countNumberComputers(String myName);
+	public int countNumberOfComputers(String myName);
 
-	public double numberPage(int numberComputers, int numberOfRow);
+	public double numberOfPage(int numberComputers, int numberOfRow);
 
 	public int getStartLimit(int idPage, int numberOfRow);
 
-	public ArrayList<Computer> searchComputer(String myName, String myOrder, int startLimit,
+	public ArrayList<Computer> selectComputers(String myLikeParam, String myOrder, int startLimit,
 			int numberOfRow);
 	
 	public String getOrderBy(String myOrder, Boolean desc);
+	
+	public int validateForm(String name, String introduced, String discontinued, int companyId);
 }

@@ -7,21 +7,36 @@
 
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<form  id="frm" action="addcomputer" method="POST">
-			
+			<form id="frm" action="addcomputer" method="POST">
+
 				<div class="form-group">
 					<label for="name">Name</label> <input type="text"
 						class="form-control" name="name" placeholder="Enter name">
+					<c:if test="${errorName != null}">
+						<label class="error" for="name">
+							<c:out value="${errorName}"></c:out>
+						</label>
+					</c:if>
 				</div>
 				<div class="form-group">
 					<label for="introduced">Introduced</label> <input type=text
 						class="form-control" name="introducedDate"
 						placeholder="date introduced" id="datepickerIntroduced">
+					<c:if test="${errorIntroduced != null}">
+						<label class="error" for="datepickerIntroduced">
+							<c:out value="${errorIntroduced}"></c:out>
+						</label>
+					</c:if>
 				</div>
 				<div class="form-group">
 					<label for="discontinued">Discontinued</label> <input type="text"
 						class="form-control" name="discontinuedDate"
 						placeholder="date discontinued" id="datepickerDiscontinued">
+					<c:if test="${errorDiscontinued != null}">
+						<label class="error" for="datepickerDiscontinued">
+							<c:out value="${errorDiscontinued}"></c:out>
+						</label>
+					</c:if>
 				</div>
 				<label for="company">Company Name:</label>
 				<div class="controls">
@@ -32,16 +47,17 @@
 									value="${company.value.name}" /></option>
 						</c:forEach>
 					</select>
+					<c:if test="${errorCompany != null}">
+						<label class="error" for="company">
+							<c:out value="${errorCompany}"></c:out>
+						</label>
+					</c:if>
 				</div>
 				<br>
 				<button type="submit" class="btn btn-default">Submit</button>
 				or <a class="btn btn-success" id="cancel" href="dashboard">Cancel</a>
 			</form>
-
 		</div>
 	</div>
-
-
 </section>
-
 <jsp:include page="include/footer.jsp" />

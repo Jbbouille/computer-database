@@ -29,11 +29,15 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	public HashMap<Integer, Company> selectAllCompanies() {
-		return DaoFactory.getInstanceCompanyDao().selectAllCompanies();
+	public HashMap<Integer, Company> selectCompanies() {
+		return DaoFactory.getInstanceCompanyDao().selectCompanies();
+	}
+
+	@Override
+	public int countCompanies() {
+		return DaoFactory.getInstanceCompanyDao().countCompanies();
 	}
 
 	protected CompanyServiceImpl(){
-		
 	}
 }

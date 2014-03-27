@@ -21,8 +21,6 @@
 			orderBy="${orderby}" bool="${bool}"></m:pagination>
 	</div>
 
-
-
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
@@ -56,26 +54,25 @@
 						<th class="col-md-2">Action</th>
 					</c:otherwise>
 				</c:choose>
-
 			</tr>
 		</thead>
 		<tbody>
 			<c:set var="companie" value="${companies}"></c:set>
 			<c:forEach var="computer" items="${computers}">
 				<tr>
-					<td class="col-md-2"><a href="modifycomputer?id=${computer.id}"><c:out
+					<td class="col-md-2"><a
+						href="modifycomputer?id=${computer.id}"><c:out
 								value="${computer.name}" /></a></td>
 					<td class="col-md-2"><c:out value="${computer.introduced}" /></td>
 					<td class="col-md-2"><c:out value="${computer.discontinued}" /></td>
 					<c:if test="${computer.companyId != null }">
 						<td><c:out value="${companie.get(computer.companyId).name}" /></td>
 					</c:if>
-					<td class="col-md-2"><a href="deletecomputer?id=${computer.id}"
-						class="btn btn-warning">Delete</a>
+					<td class="col-md-2"><a
+						href="deletecomputer?id=${computer.id}" class="btn btn-warning">Delete</a>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 </section>
-
 <jsp:include page="include/footer.jsp" />

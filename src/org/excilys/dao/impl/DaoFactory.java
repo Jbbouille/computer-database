@@ -6,13 +6,9 @@ public class DaoFactory {
 	private static ComputerDaoImpl instanceComputerDao;
 	private static CompanyDaoImpl instanceCompanyDao;
 
-
 	public static DaoFactory getInstance() {
 		if (instanceFactory == null) instanceFactory = new DaoFactory();
 		return instanceFactory;
-	}
-	
-	private DaoFactory() {
 	}
 
 	public static ComputerDaoImpl getInstanceComputerDao() {
@@ -25,5 +21,8 @@ public class DaoFactory {
 		if (instanceCompanyDao == null)
 			instanceCompanyDao = new CompanyDaoImpl();
 		return instanceCompanyDao;
+	}
+	
+	private DaoFactory() {
 	}
 }

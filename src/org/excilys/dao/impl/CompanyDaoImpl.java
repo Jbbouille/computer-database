@@ -21,7 +21,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		String sql = "INSERT INTO computer-database-db.company (id, name) VALUES (NULL, ?)";
-		LOG.debug("requete : " + sql);
+		LOG.debug("requete sql non-prepare : " + sql);
 
 		try {
 			myCon = manager.createConnection();
@@ -29,6 +29,7 @@ public class CompanyDaoImpl implements CompanyDao {
 
 			myPreStmt.setString(1, myCompany.getName());
 
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
 			LOG.error("Error in execution of resquest :"+e);
@@ -42,7 +43,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		String sql = "DELETE FROM computer-database-db.company WHERE company.id = ?";
-		LOG.debug("requete : " + sql);
+		LOG.debug("requete sql non-prepare : " + sql);
 		
 		try {
 			myCon = manager.createConnection();
@@ -50,6 +51,7 @@ public class CompanyDaoImpl implements CompanyDao {
 
 			myPreStmt.setInt(1, myCompany.getId());
 
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
 			LOG.error("Error in execution of resquest :"+e);
@@ -63,7 +65,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		String sql = "UPDATE comany SET id = ?, name = ? WHERE company.id = ?";
-		LOG.debug("requete : " + sql);
+		LOG.debug("requete sql non-prepare : " + sql);
 		
 		try {
 			myCon = manager.createConnection();
@@ -73,6 +75,7 @@ public class CompanyDaoImpl implements CompanyDao {
 			myPreStmt.setString(2, myCompany.getName());
 			myPreStmt.setInt(3, myCompany.getId());
 
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			myPreStmt.executeUpdate();
 		} catch (SQLException e) {
 			LOG.error("Error in execution of resquest :"+e);
@@ -89,7 +92,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT * FROM company WHERE id = ?";
-		LOG.debug("requete : " + sql);
+		LOG.debug("requete sql non-prepare : " + sql);
 		
 		try {
 			myCon = manager.createConnection();
@@ -97,6 +100,7 @@ public class CompanyDaoImpl implements CompanyDao {
 
 			myPreStmt.setInt(1, id);
 
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			mySet = myPreStmt.executeQuery();
 			mySet.next();
 
@@ -111,18 +115,19 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	public HashMap<Integer, Company> selectAllCompanies() {
+	public HashMap<Integer, Company> selectCompanies() {
 		HashMap<Integer, Company> myList = new HashMap<>();
 		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT * FROM company";
-		LOG.debug("requete : " + sql);
+		LOG.debug("requete sql non-prepare : " + sql);
 		
 		try {
 			myCon = manager.createConnection();
 			myPreStmt = myCon.prepareStatement(sql);
 
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			mySet = myPreStmt.executeQuery();
 			while (mySet.next()) {
 
@@ -139,6 +144,34 @@ public class CompanyDaoImpl implements CompanyDao {
 		return myList;
 	}
 
+	@Override
+	public int countCompanies() {
+		int number = 0;
+
+		Connection myCon = null;
+		PreparedStatement myPreStmt = null;
+		ResultSet mySet = null;
+		String sql = "SELECT count(*) FROM computer";
+		LOG.debug("requete sql non-prepare : " + sql);
+
+		try {
+			myCon = manager.createConnection();
+			myPreStmt = myCon.prepareStatement(sql);
+
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
+			mySet = myPreStmt.executeQuery();
+			
+			mySet.next();
+			number = mySet.getInt(1);
+		} catch (SQLException e) {
+			LOG.error("Error in execution of request :" + e);
+		} finally {
+			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
+		}
+
+		return number;
+	}
+	
 	protected CompanyDaoImpl() {
 	}
 }

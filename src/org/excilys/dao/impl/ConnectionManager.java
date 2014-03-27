@@ -44,12 +44,12 @@ public class ConnectionManager {
 	
 	protected static void closeAll(PreparedStatement myPreStmt, Connection myCon, ResultSet mySet) {
 		try {
-			LOG.debug("Close of all connections");
+			LOG.debug("Close of all connections " + myPreStmt.toString());
 			if (myCon != null) myCon.close();
 			if (mySet != null) mySet.close();
 			if (myPreStmt != null) myPreStmt.close();
 		} catch (SQLException e) {
-			LOG.error("Cannot close connections :" + e);
+			LOG.error("CANNOT close connections : " + e);
 		}
 	}
 }

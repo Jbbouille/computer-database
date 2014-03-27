@@ -1,10 +1,12 @@
 package org.excilys.service.impl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.excilys.dao.impl.DaoFactory;
 import org.excilys.model.Computer;
 import org.excilys.service.ComputerService;
+import org.excilys.util.Utilities;
 
 public class ComputerServiceImpl implements ComputerService {
 
@@ -29,12 +31,12 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public int countNumberComputers(String myName) {
+	public int countNumberOfComputers(String myName) {
 		return DaoFactory.getInstanceComputerDao().countNumberComputers(myName);
 	}
 
 	@Override
-	public double numberPage(int numberComputers, int numberOfRow) {
+	public double numberOfPage(int numberComputers, int numberOfRow) {
 		return Math.ceil(numberComputers / numberOfRow) + 1;
 	}
 
@@ -44,15 +46,14 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public ArrayList<Computer> searchComputer(String myName, String myOrder,
+	public ArrayList<Computer> selectComputers(String myLikeParam, String myOrder,
 			int startLimit, int numberOfRow) {
-		return DaoFactory.getInstanceComputerDao().selectPartsSearchComputers(
-				myName, myOrder, startLimit, numberOfRow);
+		return DaoFactory.getInstanceComputerDao().selectComputers(
+				myLikeParam, myOrder, startLimit, numberOfRow);
 	}
 
 	@Override
 	public String getOrderBy(String myOrder, Boolean desc) {
-
 		StringBuilder myStringBuilder = new StringBuilder();
 
 		switch (myOrder.toLowerCase()) {
@@ -77,13 +78,35 @@ public class ComputerServiceImpl implements ComputerService {
 			break;
 		}
 
-		if (desc)
-			myStringBuilder.append(" DESC");
+		if (desc) myStringBuilder.append(" DESC");
 
 		return myStringBuilder.toString();
 	}
 
 	protected ComputerServiceImpl() {
 
+	}
+
+	@Override
+	public int validateForm(String name, String introduced, String discontinued, int companyId) {
+		int numberCompanies =  ServiceFactory.getCompanyServ().countCompanies();
+		
+		if(name.length() < 2) return 1;
+		
+		try {
+			Utilities.stringToDate(introduced);
+		} catch (ParseException e) {
+			return 2;
+		}
+		
+		try {
+			Utilities.stringToDate(discontinued);
+		} catch (ParseException e) {
+			return 3;
+		}
+		
+		if(companyId > numberCompanies || companyId < -1) return 4;
+		
+		return 0;
 	}
 }
