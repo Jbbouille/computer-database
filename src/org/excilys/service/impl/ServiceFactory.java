@@ -3,15 +3,15 @@ package org.excilys.service.impl;
 public enum ServiceFactory {
 INSTANCE;
 
-	public static ServiceFactory getInstance() {
+	public ServiceFactory getInstance() {
 		return ServiceFactory.INSTANCE;
 	}
 
-	public static ComputerServiceImpl getComputerServ() {
+	public ComputerServiceImpl getComputerServ() {
 		return ComputerServiceImpl.INSTANCE;
 	}
 
-	public static CompanyServiceImpl getCompanyServ() {
+	public CompanyServiceImpl getCompanyServ() {
 		return CompanyServiceImpl.INSTANCE;
 	}
 }

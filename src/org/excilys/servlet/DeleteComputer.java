@@ -18,7 +18,7 @@ public class DeleteComputer extends HttpServlet {
 		
 		int id = Integer.valueOf(req.getParameter("idComputer"));
 		
-		ComputerServiceImpl myService = ServiceFactory.getComputerServ();
+		ComputerServiceImpl myService = ServiceFactory.INSTANCE.getComputerServ();
 
 		myService.deleteComputer(myService.selectComputer(id));
 
@@ -31,7 +31,7 @@ public class DeleteComputer extends HttpServlet {
 
 		int id = Integer.valueOf(req.getParameter("id"));
 
-		req.setAttribute("computer", ServiceFactory.getComputerServ()
+		req.setAttribute("computer", ServiceFactory.INSTANCE.getComputerServ()
 				.selectComputer(id));
 
 		getServletContext().getRequestDispatcher("/WEB-INF/deleteComputer.jsp")

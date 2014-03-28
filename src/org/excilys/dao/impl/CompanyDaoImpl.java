@@ -13,163 +13,123 @@ import org.slf4j.LoggerFactory;
 
 public enum CompanyDaoImpl implements CompanyDao {
 	INSTANCE;
-	
+
 	static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
-	private ConnectionManager manager = ConnectionManager.getInstance();
 
 	@Override
-	public void insertCompany(Company myCompany) {
-		Connection myCon = null;
+	public void insertCompany(Company myCompany, Connection myCon)
+			throws SQLException {
 		PreparedStatement myPreStmt = null;
 		String sql = "INSERT INTO computer-database-db.company (id, name) VALUES (NULL, ?)";
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		try {
-			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql);
+		myPreStmt = myCon.prepareStatement(sql);
 
-			myPreStmt.setString(1, myCompany.getName());
+		myPreStmt.setString(1, myCompany.getName());
 
-			LOG.debug("requete sql prepare : " + myPreStmt.toString());
-			myPreStmt.executeUpdate();
-		} catch (SQLException e) {
-			LOG.error("Error in execution of resquest :"+e);
-		} finally {
-			ConnectionManager.closeAll(myPreStmt, myCon, null);
-		}
+		LOG.debug("requete sql prepare : " + myPreStmt.toString());
+		myPreStmt.executeUpdate();
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
 	}
 
 	@Override
-	public void deleteCompany(Company myCompany) {
-		Connection myCon = null;
+	public void deleteCompany(Company myCompany, Connection myCon)
+			throws SQLException {
 		PreparedStatement myPreStmt = null;
 		String sql = "DELETE FROM computer-database-db.company WHERE company.id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
-		
-		try {
-			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql);
 
-			myPreStmt.setInt(1, myCompany.getId());
+		myPreStmt = myCon.prepareStatement(sql);
 
-			LOG.debug("requete sql prepare : " + myPreStmt.toString());
-			myPreStmt.executeUpdate();
-		} catch (SQLException e) {
-			LOG.error("Error in execution of resquest :"+e);
-		} finally {
-			ConnectionManager.closeAll(myPreStmt, myCon, null);
-		}
+		myPreStmt.setInt(1, myCompany.getId());
+
+		LOG.debug("requete sql prepare : " + myPreStmt.toString());
+		myPreStmt.executeUpdate();
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
 	}
 
 	@Override
-	public void updateCompany(Company myCompany) {
-		Connection myCon = null;
+	public void updateCompany(Company myCompany, Connection myCon)
+			throws SQLException {
 		PreparedStatement myPreStmt = null;
 		String sql = "UPDATE comany SET id = ?, name = ? WHERE company.id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
-		
-		try {
-			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql);
 
-			myPreStmt.setInt(1, myCompany.getId());
-			myPreStmt.setString(2, myCompany.getName());
-			myPreStmt.setInt(3, myCompany.getId());
+		myPreStmt = myCon.prepareStatement(sql);
 
-			LOG.debug("requete sql prepare : " + myPreStmt.toString());
-			myPreStmt.executeUpdate();
-		} catch (SQLException e) {
-			LOG.error("Error in execution of resquest :"+e);
-		} finally {
-			ConnectionManager.closeAll(myPreStmt, myCon, null);
-		}
+		myPreStmt.setInt(1, myCompany.getId());
+		myPreStmt.setString(2, myCompany.getName());
+		myPreStmt.setInt(3, myCompany.getId());
+
+		LOG.debug("requete sql prepare : " + myPreStmt.toString());
+		myPreStmt.executeUpdate();
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
 	}
 
 	@Override
-	public Company selectCompany(int id) {
+	public Company selectCompany(int id, Connection myCon) throws SQLException {
 		Company myCompany = null;
 
-		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT * FROM company WHERE id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
-		
-		try {
-			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql);
 
-			myPreStmt.setInt(1, id);
+		myPreStmt = myCon.prepareStatement(sql);
 
-			LOG.debug("requete sql prepare : " + myPreStmt.toString());
-			mySet = myPreStmt.executeQuery();
-			mySet.next();
+		myPreStmt.setInt(1, id);
 
-			myCompany = new Company(mySet.getInt("id"), mySet.getString("name"));
-		} catch (SQLException e) {
-			LOG.error("Error in execution of resquest :"+e);
-		} finally {
-			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
-		}
+		LOG.debug("requete sql prepare : " + myPreStmt.toString());
+		mySet = myPreStmt.executeQuery();
+		mySet.next();
 
+		myCompany = new Company(mySet.getInt("id"), mySet.getString("name"));
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
 		return myCompany;
 	}
 
 	@Override
-	public HashMap<Integer, Company> selectCompanies() {
+	public HashMap<Integer, Company> selectCompanies(Connection myCon)
+			throws SQLException {
 		HashMap<Integer, Company> myList = new HashMap<>();
-		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT * FROM company";
 		LOG.debug("requete sql non-prepare : " + sql);
-		
-		try {
-			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql);
 
-			LOG.debug("requete sql prepare : " + myPreStmt.toString());
-			mySet = myPreStmt.executeQuery();
-			while (mySet.next()) {
+		myPreStmt = myCon.prepareStatement(sql);
 
-				myList.put(mySet.getInt("id"), new Company(mySet.getInt("id"),
-						mySet.getString("name")));
+		LOG.debug("requete sql prepare : " + myPreStmt.toString());
+		mySet = myPreStmt.executeQuery();
+		while (mySet.next()) {
 
-			}
-		} catch (SQLException e) {
-			LOG.error("Error in execution of resquest :"+e);
-		} finally {
-			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
+			myList.put(mySet.getInt("id"), new Company(mySet.getInt("id"),
+					mySet.getString("name")));
+
 		}
 
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
 		return myList;
 	}
 
 	@Override
-	public int countCompanies() {
+	public int countCompanies(Connection myCon) throws SQLException {
 		int number = 0;
 
-		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT count(*) FROM computer";
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		try {
-			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql);
+		myPreStmt = myCon.prepareStatement(sql);
 
-			LOG.debug("requete sql prepare : " + myPreStmt.toString());
-			mySet = myPreStmt.executeQuery();
-			
-			mySet.next();
-			number = mySet.getInt(1);
-		} catch (SQLException e) {
-			LOG.error("Error in execution of request :" + e);
-		} finally {
-			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
-		}
+		LOG.debug("requete sql prepare : " + myPreStmt.toString());
+		mySet = myPreStmt.executeQuery();
 
+		mySet.next();
+		number = mySet.getInt(1);
+
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
 		return number;
 	}
 }

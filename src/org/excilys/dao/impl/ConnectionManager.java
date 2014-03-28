@@ -21,7 +21,7 @@ public enum ConnectionManager {
 	private static final Logger LOG = LoggerFactory.getLogger(ConnectionManager.class);
 	private BoneCPDataSource boneCP = new BoneCPDataSource();
 	
-	public static ConnectionManager getInstance() {
+	public ConnectionManager getInstance() {
 		return ConnectionManager.INSTANCE;
 	}
 
@@ -41,7 +41,7 @@ public enum ConnectionManager {
 		return mConnection;
 	}
 	
-	protected static void closeAll(PreparedStatement myPreStmt, Connection myCon, ResultSet mySet) {
+	protected void closeAll(PreparedStatement myPreStmt, Connection myCon, ResultSet mySet) {
 		try {
 			LOG.debug("Close of all connections " + myPreStmt.toString());
 			if (myCon != null) myCon.close();

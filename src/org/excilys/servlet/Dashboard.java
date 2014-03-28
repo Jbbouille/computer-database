@@ -20,7 +20,7 @@ public class Dashboard extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		ComputerServiceImpl myService = ServiceFactory.getComputerServ();
+		ComputerServiceImpl myService = ServiceFactory.INSTANCE.getComputerServ();
 		
 		int page;
 		String search;
@@ -58,7 +58,7 @@ public class Dashboard extends HttpServlet {
 				NUMBER_OF_COMPUTER_BY_PAGE));
 		req.setAttribute("orderby", orderBy);
 		req.setAttribute("bool", desc);
-		req.setAttribute("companies", ServiceFactory.getCompanyServ()
+		req.setAttribute("companies", ServiceFactory.INSTANCE.getCompanyServ()
 				.selectCompanies());
 		req.setAttribute("currentPage", page);
 

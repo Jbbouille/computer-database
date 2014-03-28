@@ -37,6 +37,7 @@ public enum ComputerServiceImpl implements ComputerService {
 
 		try {
 			myCon.commit();
+			myCon.close();
 		} catch (SQLException e) {
 		}
 	}
@@ -61,6 +62,7 @@ public enum ComputerServiceImpl implements ComputerService {
 
 		try {
 			myCon.commit();
+			myCon.close();
 		} catch (SQLException e) {
 		}
 	}
@@ -74,7 +76,7 @@ public enum ComputerServiceImpl implements ComputerService {
 			DaoFactory.getInstanceComputerDao().updateComputer(myComputer,
 					myCon);
 			DaoFactory.getInstanceLogDao().insertLog(
-					"update of a computer id :" +myComputer.getId(), myCon);
+					"update of a computer id :" + myComputer.getId(), myCon);
 		} catch (SQLException e1) {
 			try {
 				myCon.rollback();
@@ -85,18 +87,35 @@ public enum ComputerServiceImpl implements ComputerService {
 
 		try {
 			myCon.commit();
+			myCon.close();
 		} catch (SQLException e) {
 		}
 	}
 
 	@Override
 	public Computer selectComputer(int id) {
-		return DaoFactory.getInstanceComputerDao().selectComputer(id);
+		Connection myCon = ConnectionManager.INSTANCE.createConnection();
+		Computer myComputer = null;
+		try {
+			myComputer = DaoFactory.getInstanceComputerDao().selectComputer(id,
+					myCon);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return myComputer;
 	}
 
 	@Override
 	public int countNumberOfComputers(String myName) {
-		return DaoFactory.getInstanceComputerDao().countNumberComputers(myName);
+		Connection myCon = ConnectionManager.INSTANCE.createConnection();
+		int number = 0;
+		try {
+			number = DaoFactory.getInstanceComputerDao().countNumberComputers(
+					myName, myCon);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return number;
 	}
 
 	@Override
@@ -112,8 +131,15 @@ public enum ComputerServiceImpl implements ComputerService {
 	@Override
 	public ArrayList<Computer> selectComputers(String myLikeParam,
 			String myOrder, int startLimit, int numberOfRow) {
-		return DaoFactory.getInstanceComputerDao().selectComputers(myLikeParam,
-				myOrder, startLimit, numberOfRow);
+		Connection myCon = ConnectionManager.INSTANCE.createConnection();
+		ArrayList<Computer> myList = null;
+		try {
+			myList = DaoFactory.getInstanceComputerDao().selectComputers(
+					myLikeParam, myOrder, startLimit, numberOfRow, myCon);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return myList;
 	}
 
 	@Override
@@ -151,7 +177,6 @@ public enum ComputerServiceImpl implements ComputerService {
 	@Override
 	public HttpServletRequest validateForm(HttpServletRequest req) {
 
-		int numberCompanies = ServiceFactory.getCompanyServ().countCompanies();
 		Integer id = 0;
 
 		if (req.getParameter("name").length() < 2) {

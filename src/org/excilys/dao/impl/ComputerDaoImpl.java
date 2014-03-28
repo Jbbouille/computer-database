@@ -19,7 +19,6 @@ public enum ComputerDaoImpl implements ComputerDao {
 	INSTANCE;
 
 	static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
-	private ConnectionManager manager = ConnectionManager.getInstance();
 
 	@Override
 	public int insertComputer(Computer myComputer, Connection myCon)
@@ -60,6 +59,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 		mySet.next();
 		id = mySet.getInt(1);
 
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, mySet);
 		return id;
 	}
 
@@ -82,10 +82,12 @@ public enum ComputerDaoImpl implements ComputerDao {
 
 		mySet = myPreStmt.getGeneratedKeys();
 		mySet.next();
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, mySet);
 	}
 
 	@Override
-	public void updateComputer(Computer myComputer, Connection myCon) throws SQLException {
+	public void updateComputer(Computer myComputer, Connection myCon)
+			throws SQLException {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE computer.id = ?";
@@ -122,77 +124,66 @@ public enum ComputerDaoImpl implements ComputerDao {
 
 		mySet = myPreStmt.getGeneratedKeys();
 		mySet.next();
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, mySet);
 	}
 
 	@Override
-	public Computer selectComputer(int id) {
+	public Computer selectComputer(int id, Connection myCon)
+			throws SQLException {
 		Computer myComputer = null;
 
-		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 
 		String sql = "SELECT * FROM computer WHERE id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		try {
-			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql);
+		myPreStmt = myCon.prepareStatement(sql);
 
-			myPreStmt.setInt(1, id);
+		myPreStmt.setInt(1, id);
 
-			LOG.debug("requete sql prepare : " + myPreStmt.toString());
-			mySet = myPreStmt.executeQuery();
-			mySet.next();
+		LOG.debug("requete sql prepare : " + myPreStmt.toString());
+		mySet = myPreStmt.executeQuery();
+		mySet.next();
 
-			myComputer = new Computer(mySet.getInt("id"),
-					mySet.getString("name"), mySet.getDate("introduced"),
-					mySet.getDate("discontinued"), mySet.getInt("company_id"));
-		} catch (SQLException e) {
-			LOG.error("Error in execution of request :" + e);
-		} finally {
-			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
-		}
+		myComputer = new Computer(mySet.getInt("id"), mySet.getString("name"),
+				mySet.getDate("introduced"), mySet.getDate("discontinued"),
+				mySet.getInt("company_id"));
 
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, mySet);
 		return myComputer;
 	}
 
 	@Override
-	public int countNumberComputers(String myName) {
+	public int countNumberComputers(String myName, Connection myCon)
+			throws SQLException {
 		int number = 0;
 
-		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT count(*) FROM computer WHERE name like ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		try {
-			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql);
+		myPreStmt = myCon.prepareStatement(sql);
 
-			myPreStmt.setString(1, "%" + myName + "%");
+		myPreStmt.setString(1, "%" + myName + "%");
 
-			LOG.debug("requete sql prepare : " + myPreStmt.toString());
-			mySet = myPreStmt.executeQuery();
+		LOG.debug("requete sql prepare : " + myPreStmt.toString());
+		mySet = myPreStmt.executeQuery();
 
-			mySet.next();
-			number = mySet.getInt(1);
-		} catch (SQLException e) {
-			LOG.error("Error in execution of request :" + e);
-		} finally {
-			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
-		}
+		mySet.next();
+		number = mySet.getInt(1);
 
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, mySet);
 		return number;
 	}
 
 	@Override
 	public ArrayList<Computer> selectComputers(String myLikeParam,
-			String myOrder, int startLimit, int numberOfRow) {
+			String myOrder, int startLimit, int numberOfRow, Connection myCon)
+			throws SQLException {
 		ArrayList<Computer> myList = new ArrayList<>();
 
-		Connection myCon = null;
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		StringBuilder sql = new StringBuilder();
@@ -202,34 +193,27 @@ public enum ComputerDaoImpl implements ComputerDao {
 
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		try {
-			myCon = manager.createConnection();
-			myPreStmt = myCon.prepareStatement(sql.toString());
+		myPreStmt = myCon.prepareStatement(sql.toString());
 
-			myPreStmt.setString(1, "%" + myLikeParam + "%");
-			myPreStmt.setString(2, "%" + myLikeParam + "%");
-			myPreStmt.setInt(3, startLimit);
-			myPreStmt.setInt(4, numberOfRow);
+		myPreStmt.setString(1, "%" + myLikeParam + "%");
+		myPreStmt.setString(2, "%" + myLikeParam + "%");
+		myPreStmt.setInt(3, startLimit);
+		myPreStmt.setInt(4, numberOfRow);
 
-			LOG.debug("requete sql prepare : " + myPreStmt.toString());
+		LOG.debug("requete sql prepare : " + myPreStmt.toString());
 
-			mySet = myPreStmt.executeQuery();
+		mySet = myPreStmt.executeQuery();
 
-			while (mySet.next()) {
+		while (mySet.next()) {
 
-				Computer myComputer = new Computer(mySet.getInt("id"),
-						mySet.getString("name"), mySet.getDate("introduced"),
-						mySet.getDate("discontinued"),
-						mySet.getInt("company_id"));
+			Computer myComputer = new Computer(mySet.getInt("id"),
+					mySet.getString("name"), mySet.getDate("introduced"),
+					mySet.getDate("discontinued"), mySet.getInt("company_id"));
 
-				myList.add(myComputer);
-			}
-		} catch (SQLException e) {
-			LOG.error("Error in execution of request :" + e);
-		} finally {
-			ConnectionManager.closeAll(myPreStmt, myCon, mySet);
+			myList.add(myComputer);
 		}
 
+		ConnectionManager.INSTANCE.closeAll(myPreStmt,myCon, mySet);
 		return myList;
 	}
 }

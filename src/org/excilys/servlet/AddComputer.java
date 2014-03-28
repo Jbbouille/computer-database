@@ -20,7 +20,7 @@ public class AddComputer extends HttpServlet {
 
 		Computer myComputer = new Computer();
 		
-		req = ServiceFactory.getComputerServ().validateForm(req);
+		req = ServiceFactory.INSTANCE.getComputerServ().validateForm(req);
 		boolean myCheckForm = true;
 		if (req.getAttribute("checkForm") != null) myCheckForm = (Boolean) req.getAttribute("checkForm");
 		
@@ -38,7 +38,7 @@ public class AddComputer extends HttpServlet {
 				e.printStackTrace();
 			}
 
-			ServiceFactory.getComputerServ().insertComputer(myComputer);
+			ServiceFactory.INSTANCE.getComputerServ().insertComputer(myComputer);
 
 			resp.sendRedirect("dashboard");
 		} else {
@@ -47,7 +47,7 @@ public class AddComputer extends HttpServlet {
 			req.setAttribute("introducedDate", req.getParameter("introducedDate"));
 			req.setAttribute("discontinuedDate", req.getParameter("discontinuedDate"));
 			req.setAttribute("companyParam", req.getParameter("company"));
-			req.setAttribute("companies", ServiceFactory.getCompanyServ()
+			req.setAttribute("companies", ServiceFactory.INSTANCE.getCompanyServ()
 					.selectCompanies());
 			
 			getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(req, resp);
@@ -58,7 +58,7 @@ public class AddComputer extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		req.setAttribute("companies", ServiceFactory.getCompanyServ()
+		req.setAttribute("companies", ServiceFactory.INSTANCE.getCompanyServ()
 				.selectCompanies());
 
 		getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp")

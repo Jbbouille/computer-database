@@ -25,7 +25,7 @@ public enum LogDaoImpl implements LogDao {
 		myPreStmt.setString(1, text);
 
 		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		
+
 		myPreStmt.execute();
 	}
 
