@@ -13,11 +13,14 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jolbox.bonecp.BoneCPDataSource;
+
 public enum ConnectionManager {
 	INSTANCE;
 	
-	static final Logger LOG = LoggerFactory.getLogger(ConnectionManager.class);
-
+	private static final Logger LOG = LoggerFactory.getLogger(ConnectionManager.class);
+	private BoneCPDataSource boneCP = new BoneCPDataSource();
+	
 	public static ConnectionManager getInstance() {
 		return ConnectionManager.INSTANCE;
 	}
@@ -28,7 +31,8 @@ public enum ConnectionManager {
 			Context ctx = new InitialContext();
 			DataSource ds = (DataSource) ctx
 					.lookup("java:comp/env/jdbc/computerdatabase");
-			mConnection = ds.getConnection();
+			boneCP.setDatasourceBean(ds);
+			mConnection = boneCP.getConnection();
 		} catch (NamingException e) {
 			LOG.error("Cannot get Name of DataSource :" + e);
 		} catch (SQLException e) {
@@ -46,8 +50,5 @@ public enum ConnectionManager {
 		} catch (SQLException e) {
 			LOG.error("CANNOT close connections : " + e);
 		}
-	}
-
-	private ConnectionManager() {
 	}
 }

@@ -72,9 +72,9 @@ public class ModifyComputer extends HttpServlet {
 			throws ServletException, IOException {
 
 		Integer id = null;
-		if (req.getParameter("idComputer") != null) {
+		if (req.getParameter("id") != null) {
 			
-			id = Integer.valueOf(req.getParameter("idComputer"));
+			id = Integer.valueOf(req.getParameter("id"));
 			
 			req.setAttribute("companies", ServiceFactory.getCompanyServ()
 					.selectCompanies());
