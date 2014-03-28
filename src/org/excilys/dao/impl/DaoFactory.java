@@ -14,4 +14,8 @@ public enum DaoFactory {
 	public static CompanyDaoImpl getInstanceCompanyDao() {
 		return CompanyDaoImpl.INSTANCE;
 	}
+	
+	public static LogDaoImpl getInstanceLogDao(){
+		return LogDaoImpl.INSTANCE;
+	}
 }

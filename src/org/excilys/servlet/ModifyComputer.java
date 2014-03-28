@@ -18,9 +18,7 @@ public class ModifyComputer extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		Integer id =null;
-		if(req.getParameter("idComputer")!=null) id = Integer.valueOf(req.getParameter("idComputer"));
-		else resp.sendRedirect("dashboard");
+		Integer id = Integer.valueOf(req.getParameter("idComputer"));
 		
 		req = ServiceFactory.getComputerServ().validateForm(req);
 		
