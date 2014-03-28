@@ -34,12 +34,14 @@ public enum ComputerServiceImpl implements ComputerService {
 			DaoFactory.getInstanceLogDao().insertLog(
 					"insert of a computer id :" + id, myCon);
 		} catch (SQLException e1) {
+			LOG.error("Error on the insertComputer -computerId-"+id+" "+e1);
 			try {
 				myCon.rollback();
 				myThreadLocal.get().close();
 				myThreadLocal.remove();
 				LOG.debug("Close of Thread" + Thread.currentThread().toString());
 			} catch (SQLException e) {
+				LOG.error("Error on the rollback insertComputer -computerId-"+id+" "+e);
 			}
 		}
 
@@ -49,6 +51,7 @@ public enum ComputerServiceImpl implements ComputerService {
 			myThreadLocal.remove();
 			LOG.debug("Close of Thread" + Thread.currentThread().toString());
 		} catch (SQLException e) {
+			LOG.error("Error on the commit insertComputer -computerId-"+id+" "+e);
 		}
 	}
 
@@ -63,12 +66,14 @@ public enum ComputerServiceImpl implements ComputerService {
 			DaoFactory.getInstanceLogDao().insertLog(
 					"delete of a computer id :" + myComputer.getId(), myCon);
 		} catch (SQLException e1) {
+			LOG.error("Error on the deleteComputer "+e1);
 			try {
 				myCon.rollback();
 				myThreadLocal.get().close();
 				myThreadLocal.remove();
 				LOG.debug("Close of Thread" + Thread.currentThread().toString());
 			} catch (SQLException e) {
+				LOG.error("Error on the rollback deleteComputer "+e);
 			}
 		}
 
@@ -78,6 +83,7 @@ public enum ComputerServiceImpl implements ComputerService {
 			myThreadLocal.remove();
 			LOG.debug("Close of Thread" + Thread.currentThread().toString());
 		} catch (SQLException e) {
+			LOG.error("Error on the commit deleteComputer "+e);
 		}
 	}
 
@@ -92,12 +98,14 @@ public enum ComputerServiceImpl implements ComputerService {
 			DaoFactory.getInstanceLogDao().insertLog(
 					"update of a computer id :" + myComputer.getId(), myCon);
 		} catch (SQLException e1) {
+			LOG.error("Error on the updateComputer -computerId-"+myComputer.getId()+" "+e1);
 			try {
 				myCon.rollback();
 				myThreadLocal.get().close();
 				myThreadLocal.remove();
 				LOG.debug("Close of Thread" + Thread.currentThread().toString());
 			} catch (SQLException e) {
+				LOG.error("Error on the rollback updateComputer -computerId-"+myComputer.getId()+" "+e1);
 			}
 		}
 
@@ -107,6 +115,7 @@ public enum ComputerServiceImpl implements ComputerService {
 			myThreadLocal.remove();
 			LOG.debug("Close of Thread" + Thread.currentThread().toString());
 		} catch (SQLException e) {
+			LOG.error("Error on the commit updateComputer -computerId-"+myComputer.getId()+" "+e);
 		}
 	}
 
@@ -119,6 +128,7 @@ public enum ComputerServiceImpl implements ComputerService {
 					myCon);
 
 		} catch (SQLException e) {
+			LOG.error("Error on the selectComputer -computerId-"+id+" "+e);
 		} finally {
 			try {
 				myThreadLocal.get().close();
@@ -140,11 +150,12 @@ public enum ComputerServiceImpl implements ComputerService {
 					myName, myCon);
 
 		} catch (SQLException e) {
+			LOG.error("Error on the countNumberOfComputers "+e);
 		} finally {
 			try {
 				ConnectionManager.INSTANCE.myThreadLocal.get().close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				LOG.error("Error on the close connection of countNumberOfComputers "+e);
 			}
 			myThreadLocal.remove();
 			LOG.debug("Close of Thread" + Thread.currentThread().toString());
@@ -172,10 +183,12 @@ public enum ComputerServiceImpl implements ComputerService {
 					myLikeParam, myOrder, startLimit, numberOfRow, myCon);
 
 		} catch (SQLException e) {
+			LOG.error("Error on the selectComputers "+e);
 		} finally {
 			try {
 				myThreadLocal.get().close();
 			} catch (SQLException e) {
+				LOG.error("Error on the close of selectComputers "+e);
 			}
 			myThreadLocal.remove();
 			LOG.debug("Close of Thread" + Thread.currentThread().toString());
