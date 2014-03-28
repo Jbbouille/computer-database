@@ -1,7 +1,6 @@
 package org.excilys.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,5 +28,4 @@ public interface ComputerService {
 	public String getOrderBy(String myOrder, Boolean desc);
 
 	public HttpServletRequest validateForm(HttpServletRequest req);
-	
 }

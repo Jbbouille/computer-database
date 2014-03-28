@@ -13,28 +13,15 @@ import org.excilys.service.impl.ServiceFactory;
 public class DeleteComputer extends HttpServlet {
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
-		int id = Integer.valueOf(req.getParameter("idComputer"));
+
+		int id = Integer.valueOf(req.getParameter("id"));
 		
 		ComputerServiceImpl myService = ServiceFactory.INSTANCE.getComputerServ();
 
 		myService.deleteComputer(myService.selectComputer(id));
 
 		resp.sendRedirect("dashboard");
-	}
-
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-
-		int id = Integer.valueOf(req.getParameter("id"));
-
-		req.setAttribute("computer", ServiceFactory.INSTANCE.getComputerServ()
-				.selectComputer(id));
-
-		getServletContext().getRequestDispatcher("/WEB-INF/deleteComputer.jsp")
-				.forward(req, resp);
 	}
 }

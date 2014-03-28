@@ -174,7 +174,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 		mySet.next();
 		number = mySet.getInt(1);
 
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, mySet);
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, mySet);
 		return number;
 	}
 
@@ -213,7 +213,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			myList.add(myComputer);
 		}
 
-		ConnectionManager.INSTANCE.closeAll(myPreStmt,myCon, mySet);
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, mySet);
 		return myList;
 	}
 }

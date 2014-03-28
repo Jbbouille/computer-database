@@ -29,7 +29,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 
 		LOG.debug("requete sql prepare : " + myPreStmt.toString());
 		myPreStmt.executeUpdate();
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, null);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 
 		LOG.debug("requete sql prepare : " + myPreStmt.toString());
 		myPreStmt.executeUpdate();
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, null);
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 
 		LOG.debug("requete sql prepare : " + myPreStmt.toString());
 		myPreStmt.executeUpdate();
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, null);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 		mySet.next();
 
 		myCompany = new Company(mySet.getInt("id"), mySet.getString("name"));
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, null);
 		return myCompany;
 	}
 
@@ -107,8 +107,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 					mySet.getString("name")));
 
 		}
-
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, null);
 		return myList;
 	}
 
@@ -129,7 +128,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 		mySet.next();
 		number = mySet.getInt(1);
 
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, null);
+		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, null);
 		return number;
 	}
 }

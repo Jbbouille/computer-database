@@ -17,34 +17,47 @@ import com.jolbox.bonecp.BoneCPDataSource;
 
 public enum ConnectionManager {
 	INSTANCE;
+
+	public static final Logger LOG = LoggerFactory
+			.getLogger(ConnectionManager.class);
 	
-	private static final Logger LOG = LoggerFactory.getLogger(ConnectionManager.class);
 	private BoneCPDataSource boneCP = new BoneCPDataSource();
 	
+	public ThreadLocal<Connection> myThreadLocal = new ThreadLocal<Connection>();
+
+	{
+		Context ctx = null;
+		DataSource ds = null;
+		try {
+			ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/computerdatabase");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		boneCP.setDatasourceBean(ds);
+	}
+
 	public ConnectionManager getInstance() {
 		return ConnectionManager.INSTANCE;
 	}
 
-	public Connection createConnection() {
-		Connection mConnection = null;
+	public Connection getConnection() {
 		try {
-			Context ctx = new InitialContext();
-			DataSource ds = (DataSource) ctx
-					.lookup("java:comp/env/jdbc/computerdatabase");
-			boneCP.setDatasourceBean(ds);
-			mConnection = boneCP.getConnection();
-		} catch (NamingException e) {
-			LOG.error("Cannot get Name of DataSource :" + e);
+			if(myThreadLocal.get()==null){
+				myThreadLocal.set(boneCP.getConnection());
+				LOG.debug("getThread NEW :"+Thread.currentThread().toString());
+			}
+			LOG.debug("getThread NOT NEW :"+Thread.currentThread().toString());
 		} catch (SQLException e) {
-			LOG.error("Cannot create DataSource :" + e);
+			e.printStackTrace();
 		}
-		return mConnection;
+		return myThreadLocal.get();
 	}
-	
-	protected void closeAll(PreparedStatement myPreStmt, Connection myCon, ResultSet mySet) {
+
+	protected void closeAll(PreparedStatement myPreStmt, Connection myCon,
+			ResultSet mySet) {
 		try {
 			LOG.debug("Close of all connections " + myPreStmt.toString());
-			if (myCon != null) myCon.close();
 			if (mySet != null) mySet.close();
 			if (myPreStmt != null) myPreStmt.close();
 		} catch (SQLException e) {

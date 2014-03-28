@@ -27,6 +27,7 @@ public class Dashboard extends HttpServlet {
 		String orderBy;
 		boolean desc;
 		Double myNumberOfPage;
+		int numberOfComputer;
 				
 		if (req.getParameter("bool") == null) desc = false;
 		else desc = Boolean.valueOf(req.getParameter("bool"));
@@ -37,8 +38,10 @@ public class Dashboard extends HttpServlet {
 		if (req.getParameter("search") == null) search = "";
 		else search = req.getParameter("search");
 
+		numberOfComputer = myService.countNumberOfComputers(search);
+		
 		myNumberOfPage = myService.numberOfPage(
-				myService.countNumberOfComputers(search),
+				numberOfComputer,
 				NUMBER_OF_COMPUTER_BY_PAGE);
 			
 		if ((req.getParameter("page") == null) || Double.valueOf(req.getParameter("page")) > myNumberOfPage || Double.valueOf(req.getParameter("page")) < 0) page = 1;
@@ -51,11 +54,8 @@ public class Dashboard extends HttpServlet {
 
 		req.setAttribute("computers", myListComputers);
 		req.setAttribute("search", search);
-		req.setAttribute("numberOfComputers",
-				myService.countNumberOfComputers(search));
-		req.setAttribute("numberOfPages", myService.numberOfPage(
-				myService.countNumberOfComputers(search),
-				NUMBER_OF_COMPUTER_BY_PAGE));
+		req.setAttribute("numberOfComputers",numberOfComputer);
+		req.setAttribute("numberOfPages",myNumberOfPage);
 		req.setAttribute("orderby", orderBy);
 		req.setAttribute("bool", desc);
 		req.setAttribute("companies", ServiceFactory.INSTANCE.getCompanyServ()

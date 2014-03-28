@@ -50,7 +50,7 @@
 						<td><c:out value="${companie.get(computer.companyId).name}" /></td>
 					</c:if>
 					<td class="col-md-2"><a
-						href="deletecomputer?id=${computer.id}" class="btn btn-warning">Delete</a>
+						href="deletecomputer?id=${computer.id}" class="btn btn-warning" onClick="confirm( 'Are you sure to delete' )">Delete</a>
 				</tr>
 			</c:forEach>
 		</tbody>
