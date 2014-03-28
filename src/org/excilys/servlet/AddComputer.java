@@ -21,10 +21,10 @@ public class AddComputer extends HttpServlet {
 		Computer myComputer = new Computer();
 		
 		req = ServiceFactory.getComputerServ().validateForm(req);
+		boolean myCheckForm = true;
+		if (req.getAttribute("checkForm") != null) myCheckForm = (Boolean) req.getAttribute("checkForm");
 		
-		boolean mybool = (Boolean) req.getAttribute("checkForm");
-		
-		if (mybool) {
+		if (myCheckForm) {
 			
 			myComputer.setName(req.getParameter("name"));
 

@@ -18,13 +18,16 @@ public class ModifyComputer extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		int id = Integer.valueOf(req.getParameter("idComputer"));
+		Integer id =null;
+		if(req.getParameter("idComputer")!=null) id = Integer.valueOf(req.getParameter("idComputer"));
+		else resp.sendRedirect("dashboard");
 		
 		req = ServiceFactory.getComputerServ().validateForm(req);
 		
-		boolean mybool = (Boolean) req.getAttribute("checkForm");
+		boolean myCheckForm = true;
+		if (req.getAttribute("checkForm") != null) myCheckForm = (Boolean) req.getAttribute("checkForm");
 		
-		if (mybool) {
+		if (myCheckForm) {
 
 			Computer myComputer = new Computer();
 
@@ -68,14 +71,20 @@ public class ModifyComputer extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		int id = Integer.valueOf(req.getParameter("id"));
+		Integer id = null;
+		if (req.getParameter("idComputer") != null) {
+			
+			id = Integer.valueOf(req.getParameter("idComputer"));
+			
+			req.setAttribute("companies", ServiceFactory.getCompanyServ()
+					.selectCompanies());
+			req.setAttribute("computer", ServiceFactory.getComputerServ()
+					.selectComputer(id));
 
-		req.setAttribute("companies", ServiceFactory.getCompanyServ()
-				.selectCompanies());
-		req.setAttribute("computer", ServiceFactory.getComputerServ()
-				.selectComputer(id));
-
-		getServletContext().getRequestDispatcher("/WEB-INF/modifyComputer.jsp")
-				.forward(req, resp);
+			getServletContext().getRequestDispatcher("/WEB-INF/modifyComputer.jsp")
+					.forward(req, resp);
+		} else {
+			resp.sendRedirect("dashboard");
+		}
 	}
 }

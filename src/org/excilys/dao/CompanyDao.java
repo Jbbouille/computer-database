@@ -16,5 +16,5 @@ public interface CompanyDao {
 	
 	public HashMap<Integer, Company> selectCompanies();
 	
-	public int countCompanies();
+	public int countCompanies();	
 }

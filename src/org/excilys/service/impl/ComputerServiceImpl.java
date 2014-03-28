@@ -2,7 +2,6 @@ package org.excilys.service.impl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,11 +10,9 @@ import org.excilys.model.Computer;
 import org.excilys.service.ComputerService;
 import org.excilys.util.Utilities;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 public enum ComputerServiceImpl implements ComputerService {
 	INSTANCE;
-	
+
 	@Override
 	public void insertComputer(Computer myComputer) {
 		DaoFactory.getInstanceComputerDao().insertComputer(myComputer);
@@ -94,6 +91,7 @@ public enum ComputerServiceImpl implements ComputerService {
 	public HttpServletRequest validateForm(HttpServletRequest req) {
 		
 		int numberCompanies = ServiceFactory.getCompanyServ().countCompanies();
+		Integer id = 0;
 
 		if (req.getParameter("name").length() < 2) {
 			req.setAttribute("errorName", "Please enter at least 2 characters.");
@@ -120,10 +118,20 @@ public enum ComputerServiceImpl implements ComputerService {
 		}
 		}
 		
-		if (Integer.valueOf(req.getParameter("company")) > numberCompanies || Integer.valueOf(req.getParameter("company")) < -1){
+		try {
+			id = Integer.valueOf(req.getParameter("company"));
+		} catch (NumberFormatException e) {
 			req.setAttribute("errorCompany",
 					"Please enter a company id in a range.");
 			req.setAttribute("checkForm", false);
+		}
+		
+		if (id != -1 && id != null){
+			if (ServiceFactory.INSTANCE.getCompanyServ().selectCompany(id) == null) {
+				req.setAttribute("errorCompany",
+						"Please enter a company id in a range.");
+				req.setAttribute("checkForm", false);
+			}
 		}
 
 		return req;

@@ -14,9 +14,7 @@ public class Utilities {
 	public static Date stringToDate(String myString) throws ParseException {
 		Date myDate = null;
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
 			myDate = formatter.parse(myString);
-
 		return myDate;
 	}
 }
