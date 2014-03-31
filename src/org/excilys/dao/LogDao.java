@@ -1,9 +1,8 @@
 package org.excilys.dao;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import exception.DaoException;
 
 public interface LogDao {
 
-	public void insertLog(String text, Connection myCon) throws SQLException;
+	public void insertLog(String text) throws DaoException;
 }

@@ -15,175 +15,206 @@ import org.slf4j.LoggerFactory;
 
 import com.mysql.jdbc.Statement;
 
+import exception.DaoException;
+
 public enum ComputerDaoImpl implements ComputerDao {
 	INSTANCE;
 
 	static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
 	@Override
-	public int insertComputer(Computer myComputer, Connection myCon)
-			throws SQLException {
+	public int insertComputer(Computer myComputer) throws DaoException {
+
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
-		int id;
+		int id = 0;
+		Connection myCon = ConnectionManager.INSTANCE.getConnection();
 		String sql = "INSERT INTO computer VALUES (null, ?, ?, ?, ?)";
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		myCon.setAutoCommit(false);
-		myPreStmt = myCon
-				.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		try {
 
-		myPreStmt.setString(1, myComputer.getName());
+			myPreStmt = myCon.prepareStatement(sql,
+					Statement.RETURN_GENERATED_KEYS);
 
-		if (myComputer.getDiscontinued() == null)
-			myPreStmt.setNull(3, Types.NULL);
-		else
-			myPreStmt.setString(3,
-					Utilities.dateSQLtoString(myComputer.getDiscontinued()));
+			myPreStmt.setString(1, myComputer.getName());
 
-		if (myComputer.getIntroduced() == null)
-			myPreStmt.setNull(2, Types.NULL);
-		else
-			myPreStmt.setString(2,
-					Utilities.dateSQLtoString(myComputer.getIntroduced()));
+			if (myComputer.getDiscontinued() == null)
+				myPreStmt.setNull(3, Types.NULL);
+			else
+				myPreStmt
+						.setString(3, Utilities.dateSQLtoString(myComputer
+								.getDiscontinued()));
 
-		if (myComputer.getCompanyId() == -1)
-			myPreStmt.setNull(4, Types.NULL);
-		else
-			myPreStmt.setInt(4, myComputer.getCompanyId());
+			if (myComputer.getIntroduced() == null)
+				myPreStmt.setNull(2, Types.NULL);
+			else
+				myPreStmt.setString(2,
+						Utilities.dateSQLtoString(myComputer.getIntroduced()));
 
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		myPreStmt.execute();
+			if (myComputer.getCompanyId() == -1)
+				myPreStmt.setNull(4, Types.NULL);
+			else
+				myPreStmt.setInt(4, myComputer.getCompanyId());
 
-		mySet = myPreStmt.getGeneratedKeys();
-		mySet.next();
-		id = mySet.getInt(1);
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
+			myPreStmt.execute();
 
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, mySet);
+			mySet = myPreStmt.getGeneratedKeys();
+			mySet.next();
+			id = mySet.getInt(1);
+
+		} catch (SQLException e) {
+			throw new DaoException("Error in insertComuter "+e.getMessage());
+		} finally {
+			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+		}
+
 		return id;
 	}
 
 	@Override
-	public void deleteComputer(Computer myComputer, Connection myCon)
-			throws SQLException {
+	public void deleteComputer(Computer myComputer) throws DaoException {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
+		Connection myCon = ConnectionManager.INSTANCE.getConnection();
 		String sql = "DELETE FROM computer WHERE computer.id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		myCon.setAutoCommit(false);
-		myPreStmt = myCon
-				.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		try {
 
-		myPreStmt.setInt(1, myComputer.getId());
+			myPreStmt = myCon.prepareStatement(sql,
+					Statement.RETURN_GENERATED_KEYS);
 
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		myPreStmt.executeUpdate();
+			myPreStmt.setInt(1, myComputer.getId());
 
-		mySet = myPreStmt.getGeneratedKeys();
-		mySet.next();
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, mySet);
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
+			myPreStmt.executeUpdate();
+
+			mySet = myPreStmt.getGeneratedKeys();
+			mySet.next();
+		} catch (SQLException e) {
+			throw new DaoException("Error in deleteComputer "+e.getMessage());
+		} finally {
+			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+		}
 	}
 
 	@Override
-	public void updateComputer(Computer myComputer, Connection myCon)
-			throws SQLException {
+	public void updateComputer(Computer myComputer) throws DaoException {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
+		Connection myCon = ConnectionManager.INSTANCE.getConnection();
 		String sql = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE computer.id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		myCon.setAutoCommit(false);
-		myPreStmt = myCon
-				.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		try {
 
-		myPreStmt.setInt(1, myComputer.getId());
-		myPreStmt.setString(2, myComputer.getName());
+			myPreStmt = myCon.prepareStatement(sql,
+					Statement.RETURN_GENERATED_KEYS);
 
-		if (myComputer.getDiscontinued() == null)
-			myPreStmt.setNull(4, Types.NULL);
-		else
-			myPreStmt.setString(4,
-					Utilities.dateSQLtoString(myComputer.getDiscontinued()));
+			myPreStmt.setInt(1, myComputer.getId());
+			myPreStmt.setString(2, myComputer.getName());
 
-		if (myComputer.getIntroduced() == null)
-			myPreStmt.setNull(3, Types.NULL);
-		else
-			myPreStmt.setString(3,
-					Utilities.dateSQLtoString(myComputer.getIntroduced()));
+			if (myComputer.getDiscontinued() == null)
+				myPreStmt.setNull(4, Types.NULL);
+			else
+				myPreStmt
+						.setString(4, Utilities.dateSQLtoString(myComputer
+								.getDiscontinued()));
 
-		if (myComputer.getCompanyId() == -1)
-			myPreStmt.setNull(5, Types.NULL);
-		else
-			myPreStmt.setInt(5, myComputer.getCompanyId());
+			if (myComputer.getIntroduced() == null)
+				myPreStmt.setNull(3, Types.NULL);
+			else
+				myPreStmt.setString(3,
+						Utilities.dateSQLtoString(myComputer.getIntroduced()));
 
-		myPreStmt.setInt(6, myComputer.getId());
+			if (myComputer.getCompanyId() == -1)
+				myPreStmt.setNull(5, Types.NULL);
+			else
+				myPreStmt.setInt(5, myComputer.getCompanyId());
 
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		myPreStmt.executeUpdate();
+			myPreStmt.setInt(6, myComputer.getId());
 
-		mySet = myPreStmt.getGeneratedKeys();
-		mySet.next();
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, mySet);
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
+			myPreStmt.executeUpdate();
+
+			mySet = myPreStmt.getGeneratedKeys();
+			mySet.next();
+		} catch (SQLException e) {
+			throw new DaoException("Error in updateComputer "+e.getMessage());
+		} finally {
+			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+		}
 	}
 
 	@Override
-	public Computer selectComputer(int id, Connection myCon)
-			throws SQLException {
+	public Computer selectComputer(int id) throws DaoException {
 		Computer myComputer = null;
-
+		Connection myCon = ConnectionManager.INSTANCE.getConnection();
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 
 		String sql = "SELECT * FROM computer WHERE id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		myPreStmt = myCon.prepareStatement(sql);
+		try {
 
-		myPreStmt.setInt(1, id);
+			myPreStmt = myCon.prepareStatement(sql);
 
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		mySet = myPreStmt.executeQuery();
-		mySet.next();
+			myPreStmt.setInt(1, id);
 
-		myComputer = new Computer(mySet.getInt("id"), mySet.getString("name"),
-				mySet.getDate("introduced"), mySet.getDate("discontinued"),
-				mySet.getInt("company_id"));
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
+			mySet = myPreStmt.executeQuery();
+			mySet.next();
 
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, myCon, mySet);
+			myComputer = new Computer(mySet.getInt("id"),
+					mySet.getString("name"), mySet.getDate("introduced"),
+					mySet.getDate("discontinued"), mySet.getInt("company_id"));
+
+		} catch (SQLException e) {
+			throw new DaoException("Error in -> selectComputer "+e.getMessage());
+		} finally {
+			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+		}
 		return myComputer;
 	}
 
 	@Override
-	public int countNumberComputers(String myName, Connection myCon)
-			throws SQLException {
+	public int countNumberComputers(String myName) throws DaoException {
 		int number = 0;
-
+		Connection myCon = ConnectionManager.INSTANCE.getConnection();
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT count(*) FROM computer WHERE name like ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		myPreStmt = myCon.prepareStatement(sql);
+		try {
 
-		myPreStmt.setString(1, "%" + myName + "%");
+			myPreStmt = myCon.prepareStatement(sql);
 
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		mySet = myPreStmt.executeQuery();
+			myPreStmt.setString(1, "%" + myName + "%");
 
-		mySet.next();
-		number = mySet.getInt(1);
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
+			mySet = myPreStmt.executeQuery();
 
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, mySet);
+			mySet.next();
+			number = mySet.getInt(1);
+
+		} catch (SQLException e) {
+			throw new DaoException("Error in -> countNumberComputers "+e.getMessage());
+		} finally {
+			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+		}
 		return number;
 	}
 
 	@Override
 	public ArrayList<Computer> selectComputers(String myLikeParam,
-			String myOrder, int startLimit, int numberOfRow, Connection myCon)
-			throws SQLException {
+			String myOrder, int startLimit, int numberOfRow)
+			throws DaoException {
 		ArrayList<Computer> myList = new ArrayList<>();
-
+		Connection myCon = ConnectionManager.INSTANCE.getConnection();
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		StringBuilder sql = new StringBuilder();
@@ -193,27 +224,33 @@ public enum ComputerDaoImpl implements ComputerDao {
 
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		myPreStmt = myCon.prepareStatement(sql.toString());
+		try {
 
-		myPreStmt.setString(1, "%" + myLikeParam + "%");
-		myPreStmt.setString(2, "%" + myLikeParam + "%");
-		myPreStmt.setInt(3, startLimit);
-		myPreStmt.setInt(4, numberOfRow);
+			myPreStmt = myCon.prepareStatement(sql.toString());
 
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
+			myPreStmt.setString(1, "%" + myLikeParam + "%");
+			myPreStmt.setString(2, "%" + myLikeParam + "%");
+			myPreStmt.setInt(3, startLimit);
+			myPreStmt.setInt(4, numberOfRow);
 
-		mySet = myPreStmt.executeQuery();
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 
-		while (mySet.next()) {
+			mySet = myPreStmt.executeQuery();
 
-			Computer myComputer = new Computer(mySet.getInt("id"),
-					mySet.getString("name"), mySet.getDate("introduced"),
-					mySet.getDate("discontinued"), mySet.getInt("company_id"));
+			while (mySet.next()) {
 
-			myList.add(myComputer);
+				Computer myComputer = new Computer(mySet.getInt("id"),
+						mySet.getString("name"), mySet.getDate("introduced"),
+						mySet.getDate("discontinued"),
+						mySet.getInt("company_id"));
+
+				myList.add(myComputer);
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Error in -> selectComputers "+e.getMessage());
+		} finally {
+			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
 		}
-
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, mySet);
 		return myList;
 	}
 }

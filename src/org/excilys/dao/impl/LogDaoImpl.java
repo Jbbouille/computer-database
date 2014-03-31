@@ -8,27 +8,32 @@ import org.excilys.dao.LogDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exception.DaoException;
+
 public enum LogDaoImpl implements LogDao {
 	INSTANCE;
 
 	static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
 	@Override
-	public void insertLog(String text, Connection myCon) throws SQLException {
+	public void insertLog(String text) throws DaoException {
 		PreparedStatement myPreStmt = null;
+		Connection myCon = ConnectionManager.INSTANCE.getConnection();
 		String sql = "INSERT INTO log VALUES (null, ?, null)";
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		myCon.setAutoCommit(false);
-		myPreStmt = myCon.prepareStatement(sql);
+		try {
+			myPreStmt = myCon.prepareStatement(sql);
 
-		myPreStmt.setString(1, text);
+			myPreStmt.setString(1, text);
 
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 
-		myPreStmt.execute();
-		
-		ConnectionManager.INSTANCE.closeAll(myPreStmt, null, null);
+			myPreStmt.execute();
+		} catch (SQLException e) {
+			ConnectionManager.INSTANCE.closeAll(myPreStmt, null);
+			throw new DaoException("Error in -> insertLog "+e.getMessage());
+		}
 	}
 
 }

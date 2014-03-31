@@ -1,6 +1,5 @@
 package org.excilys.service.impl;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -15,145 +14,95 @@ import org.excilys.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exception.DaoException;
+
 public enum ComputerServiceImpl implements ComputerService {
 	INSTANCE;
 
 	public static final Logger LOG = LoggerFactory
 			.getLogger(ConnectionManager.class);
-	private ThreadLocal<Connection> myThreadLocal = ConnectionManager.INSTANCE.myThreadLocal;
 
 	@Override
 	public void insertComputer(Computer myComputer) {
-		Connection myCon = null;
 		int id = 0;
 
 		try {
-			myCon = ConnectionManager.INSTANCE.getConnection();
-			id = DaoFactory.getInstanceComputerDao().insertComputer(myComputer,
-					myCon);
+			ConnectionManager.INSTANCE.startTransaction();
+			id = DaoFactory.getInstanceComputerDao().insertComputer(myComputer);
 			DaoFactory.getInstanceLogDao().insertLog(
-					"insert of a computer id :" + id, myCon);
-		} catch (SQLException e1) {
+					"insert of a computer id :" + id);
+			ConnectionManager.INSTANCE.commit();
+		} catch (DaoException e1) {
 			LOG.error("Error on the insertComputer -computerId-" + id + " "
 					+ e1);
-			try {
-				myCon.rollback();
+				ConnectionManager.INSTANCE.rollback();
 				closeThread();
-			} catch (SQLException e) {
-				LOG.error("Error on the rollback insertComputer -computerId-"
-						+ id + " " + e);
-			}
+				throw e1;
+		}finally{
+			closeThread();
 		}
 
-		try {
-			myCon.commit();
-			closeThread();
-		} catch (SQLException e) {
-			LOG.error("Error on the commit insertComputer -computerId-" + id
-					+ " " + e);
-		}
 	}
 
 	@Override
 	public void deleteComputer(Computer myComputer) {
-		Connection myCon = null;
 
 		try {
-			myCon = ConnectionManager.INSTANCE.getConnection();
-			DaoFactory.getInstanceComputerDao().deleteComputer(myComputer,
-					myCon);
+			ConnectionManager.INSTANCE.startTransaction();
+			DaoFactory.getInstanceComputerDao().deleteComputer(myComputer);
 			DaoFactory.getInstanceLogDao().insertLog(
-					"delete of a computer id :" + myComputer.getId(), myCon);
-		} catch (SQLException e1) {
+					"delete of a computer id :" + myComputer.getId());
+			ConnectionManager.INSTANCE.commit();
+		} catch (DaoException e1) {
 			LOG.error("Error on the deleteComputer " + e1);
-			try {
-				myCon.rollback();
-				closeThread();
-			} catch (SQLException e) {
-				LOG.error("Error on the rollback deleteComputer " + e);
-			}
-		}
-
-		try {
-			myCon.commit();
-			closeThread();
-		} catch (SQLException e) {
-			LOG.error("Error on the commit deleteComputer " + e);
+			ConnectionManager.INSTANCE.rollback();
+			throw e1;
 		}
 	}
 
 	@Override
 	public void updateComputer(Computer myComputer) {
-		Connection myCon = null;
-
 		try {
-			myCon = ConnectionManager.INSTANCE.getConnection();
-			DaoFactory.getInstanceComputerDao().updateComputer(myComputer,
-					myCon);
+			ConnectionManager.INSTANCE.startTransaction();
+			DaoFactory.getInstanceComputerDao().updateComputer(myComputer);
 			DaoFactory.getInstanceLogDao().insertLog(
-					"update of a computer id :" + myComputer.getId(), myCon);
-		} catch (SQLException e1) {
+					"update of a computer id :" + myComputer.getId());
+			ConnectionManager.INSTANCE.commit();
+		} catch (DaoException e1) {
 			LOG.error("Error on the updateComputer -computerId-"
 					+ myComputer.getId() + " " + e1);
-			try {
-				myCon.rollback();
-				closeThread();
-			} catch (SQLException e) {
-				LOG.error("Error on the rollback updateComputer -computerId-"
-						+ myComputer.getId() + " " + e1);
-			}
-		}
-
-		try {
-			myCon.commit();
-			closeThread();
-		} catch (SQLException e) {
-			LOG.error("Error on the commit updateComputer -computerId-"
-					+ myComputer.getId() + " " + e);
+			ConnectionManager.INSTANCE.rollback();
+			throw e1;
 		}
 	}
 
 	@Override
 	public Computer selectComputer(int id) {
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		ConnectionManager.INSTANCE.getConnection();
 		Computer myComputer = null;
 		try {
-			myComputer = DaoFactory.getInstanceComputerDao().selectComputer(id,
-					myCon);
-
-		} catch (SQLException e) {
+			myComputer = DaoFactory.getInstanceComputerDao().selectComputer(id);
+		} catch (DaoException e) {
 			LOG.error("Error in -> selectComputer -computerId-" + id + " " + e);
+			throw e;
 		} finally {
-			try {
-				myThreadLocal.get().close();
-			} catch (SQLException e) {
-				LOG.error("Error in -> Close of the Connection" + e);
-			}
-			myThreadLocal.remove();
-			LOG.debug("Close of Thread" + Thread.currentThread().toString());
+			closeThread();
 		}
 		return myComputer;
 	}
 
 	@Override
 	public int countNumberOfComputers(String myName) {
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		ConnectionManager.INSTANCE.getConnection();
 		int number = 0;
 		try {
 			number = DaoFactory.getInstanceComputerDao().countNumberComputers(
-					myName, myCon);
-
-		} catch (SQLException e) {
+					myName);
+		} catch (DaoException e) {
 			LOG.error("Error in -> countNumberOfComputers " + e);
+			throw e;
 		} finally {
-			try {
-				ConnectionManager.INSTANCE.myThreadLocal.get().close();
-			} catch (SQLException e) {
-				LOG.error("Error on the close connection of countNumberOfComputers "
-						+ e);
-			}
-			myThreadLocal.remove();
-			LOG.debug("Close of Thread" + Thread.currentThread().toString());
+			closeThread();
 		}
 		return number;
 	}
@@ -171,22 +120,16 @@ public enum ComputerServiceImpl implements ComputerService {
 	@Override
 	public ArrayList<Computer> selectComputers(String myLikeParam,
 			String myOrder, int startLimit, int numberOfRow) {
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		ConnectionManager.INSTANCE.getConnection();
 		ArrayList<Computer> myList = null;
 		try {
 			myList = DaoFactory.getInstanceComputerDao().selectComputers(
-					myLikeParam, myOrder, startLimit, numberOfRow, myCon);
-
-		} catch (SQLException e) {
+					myLikeParam, myOrder, startLimit, numberOfRow);
+		} catch (DaoException e) {
 			LOG.error("Error on the selectComputers " + e);
+			throw e;
 		} finally {
-			try {
-				myThreadLocal.get().close();
-			} catch (SQLException e) {
-				LOG.error("Error on the close of selectComputers " + e);
-			}
-			myThreadLocal.remove();
-			LOG.debug("Close of Thread" + Thread.currentThread().toString());
+			closeThread();
 		}
 		return myList;
 	}
@@ -275,12 +218,13 @@ public enum ComputerServiceImpl implements ComputerService {
 	@Override
 	public void closeThread() {
 		try {
-			myThreadLocal.get().close();
-			myThreadLocal.remove();
-			LOG.debug("Close of Thread" + Thread.currentThread().toString());
+			ConnectionManager.INSTANCE.getConnection().close();
+			ConnectionManager.INSTANCE.myThreadLocal.remove();
+			LOG.debug("Close of Thread :" + Thread.currentThread().toString());
 		} catch (SQLException e) {
-			LOG.error("Error in -> Close of Thread"
+			LOG.error("Error in -> Close of Thread "
 					+ Thread.currentThread().toString());
+			throw new DaoException("Error in -> Close of Thread "+e.getMessage());
 		}
 	}
 }

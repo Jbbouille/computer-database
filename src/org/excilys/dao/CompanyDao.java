@@ -1,26 +1,22 @@
 package org.excilys.dao;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 import org.excilys.model.Company;
 
+import exception.DaoException;
+
 public interface CompanyDao {
 
-	public void insertCompany(Company myCompany, Connection myCon)
-			throws SQLException;
+	public void insertCompany(Company myCompany) throws DaoException;
 
-	public void deleteCompany(Company myCompany, Connection myCon)
-			throws SQLException;
+	public void deleteCompany(Company myCompany) throws DaoException;
 
-	public void updateCompany(Company myCompany, Connection myCon)
-			throws SQLException;
+	public void updateCompany(Company myCompany) throws DaoException;
 
-	public Company selectCompany(int id, Connection myCon) throws SQLException;
+	public Company selectCompany(int id) throws DaoException;
 
-	public HashMap<Integer, Company> selectCompanies(Connection myCon)
-			throws SQLException;
+	public HashMap<Integer, Company> selectCompanies() throws DaoException;
 
-	public int countCompanies(Connection myCon) throws SQLException;
+	public int countCompanies() throws DaoException;
 }
