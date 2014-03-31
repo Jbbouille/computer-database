@@ -54,6 +54,7 @@
 	</dependencies>
 	<build>
 		<finalName>Computer-Database</finalName>
+<<<<<<< HEAD
 		<plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -65,5 +66,7 @@
         </configuration>
       </plugin>
     </plugins>
+=======
+>>>>>>> 481708d1a6d302520afdaf97e03156e361fa2652
 	</build>
 </project>

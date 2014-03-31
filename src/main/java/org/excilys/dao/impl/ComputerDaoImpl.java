@@ -16,6 +16,10 @@ import org.slf4j.LoggerFactory;
 
 import com.mysql.jdbc.Statement;
 
+<<<<<<< HEAD:src/main/java/org/excilys/dao/impl/ComputerDaoImpl.java
+=======
+
+>>>>>>> 481708d1a6d302520afdaf97e03156e361fa2652:src/main/java/org/excilys/dao/impl/ComputerDaoImpl.java
 public enum ComputerDaoImpl implements ComputerDao {
 	INSTANCE;
 
@@ -64,7 +68,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			id = mySet.getInt(1);
 
 		} catch (SQLException e) {
-			throw new DaoException("Error in insertComuter "+e.getMessage());
+			throw new DaoException("Error in insertComuter " + e.getMessage());
 		} finally {
 			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
 		}
@@ -93,7 +97,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			mySet = myPreStmt.getGeneratedKeys();
 			mySet.next();
 		} catch (SQLException e) {
-			throw new DaoException("Error in deleteComputer "+e.getMessage());
+			throw new DaoException("Error in deleteComputer " + e.getMessage());
 		} finally {
 			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
 		}
@@ -141,7 +145,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			mySet = myPreStmt.getGeneratedKeys();
 			mySet.next();
 		} catch (SQLException e) {
-			throw new DaoException("Error in updateComputer "+e.getMessage());
+			throw new DaoException("Error in updateComputer " + e.getMessage());
 		} finally {
 			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
 		}
@@ -172,7 +176,8 @@ public enum ComputerDaoImpl implements ComputerDao {
 					mySet.getDate("discontinued"), mySet.getInt("company_id"));
 
 		} catch (SQLException e) {
-			throw new DaoException("Error in -> selectComputer "+e.getMessage());
+			throw new DaoException("Error in -> selectComputer "
+					+ e.getMessage());
 		} finally {
 			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
 		}
@@ -201,7 +206,8 @@ public enum ComputerDaoImpl implements ComputerDao {
 			number = mySet.getInt(1);
 
 		} catch (SQLException e) {
-			throw new DaoException("Error in -> countNumberComputers "+e.getMessage());
+			throw new DaoException("Error in -> countNumberComputers "
+					+ e.getMessage());
 		} finally {
 			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
 		}

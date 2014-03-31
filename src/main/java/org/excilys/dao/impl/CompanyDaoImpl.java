@@ -11,6 +11,11 @@ import org.excilys.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+<<<<<<< HEAD:src/main/java/org/excilys/dao/impl/CompanyDaoImpl.java
+=======
+import org.excilys.exception.DaoException;
+
+>>>>>>> 481708d1a6d302520afdaf97e03156e361fa2652:src/main/java/org/excilys/dao/impl/CompanyDaoImpl.java
 public enum CompanyDaoImpl implements CompanyDao {
 	INSTANCE;
 

@@ -9,6 +9,11 @@ import org.excilys.exception.DaoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+<<<<<<< HEAD:src/main/java/org/excilys/dao/impl/LogDaoImpl.java
+=======
+import org.excilys.exception.DaoException;
+
+>>>>>>> 481708d1a6d302520afdaf97e03156e361fa2652:src/main/java/org/excilys/dao/impl/LogDaoImpl.java
 public enum LogDaoImpl implements LogDao {
 	INSTANCE;
 
