@@ -23,11 +23,10 @@ public enum CompanyServiceImpl implements CompanyService {
 		Connection myCon = ConnectionManager.INSTANCE.getConnection();
 		try {
 			DaoFactory.getInstanceCompanyDao().insertCompany(myCompany, myCon);
-			myThreadLocal.get().close();
-			myThreadLocal.remove();
-			LOG.debug("Close of Thread" + Thread.currentThread().toString());
+			closeThread();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error("Error in -> insertCompany"
+					+ Thread.currentThread().toString());
 		}
 	}
 
@@ -36,11 +35,10 @@ public enum CompanyServiceImpl implements CompanyService {
 		Connection myCon = ConnectionManager.INSTANCE.getConnection();
 		try {
 			DaoFactory.getInstanceCompanyDao().deleteCompany(myCompany, myCon);
-			myThreadLocal.get().close();
-			myThreadLocal.remove();
-			LOG.debug("Close of Thread" + Thread.currentThread().toString());
+			closeThread();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error("Error in -> deleteCompany"
+					+ Thread.currentThread().toString());
 		}
 	}
 
@@ -49,11 +47,10 @@ public enum CompanyServiceImpl implements CompanyService {
 		Connection myCon = ConnectionManager.INSTANCE.getConnection();
 		try {
 			DaoFactory.getInstanceCompanyDao().updateCompany(myCompany, myCon);
-			myThreadLocal.get().close();
-			myThreadLocal.remove();
-			LOG.debug("Close of Thread" + Thread.currentThread().toString());
+			closeThread();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error("Error in -> updateCompany"
+					+ Thread.currentThread().toString());
 		}
 	}
 
@@ -64,11 +61,10 @@ public enum CompanyServiceImpl implements CompanyService {
 		try {
 			myCompany = DaoFactory.getInstanceCompanyDao().selectCompany(id,
 					myCon);
-			myThreadLocal.get().close();
-			myThreadLocal.remove();
-			LOG.debug("Close of Thread" + Thread.currentThread().toString());
+			closeThread();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error("Error in -> selectCompany"
+					+ Thread.currentThread().toString());
 		}
 		return myCompany;
 	}
@@ -79,11 +75,10 @@ public enum CompanyServiceImpl implements CompanyService {
 		HashMap<Integer, Company> myMap = null;
 		try {
 			myMap = DaoFactory.getInstanceCompanyDao().selectCompanies(myCon);
-			myThreadLocal.get().close();
-			myThreadLocal.remove();
-			LOG.debug("Close of Thread" + Thread.currentThread().toString());
+			closeThread();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error("Error in -> selectCompanies"
+					+ Thread.currentThread().toString());
 		}
 		return myMap;
 	}
@@ -94,12 +89,24 @@ public enum CompanyServiceImpl implements CompanyService {
 		int number = 0;
 		try {
 			number = DaoFactory.getInstanceCompanyDao().countCompanies(myCon);
+			closeThread();
+		} catch (SQLException e) {
+			LOG.error("Error in -> countCompanies"
+					+ Thread.currentThread().toString());
+		}
+		return number;
+	}
+
+	@Override
+	public void closeThread() {
+		try {
 			myThreadLocal.get().close();
 			myThreadLocal.remove();
 			LOG.debug("Close of Thread" + Thread.currentThread().toString());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error("Error in -> Close of Thread"
+					+ Thread.currentThread().toString());
 		}
-		return number;
 	}
+
 }

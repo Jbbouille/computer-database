@@ -17,4 +17,6 @@ public interface CompanyService {
 	public HashMap<Integer, Company> selectCompanies();
 	
 	public int countCompanies();
+	
+	public void closeThread();
 }

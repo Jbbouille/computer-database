@@ -28,4 +28,6 @@ public interface ComputerService {
 	public String getOrderBy(String myOrder, Boolean desc);
 
 	public HttpServletRequest validateForm(HttpServletRequest req);
+	
+	public void closeThread();
 }
