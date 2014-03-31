@@ -5,7 +5,7 @@
 <section id="main">
 	<h1>Update Computer</h1>
 	<c:set var="computer" value="${computer}"></c:set>
-	<form id=frm action="modifycomputer" method="POST">
+	<form id=frm action="modifycomputer" method="POST" class="col-md-4 col-md-offset-4">
 		<div class="form-group">
 			<label for="name">Name</label> <input type="text"
 				class="form-control" name="name" placeholder="Enter name"

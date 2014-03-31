@@ -5,7 +5,7 @@
 <section id="main">
 	<h1>Add Computer</h1>
 
-	<div class="panel panel-default">
+	<div class="panel panel-default col-md-4 col-md-offset-4">
 		<div class="panel-body">
 			<form id="frm" action="addcomputer" method="POST">
 
