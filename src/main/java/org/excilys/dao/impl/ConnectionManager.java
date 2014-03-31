@@ -16,11 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import com.jolbox.bonecp.BoneCPDataSource;
 
-<<<<<<< HEAD:src/main/java/org/excilys/dao/impl/ConnectionManager.java
-=======
-import org.excilys.exception.DaoException;
-
->>>>>>> 481708d1a6d302520afdaf97e03156e361fa2652:src/main/java/org/excilys/dao/impl/ConnectionManager.java
 public enum ConnectionManager {
 	INSTANCE;
 

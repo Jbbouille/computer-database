@@ -4,10 +4,6 @@ import java.util.HashMap;
 
 import org.excilys.exception.DaoException;
 import org.excilys.model.Company;
-<<<<<<< HEAD:src/main/java/org/excilys/dao/CompanyDao.java
-=======
-import org.excilys.exception.DaoException;
->>>>>>> 481708d1a6d302520afdaf97e03156e361fa2652:src/main/java/org/excilys/dao/CompanyDao.java
 
 public interface CompanyDao {
 

@@ -16,10 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mysql.jdbc.Statement;
 
-<<<<<<< HEAD:src/main/java/org/excilys/dao/impl/ComputerDaoImpl.java
-=======
-
->>>>>>> 481708d1a6d302520afdaf97e03156e361fa2652:src/main/java/org/excilys/dao/impl/ComputerDaoImpl.java
 public enum ComputerDaoImpl implements ComputerDao {
 	INSTANCE;
 
