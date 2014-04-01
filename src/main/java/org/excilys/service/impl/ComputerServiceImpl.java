@@ -169,6 +169,7 @@ public enum ComputerServiceImpl implements ComputerService {
 	public HttpServletRequest validateForm(HttpServletRequest req) {
 
 		Integer id = 0;
+		Integer idComputer = Integer.valueOf(req.getParameter("idComputer"));
 
 		if (req.getParameter("name").length() < 2) {
 			req.setAttribute("errorName", "Please enter at least 2 characters.");
@@ -207,6 +208,12 @@ public enum ComputerServiceImpl implements ComputerService {
 			if (ServiceFactory.INSTANCE.getCompanyServ().selectCompany(id) == null) {
 				req.setAttribute("errorCompany",
 						"Please enter a company id in a range.");
+				req.setAttribute("checkForm", false);
+			}
+		}
+		
+		if (idComputer != null) {
+			if ( idComputer < 0 ) {
 				req.setAttribute("checkForm", false);
 			}
 		}
