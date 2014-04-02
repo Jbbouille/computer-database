@@ -10,15 +10,20 @@ import org.excilys.exception.DaoException;
 import org.excilys.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public enum CompanyDaoImpl implements CompanyDao {
-	INSTANCE;
+@Repository("companyDao")
+public class CompanyDaoImpl implements CompanyDao {
 
 	static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
+	
+	@Autowired
+	private ConnectionManager myManager;
 
 	@Override
 	public void insertCompany(Company myCompany) throws DaoException {
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		PreparedStatement myPreStmt = null;
 		String sql = "INSERT INTO computer-database-db.company (id, name) VALUES (NULL, ?)";
 		LOG.debug("requete sql non-prepare : " + sql);
@@ -34,13 +39,13 @@ public enum CompanyDaoImpl implements CompanyDao {
 		}catch (Exception e) {
 			throw new DaoException("Error in -> insertCompany :"+e);
 		}finally{
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, null);
+			myManager.closeAll(myPreStmt, null);
 		}
 	}
 
 	@Override
 	public void deleteCompany(Company myCompany) throws DaoException {
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		PreparedStatement myPreStmt = null;
 		String sql = "DELETE FROM computer-database-db.company WHERE company.id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
@@ -54,13 +59,13 @@ public enum CompanyDaoImpl implements CompanyDao {
 		}catch (Exception e) {
 			throw new DaoException("Error in -> deleteCompany :"+e);
 		}finally{
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, null);
+			myManager.closeAll(myPreStmt, null);
 		}
 	}
 
 	@Override
 	public void updateCompany(Company myCompany) throws DaoException {
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		PreparedStatement myPreStmt = null;
 		String sql = "UPDATE comany SET id = ?, name = ? WHERE company.id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
@@ -76,13 +81,13 @@ public enum CompanyDaoImpl implements CompanyDao {
 		}catch (Exception e) {
 			throw new DaoException("Error in -> updateCompany :"+e);
 		}finally{
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, null);
+			myManager.closeAll(myPreStmt, null);
 		}
 	}
 
 	@Override
 	public Company selectCompany(int id) throws DaoException {
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		Company myCompany = null;
 
 		PreparedStatement myPreStmt = null;
@@ -102,14 +107,14 @@ public enum CompanyDaoImpl implements CompanyDao {
 		}catch (Exception e) {
 			throw new DaoException("Error in -> selectCompany :"+e);
 		}finally{
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+			myManager.closeAll(myPreStmt, mySet);
 		}
 		return myCompany;
 	}
 
 	@Override
 	public HashMap<Integer, Company> selectCompanies() throws DaoException {
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		HashMap<Integer, Company> myList = new HashMap<>();
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
@@ -129,14 +134,14 @@ public enum CompanyDaoImpl implements CompanyDao {
 		}catch (Exception e) {
 			throw new DaoException("Error in -> selectCompanies :"+e);
 		}finally{
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+			myManager.closeAll(myPreStmt, mySet);
 		}
 		return myList;
 	}
 
 	@Override
 	public int countCompanies() throws DaoException {
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		int number = 0;
 
 		PreparedStatement myPreStmt = null;
@@ -155,7 +160,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 		}catch (Exception e) {
 			throw new DaoException("Error in -> countCompanies :"+e);
 		}finally{
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+			myManager.closeAll(myPreStmt, mySet);
 		}
 		
 		return number;

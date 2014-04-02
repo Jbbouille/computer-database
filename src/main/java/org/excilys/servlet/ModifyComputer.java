@@ -9,18 +9,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.excilys.model.Computer;
-import org.excilys.service.impl.ServiceFactory;
+import org.excilys.service.impl.CompanyServiceImpl;
+import org.excilys.service.impl.ComputerServiceImpl;
 import org.excilys.util.Utilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 public class ModifyComputer extends HttpServlet {
+	
+	@Autowired
+	private ComputerServiceImpl myComputerServ;
 
+	@Autowired
+	private CompanyServiceImpl myCompanyServ;
+
+	@Override
+	public void init() throws ServletException {
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
 		Integer id = Integer.valueOf(req.getParameter("idComputer"));
 		
-		req = ServiceFactory.INSTANCE.getComputerServ().validateForm(req);
+		req = myComputerServ.validateForm(req);
 		
 		boolean myCheckForm = true;
 		if (req.getAttribute("checkForm") != null) myCheckForm = (Boolean) req.getAttribute("checkForm");
@@ -44,12 +60,12 @@ public class ModifyComputer extends HttpServlet {
 				e.printStackTrace();
 			}
 
-			ServiceFactory.INSTANCE.getComputerServ().updateComputer(myComputer);
+			myComputerServ.updateComputer(myComputer);
 
 			resp.sendRedirect("dashboard");
 		} else {
 
-			Computer myComputer = ServiceFactory.INSTANCE.getComputerServ()
+			Computer myComputer = myComputerServ
 					.selectComputer(id);
 
 			myComputer.setId(id);
@@ -57,7 +73,7 @@ public class ModifyComputer extends HttpServlet {
 			myComputer.setCompanyId(Integer.valueOf(req.getParameter("company")));
 
 			req.setAttribute("computer", myComputer);
-			req.setAttribute("companies", ServiceFactory.INSTANCE.getCompanyServ()
+			req.setAttribute("companies", myCompanyServ
 					.selectCompanies());
 
 			getServletContext().getRequestDispatcher(
@@ -74,9 +90,9 @@ public class ModifyComputer extends HttpServlet {
 			
 			id = Integer.valueOf(req.getParameter("id"));
 			
-			req.setAttribute("companies", ServiceFactory.INSTANCE.getCompanyServ()
+			req.setAttribute("companies", myCompanyServ
 					.selectCompanies());
-			req.setAttribute("computer", ServiceFactory.INSTANCE.getComputerServ()
+			req.setAttribute("computer", myComputerServ
 					.selectComputer(id));
 
 			getServletContext().getRequestDispatcher("/WEB-INF/modifyComputer.jsp")

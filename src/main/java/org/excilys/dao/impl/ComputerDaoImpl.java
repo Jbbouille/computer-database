@@ -13,13 +13,18 @@ import org.excilys.model.Computer;
 import org.excilys.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.mysql.jdbc.Statement;
 
-public enum ComputerDaoImpl implements ComputerDao {
-	INSTANCE;
+@Repository("computerDao")
+public class ComputerDaoImpl implements ComputerDao {
 
 	static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
+	
+	@Autowired
+	private ConnectionManager myManager;
 
 	@Override
 	public int insertComputer(Computer myComputer) throws DaoException {
@@ -27,7 +32,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		int id = 0;
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		String sql = "INSERT INTO computer VALUES (null, ?, ?, ?, ?)";
 		LOG.debug("requete sql non-prepare : " + sql);
 
@@ -66,7 +71,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 		} catch (SQLException e) {
 			throw new DaoException("Error in insertComuter " + e.getMessage());
 		} finally {
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+			myManager.closeAll(myPreStmt, mySet);
 		}
 
 		return id;
@@ -76,7 +81,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 	public void deleteComputer(Computer myComputer) throws DaoException {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		String sql = "DELETE FROM computer WHERE computer.id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 
@@ -95,7 +100,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 		} catch (SQLException e) {
 			throw new DaoException("Error in deleteComputer " + e.getMessage());
 		} finally {
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+			myManager.closeAll(myPreStmt, mySet);
 		}
 	}
 
@@ -103,7 +108,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 	public void updateComputer(Computer myComputer) throws DaoException {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		String sql = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE computer.id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 
@@ -143,14 +148,14 @@ public enum ComputerDaoImpl implements ComputerDao {
 		} catch (SQLException e) {
 			throw new DaoException("Error in updateComputer " + e.getMessage());
 		} finally {
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+			myManager.closeAll(myPreStmt, mySet);
 		}
 	}
 
 	@Override
 	public Computer selectComputer(int id) throws DaoException {
 		Computer myComputer = null;
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 
@@ -175,7 +180,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			throw new DaoException("Error in -> selectComputer "
 					+ e.getMessage());
 		} finally {
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+			myManager.closeAll(myPreStmt, mySet);
 		}
 		return myComputer;
 	}
@@ -183,7 +188,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 	@Override
 	public int countNumberComputers(String myName) throws DaoException {
 		int number = 0;
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT count(*) FROM computer WHERE name like ?";
@@ -205,7 +210,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			throw new DaoException("Error in -> countNumberComputers "
 					+ e.getMessage());
 		} finally {
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+			myManager.closeAll(myPreStmt, mySet);
 		}
 		return number;
 	}
@@ -215,7 +220,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			String myOrder, int startLimit, int numberOfRow)
 			throws DaoException {
 		ArrayList<Computer> myList = new ArrayList<>();
-		Connection myCon = ConnectionManager.INSTANCE.getConnection();
+		Connection myCon = myManager.getConnection();
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		StringBuilder sql = new StringBuilder();
@@ -250,7 +255,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 		} catch (SQLException e) {
 			throw new DaoException("Error in -> selectComputers "+e.getMessage());
 		} finally {
-			ConnectionManager.INSTANCE.closeAll(myPreStmt, mySet);
+			myManager.closeAll(myPreStmt, mySet);
 		}
 		return myList;
 	}

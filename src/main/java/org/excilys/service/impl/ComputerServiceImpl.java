@@ -6,35 +6,51 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.excilys.dao.impl.CompanyDaoImpl;
+import org.excilys.dao.impl.ComputerDaoImpl;
 import org.excilys.dao.impl.ConnectionManager;
-import org.excilys.dao.impl.DaoFactory;
+import org.excilys.dao.impl.LogDaoImpl;
 import org.excilys.exception.DaoException;
 import org.excilys.model.Computer;
 import org.excilys.service.ComputerService;
 import org.excilys.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public enum ComputerServiceImpl implements ComputerService {
-	INSTANCE;
+@Service("computerService")
+public class ComputerServiceImpl implements ComputerService {
 
 	public static final Logger LOG = LoggerFactory
 			.getLogger(ConnectionManager.class);
+	
+	@Autowired
+	private ConnectionManager myManager;
+	
+	@Autowired
+	private ComputerDaoImpl myComputerDao;
+	
+	@Autowired
+	private LogDaoImpl myLogDao;
+	
+	@Autowired
+	private CompanyDaoImpl myCompanyDao;
 
 	@Override
 	public void insertComputer(Computer myComputer) {
 		int id = 0;
 
 		try {
-			ConnectionManager.INSTANCE.startTransaction();
-			id = DaoFactory.getInstanceComputerDao().insertComputer(myComputer);
-			DaoFactory.getInstanceLogDao().insertLog(
+			myManager.startTransaction();
+			id = myComputerDao.insertComputer(myComputer);
+			myLogDao.insertLog(
 					"insert of a computer id :" + id);
-			ConnectionManager.INSTANCE.commit();
+			myManager.commit();
 		} catch (DaoException e1) {
 			LOG.error("Error on the insertComputer -computerId-" + id + " "
 					+ e1);
-				ConnectionManager.INSTANCE.rollback();
+			myManager.rollback();
 				closeThread();
 				throw e1;
 		}finally{
@@ -47,14 +63,14 @@ public enum ComputerServiceImpl implements ComputerService {
 	public void deleteComputer(Computer myComputer) {
 
 		try {
-			ConnectionManager.INSTANCE.startTransaction();
-			DaoFactory.getInstanceComputerDao().deleteComputer(myComputer);
-			DaoFactory.getInstanceLogDao().insertLog(
+			myManager.startTransaction();
+			myComputerDao.deleteComputer(myComputer);
+			myLogDao.insertLog(
 					"delete of a computer id :" + myComputer.getId());
-			ConnectionManager.INSTANCE.commit();
+			myManager.commit();
 		} catch (DaoException e1) {
 			LOG.error("Error on the deleteComputer " + e1);
-			ConnectionManager.INSTANCE.rollback();
+			myManager.rollback();
 			throw e1;
 		}
 	}
@@ -62,25 +78,25 @@ public enum ComputerServiceImpl implements ComputerService {
 	@Override
 	public void updateComputer(Computer myComputer) {
 		try {
-			ConnectionManager.INSTANCE.startTransaction();
-			DaoFactory.getInstanceComputerDao().updateComputer(myComputer);
-			DaoFactory.getInstanceLogDao().insertLog(
+			myManager.startTransaction();
+			myComputerDao.updateComputer(myComputer);
+			myLogDao.insertLog(
 					"update of a computer id :" + myComputer.getId());
-			ConnectionManager.INSTANCE.commit();
+			myManager.commit();
 		} catch (DaoException e1) {
 			LOG.error("Error on the updateComputer -computerId-"
 					+ myComputer.getId() + " " + e1);
-			ConnectionManager.INSTANCE.rollback();
+			myManager.rollback();
 			throw e1;
 		}
 	}
 
 	@Override
 	public Computer selectComputer(int id) {
-		ConnectionManager.INSTANCE.getConnection();
+		myManager.getConnection();
 		Computer myComputer = null;
 		try {
-			myComputer = DaoFactory.getInstanceComputerDao().selectComputer(id);
+			myComputer = myComputerDao.selectComputer(id);
 		} catch (DaoException e) {
 			LOG.error("Error in -> selectComputer -computerId-" + id + " " + e);
 			throw e;
@@ -92,10 +108,10 @@ public enum ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public int countNumberOfComputers(String myName) {
-		ConnectionManager.INSTANCE.getConnection();
+		myManager.getConnection();
 		int number = 0;
 		try {
-			number = DaoFactory.getInstanceComputerDao().countNumberComputers(
+			number = myComputerDao.countNumberComputers(
 					myName);
 		} catch (DaoException e) {
 			LOG.error("Error in -> countNumberOfComputers " + e);
@@ -119,10 +135,10 @@ public enum ComputerServiceImpl implements ComputerService {
 	@Override
 	public ArrayList<Computer> selectComputers(String myLikeParam,
 			String myOrder, int startLimit, int numberOfRow) {
-		ConnectionManager.INSTANCE.getConnection();
+		myManager.getConnection();
 		ArrayList<Computer> myList = null;
 		try {
-			myList = DaoFactory.getInstanceComputerDao().selectComputers(
+			myList = myComputerDao.selectComputers(
 					myLikeParam, myOrder, startLimit, numberOfRow);
 		} catch (DaoException e) {
 			LOG.error("Error on the selectComputers " + e);
@@ -205,7 +221,7 @@ public enum ComputerServiceImpl implements ComputerService {
 		}
 
 		if (id != -1 && id != null) {
-			if (ServiceFactory.INSTANCE.getCompanyServ().selectCompany(id) == null) {
+			if (myCompanyDao.selectCompany(id) == null) {
 				req.setAttribute("errorCompany",
 						"Please enter a company id in a range.");
 				req.setAttribute("checkForm", false);
@@ -224,8 +240,8 @@ public enum ComputerServiceImpl implements ComputerService {
 	@Override
 	public void closeThread() {
 		try {
-			ConnectionManager.INSTANCE.getConnection().close();
-			ConnectionManager.INSTANCE.myThreadLocal.remove();
+			myManager.getConnection().close();
+			myManager.myThreadLocal.remove();
 			LOG.debug("Close of Thread :" + Thread.currentThread().toString());
 		} catch (SQLException e) {
 			LOG.error("Error in -> Close of Thread "

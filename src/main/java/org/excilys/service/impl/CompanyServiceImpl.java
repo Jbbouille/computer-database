@@ -3,25 +3,33 @@ package org.excilys.service.impl;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import org.excilys.dao.impl.CompanyDaoImpl;
 import org.excilys.dao.impl.ConnectionManager;
-import org.excilys.dao.impl.DaoFactory;
 import org.excilys.exception.DaoException;
 import org.excilys.model.Company;
 import org.excilys.service.CompanyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public enum CompanyServiceImpl implements CompanyService {
-	INSTANCE;
+@Service("companyService")
+public class CompanyServiceImpl implements CompanyService {
 
 	public static final Logger LOG = LoggerFactory
 			.getLogger(ConnectionManager.class);
+	
+	@Autowired
+	private ConnectionManager myManager;
+	
+	@Autowired
+	private CompanyDaoImpl myCompanyDao;
 
 	@Override
 	public void insertCompany(Company myCompany) {
-		ConnectionManager.INSTANCE.startTransaction();
+		myManager.startTransaction();
 		try {
-			DaoFactory.getInstanceCompanyDao().insertCompany(myCompany);
+			myCompanyDao.insertCompany(myCompany);
 			closeThread();
 		} catch (DaoException e) {
 			LOG.error("Error in -> insertCompany"
@@ -32,9 +40,9 @@ public enum CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public void deleteCompany(Company myCompany) {
-		ConnectionManager.INSTANCE.startTransaction();
+		myManager.startTransaction();
 		try {
-			DaoFactory.getInstanceCompanyDao().deleteCompany(myCompany);
+			myCompanyDao.deleteCompany(myCompany);
 			closeThread();
 		} catch (DaoException e) {
 			LOG.error("Error in -> deleteCompany"
@@ -45,9 +53,9 @@ public enum CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public void updateCompany(Company myCompany) {
-		ConnectionManager.INSTANCE.startTransaction();
+		myManager.startTransaction();
 		try {
-			DaoFactory.getInstanceCompanyDao().updateCompany(myCompany);
+			myCompanyDao.updateCompany(myCompany);
 			closeThread();
 		} catch (DaoException e) {
 			LOG.error("Error in -> updateCompany"
@@ -58,10 +66,10 @@ public enum CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public Company selectCompany(int id) {
-		ConnectionManager.INSTANCE.getConnection();
+		myManager.getConnection();
 		Company myCompany = null;
 		try {
-			myCompany = DaoFactory.getInstanceCompanyDao().selectCompany(id);
+			myCompany = myCompanyDao.selectCompany(id);
 			closeThread();
 		} catch (DaoException e) {
 			LOG.error("Error in -> selectCompany"
@@ -73,10 +81,10 @@ public enum CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public HashMap<Integer, Company> selectCompanies() {
-		ConnectionManager.INSTANCE.getConnection();
+		myManager.getConnection();
 		HashMap<Integer, Company> myMap = null;
 		try {
-			myMap = DaoFactory.getInstanceCompanyDao().selectCompanies();
+			myMap = myCompanyDao.selectCompanies();
 			closeThread();
 		} catch (DaoException e) {
 			LOG.error("Error in -> selectCompanies"
@@ -88,10 +96,10 @@ public enum CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public int countCompanies() {
-		ConnectionManager.INSTANCE.getConnection();
+		myManager.getConnection();
 		int number = 0;
 		try {
-			number = DaoFactory.getInstanceCompanyDao().countCompanies();
+			number = myCompanyDao.countCompanies();
 			closeThread();
 		} catch (DaoException e) {
 			LOG.error("Error in -> countCompanies"
@@ -104,8 +112,8 @@ public enum CompanyServiceImpl implements CompanyService {
 	@Override
 	public void closeThread() {
 		try {
-			ConnectionManager.INSTANCE.myThreadLocal.get().close();
-			ConnectionManager.INSTANCE.myThreadLocal.remove();
+			myManager.myThreadLocal.get().close();
+			myManager.myThreadLocal.remove();
 			LOG.debug("Close of Thread :" + Thread.currentThread().toString());
 		} catch (SQLException e) {
 			LOG.error("Error in -> Close of Thread :"

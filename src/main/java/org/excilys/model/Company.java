@@ -1,7 +1,8 @@
 package org.excilys.model;
 
+
 public class Company {
-	
+
 	private int id;
 	private String name;
 
@@ -26,18 +27,21 @@ public class Company {
 		this.id = id;
 		this.name = name;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == null) return false;
+		if (obj == null)
+			return false;
 		Company comp = (Company) obj;
-		if(this.id == comp.id ) return true;
-		else return false;
+		if (this.id == comp.id)
+			return true;
+		else
+			return false;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Company -- id :"+id+", name :"+name;
+		return "Company -- id :" + id + ", name :" + name;
 	}
 
 	public Company() {
