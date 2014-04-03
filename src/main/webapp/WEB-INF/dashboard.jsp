@@ -14,6 +14,16 @@
 			<input type="submit" id="searchsubmit" value="Filter by name"
 				class="btn btn-primary">
 		</form>
+		<div class="row">
+			<div class="col-md-8"></div>
+			<div class="col-md-4">
+				<c:if test="${deleteError != null}">
+					<label class="error" for="company"> <c:out
+							value="${deleteError}"></c:out>
+					</label>
+				</c:if>
+			</div>
+		</div>
 		<a class="btn btn-success" id="add" href="addcomputer">Add
 			Computer</a>
 		<m:pagination currentPage="${currentPage}"
@@ -50,7 +60,8 @@
 						<td><c:out value="${companie.get(computer.companyId).name}" /></td>
 					</c:if>
 					<td class="col-md-2"><a
-						href="deletecomputer?id=${computer.id}" class="btn btn-warning" onClick="confirm( 'Are you sure to delete' )">Delete</a>
+						href="deletecomputer?id=${computer.id}" class="btn btn-warning"
+						onClick="return confirm( 'Are you sure to delete' )">Delete</a>
 				</tr>
 			</c:forEach>
 		</tbody>

@@ -5,13 +5,15 @@
 <section id="main">
 	<h1>Update Computer</h1>
 	<c:set var="computer" value="${computer}"></c:set>
-	<form id=frm action="modifycomputer" method="POST" class="col-md-4 col-md-offset-4">
+	<form id=frm action="modifycomputer" method="POST"
+		class="col-md-4 col-md-offset-4">
 		<div class="form-group">
 			<label for="name">Name</label> <input type="text"
 				class="form-control" name="name" placeholder="Enter name"
 				value="${computer.name}">
-			<c:if test="${errorName != null}">
-				<label class="error" for="name"> <c:out value="${errorName}"></c:out>
+			<c:if test="${errorMap.get('errorName') != null}">
+				<label class="error" for="name"> <c:out
+						value="${errorMap.get('errorName')}"></c:out>
 				</label>
 			</c:if>
 		</div>
@@ -20,9 +22,9 @@
 				class="form-control" name="introducedDate"
 				placeholder="date introduced" value="${computer.introduced}"
 				id="datepickerIntroduced">
-			<c:if test="${errorIntroduced != null}">
+			<c:if test="${errorMap.get('errorIntroduced') != null}">
 				<label class="error" for="datepickerIntroduced"> <c:out
-						value="${errorIntroduced}"></c:out>
+						value="${errorMap.get('errorIntroduced')}"></c:out>
 				</label>
 			</c:if>
 		</div>
@@ -31,9 +33,9 @@
 				class="form-control" name="discontinuedDate"
 				placeholder="date discontinued" value="${computer.discontinued}"
 				id="datepickerDiscontinued">
-			<c:if test="${errorDiscontinued != null}">
+			<c:if test="${errorMap.get('errorDiscontinued') != null}">
 				<label class="error" for="datepickerDiscontinued"> <c:out
-						value="${errorDiscontinued}"></c:out>
+						value="${errorMap.get('errorDiscontinued')}"></c:out>
 				</label>
 			</c:if>
 		</div>
@@ -48,9 +50,9 @@
 					</option>
 				</c:forEach>
 			</select>
-			<c:if test="${errorCompany != null}">
+			<c:if test="${errorMap.get('errorCompany') != null}">
 				<label class="error" for="company"> <c:out
-						value="${errorCompany}"></c:out>
+						value="${errorMap.get('errorCompany')}"></c:out>
 				</label>
 			</c:if>
 		</div>
@@ -58,6 +60,11 @@
 		<button type="submit" class="btn btn-default">Submit</button>
 		or <a class="btn btn-success" id="cancel" href="dashboard">Cancel</a>
 		<input type="hidden" name="idComputer" value="${computer.id}">
+		<c:if test="${errorMap.get('errorIdComp') != null}">
+			<label class="error" for="id"> <c:out
+					value="${errorMap.get('errorIdComp')}"></c:out>
+			</label>
+		</c:if>
 	</form>
 </section>
 

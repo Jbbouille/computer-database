@@ -1,20 +1,20 @@
 package org.excilys.servlet;
 
 import java.io.IOException;
-import java.text.ParseException;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.excilys.model.Computer;
+import org.excilys.dto.ComputerDto;
+import org.excilys.mapper.ModelMapper;
 import org.excilys.service.impl.CompanyServiceImpl;
 import org.excilys.service.impl.ComputerServiceImpl;
-import org.excilys.util.Utilities;
+import org.excilys.validator.ComputerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-
 
 public class AddComputer extends HttpServlet {
 
@@ -23,7 +23,13 @@ public class AddComputer extends HttpServlet {
 
 	@Autowired
 	private CompanyServiceImpl myCompanyServ;
-	
+
+	@Autowired
+	private ModelMapper mM;
+
+	@Autowired
+	ComputerValidator compValid;
+
 	@Override
 	public void init() throws ServletException {
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
@@ -33,43 +39,30 @@ public class AddComputer extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		Computer myComputer = new Computer();
+		HashMap<String, String> myMapErrors;
 
-		req = myComputerServ.validateForm(req);
-		boolean myCheckForm = true;
-		if (req.getAttribute("checkForm") != null)
-			myCheckForm = (Boolean) req.getAttribute("checkForm");
+		ComputerDto myDto = new ComputerDto();
+		myDto.setCompanyId(req.getParameter("company"));
+		myDto.setDiscontinued(req.getParameter("discontinuedDate"));
+		myDto.setIntroduced(req.getParameter("introducedDate"));
+		myDto.setName(req.getParameter("name"));
 
-		if (myCheckForm) {
+		myMapErrors = compValid.validateForm(myDto, true);
 
-			myComputer.setName(req.getParameter("name"));
-
-			myComputer
-					.setCompanyId(Integer.valueOf(req.getParameter("company")));
-
-			try {
-				if (!(req.getParameter("introducedDate").equals("")))
-					myComputer.setIntroduced(Utilities.stringToDate(req
-							.getParameter("introducedDate")));
-				if (!(req.getParameter("discontinuedDate").equals("")))
-					myComputer.setDiscontinued(Utilities.stringToDate(req
-							.getParameter("discontinuedDate")));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
-			myComputerServ.insertComputer(myComputer);
-
+		if (myMapErrors.get("error") == null) {
+			myComputerServ.insertComputer(mM.ComputerDtoToComputer(myDto));
 			resp.sendRedirect("dashboard");
 		} else {
-
 			req.setAttribute("name", req.getParameter("name"));
 			req.setAttribute("introducedDate",
 					req.getParameter("introducedDate"));
 			req.setAttribute("discontinuedDate",
 					req.getParameter("discontinuedDate"));
-			req.setAttribute("companyParam", req.getParameter("company"));
+			if (myMapErrors.get("errorCompany") != null) {
+				req.setAttribute("companyParam", "-1");
+			}
 			req.setAttribute("companies", myCompanyServ.selectCompanies());
+			req.setAttribute("errorMap", myMapErrors);
 
 			getServletContext()
 					.getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(

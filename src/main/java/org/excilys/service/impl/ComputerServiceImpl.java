@@ -1,19 +1,17 @@
 package org.excilys.service.impl;
 
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.excilys.dao.impl.CompanyDaoImpl;
 import org.excilys.dao.impl.ComputerDaoImpl;
 import org.excilys.dao.impl.ConnectionManager;
 import org.excilys.dao.impl.LogDaoImpl;
+import org.excilys.dto.ComputerDto;
 import org.excilys.exception.DaoException;
+import org.excilys.mapper.ModelMapper;
 import org.excilys.model.Computer;
 import org.excilys.service.ComputerService;
-import org.excilys.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +22,21 @@ public class ComputerServiceImpl implements ComputerService {
 
 	public static final Logger LOG = LoggerFactory
 			.getLogger(ConnectionManager.class);
-	
+
 	@Autowired
 	private ConnectionManager myManager;
-	
+
 	@Autowired
 	private ComputerDaoImpl myComputerDao;
-	
+
 	@Autowired
 	private LogDaoImpl myLogDao;
-	
+
 	@Autowired
 	private CompanyDaoImpl myCompanyDao;
+
+	@Autowired
+	private ModelMapper mM;
 
 	@Override
 	public void insertComputer(Computer myComputer) {
@@ -44,16 +45,15 @@ public class ComputerServiceImpl implements ComputerService {
 		try {
 			myManager.startTransaction();
 			id = myComputerDao.insertComputer(myComputer);
-			myLogDao.insertLog(
-					"insert of a computer id :" + id);
+			myLogDao.insertLog("insert of a computer id :" + id);
 			myManager.commit();
 		} catch (DaoException e1) {
 			LOG.error("Error on the insertComputer -computerId-" + id + " "
 					+ e1);
 			myManager.rollback();
-				closeThread();
-				throw e1;
-		}finally{
+			closeThread();
+			throw e1;
+		} finally {
 			closeThread();
 		}
 
@@ -65,8 +65,7 @@ public class ComputerServiceImpl implements ComputerService {
 		try {
 			myManager.startTransaction();
 			myComputerDao.deleteComputer(myComputer);
-			myLogDao.insertLog(
-					"delete of a computer id :" + myComputer.getId());
+			myLogDao.insertLog("delete of a computer id :" + myComputer.getId());
 			myManager.commit();
 		} catch (DaoException e1) {
 			LOG.error("Error on the deleteComputer " + e1);
@@ -80,8 +79,7 @@ public class ComputerServiceImpl implements ComputerService {
 		try {
 			myManager.startTransaction();
 			myComputerDao.updateComputer(myComputer);
-			myLogDao.insertLog(
-					"update of a computer id :" + myComputer.getId());
+			myLogDao.insertLog("update of a computer id :" + myComputer.getId());
 			myManager.commit();
 		} catch (DaoException e1) {
 			LOG.error("Error on the updateComputer -computerId-"
@@ -92,11 +90,12 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public Computer selectComputer(int id) {
+	public ComputerDto selectComputer(int id) {
 		myManager.getConnection();
-		Computer myComputer = null;
+		ComputerDto myComputer = null;
 		try {
-			myComputer = myComputerDao.selectComputer(id);
+			myComputer = mM.computerToComputerDto(myComputerDao
+					.selectComputer(id));
 		} catch (DaoException e) {
 			LOG.error("Error in -> selectComputer -computerId-" + id + " " + e);
 			throw e;
@@ -111,8 +110,7 @@ public class ComputerServiceImpl implements ComputerService {
 		myManager.getConnection();
 		int number = 0;
 		try {
-			number = myComputerDao.countNumberComputers(
-					myName);
+			number = myComputerDao.countNumberComputers(myName);
 		} catch (DaoException e) {
 			LOG.error("Error in -> countNumberOfComputers " + e);
 			throw e;
@@ -123,23 +121,16 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public double numberOfPage(int numberComputers, int numberOfRow) {
-		return Math.ceil(numberComputers / numberOfRow) + 1;
-	}
-
-	@Override
-	public int getStartLimit(int idPage, int numberOfRow) {
-		return ((idPage - 1) * numberOfRow);
-	}
-
-	@Override
-	public ArrayList<Computer> selectComputers(String myLikeParam,
+	public ArrayList<ComputerDto> selectComputers(String myLikeParam,
 			String myOrder, int startLimit, int numberOfRow) {
 		myManager.getConnection();
-		ArrayList<Computer> myList = null;
+		ArrayList<ComputerDto> myList = null;
 		try {
-			myList = myComputerDao.selectComputers(
-					myLikeParam, myOrder, startLimit, numberOfRow);
+			myList = new ArrayList<>();
+			for (Computer computer : myComputerDao.selectComputers(myLikeParam,
+					myOrder, startLimit, numberOfRow)) {
+				myList.add(mM.computerToComputerDto(computer));
+			}
 		} catch (DaoException e) {
 			LOG.error("Error on the selectComputers " + e);
 			throw e;
@@ -147,6 +138,30 @@ public class ComputerServiceImpl implements ComputerService {
 			closeThread();
 		}
 		return myList;
+	}
+
+	@Override
+	public void closeThread() {
+		try {
+			myManager.getConnection().close();
+			myManager.myThreadLocal.remove();
+			LOG.debug("Close of Thread :" + Thread.currentThread().toString());
+		} catch (SQLException e) {
+			LOG.error("Error in -> Close of Thread "
+					+ Thread.currentThread().toString());
+			throw new DaoException("Error in -> Close of Thread "
+					+ e.getMessage());
+		}
+	}
+
+	@Override
+	public double numberOfPage(int numberComputers, int numberOfRow) {
+		return Math.ceil(numberComputers / numberOfRow) + 1;
+	}
+
+	@Override
+	public int getStartLimit(int idPage, int numberOfRow) {
+		return ((idPage - 1) * numberOfRow);
 	}
 
 	@Override
@@ -179,74 +194,5 @@ public class ComputerServiceImpl implements ComputerService {
 			myStringBuilder.append(" DESC");
 
 		return myStringBuilder.toString();
-	}
-
-	@Override
-	public HttpServletRequest validateForm(HttpServletRequest req) {
-
-		Integer id = 0;
-		Integer idComputer = Integer.valueOf(req.getParameter("idComputer"));
-
-		if (req.getParameter("name").length() < 2) {
-			req.setAttribute("errorName", "Please enter at least 2 characters.");
-			req.setAttribute("checkForm", false);
-		}
-
-		if (req.getParameter("introducedDate").equals("") == false) {
-			try {
-				Utilities.stringToDate(req.getParameter("introducedDate"));
-			} catch (ParseException e) {
-				req.setAttribute("errorIntroduced",
-						"Please enter a date in the format yyyy-mm-dd.");
-				req.setAttribute("checkForm", false);
-			}
-		}
-
-		if (req.getParameter("discontinuedDate").equals("") == false) {
-			try {
-				Utilities.stringToDate(req.getParameter("discontinuedDate"));
-			} catch (ParseException e) {
-				req.setAttribute("errorDiscontinued",
-						"Please enter a date in the format yyyy-mm-dd.");
-				req.setAttribute("checkForm", false);
-			}
-		}
-
-		try {
-			id = Integer.valueOf(req.getParameter("company"));
-		} catch (NumberFormatException e) {
-			req.setAttribute("errorCompany",
-					"Please enter a company id in a range.");
-			req.setAttribute("checkForm", false);
-		}
-
-		if (id != -1 && id != null) {
-			if (myCompanyDao.selectCompany(id) == null) {
-				req.setAttribute("errorCompany",
-						"Please enter a company id in a range.");
-				req.setAttribute("checkForm", false);
-			}
-		}
-		
-		if (idComputer != null) {
-			if ( idComputer < 0 ) {
-				req.setAttribute("checkForm", false);
-			}
-		}
-
-		return req;
-	}
-
-	@Override
-	public void closeThread() {
-		try {
-			myManager.getConnection().close();
-			myManager.myThreadLocal.remove();
-			LOG.debug("Close of Thread :" + Thread.currentThread().toString());
-		} catch (SQLException e) {
-			LOG.error("Error in -> Close of Thread "
-					+ Thread.currentThread().toString());
-			throw new DaoException("Error in -> Close of Thread "+e.getMessage());
-		}
 	}
 }

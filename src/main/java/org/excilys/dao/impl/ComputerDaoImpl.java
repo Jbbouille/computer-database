@@ -22,7 +22,7 @@ import com.mysql.jdbc.Statement;
 public class ComputerDaoImpl implements ComputerDao {
 
 	static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
-	
+
 	@Autowired
 	private ConnectionManager myManager;
 
@@ -65,15 +65,15 @@ public class ComputerDaoImpl implements ComputerDao {
 			myPreStmt.execute();
 
 			mySet = myPreStmt.getGeneratedKeys();
-			mySet.next();
-			id = mySet.getInt(1);
 
+			if (mySet.next()) {
+				id = mySet.getInt(1);
+			}
 		} catch (SQLException e) {
 			throw new DaoException("Error in insertComuter " + e.getMessage());
 		} finally {
 			myManager.closeAll(myPreStmt, mySet);
 		}
-
 		return id;
 	}
 
@@ -94,9 +94,6 @@ public class ComputerDaoImpl implements ComputerDao {
 
 			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			myPreStmt.executeUpdate();
-
-			mySet = myPreStmt.getGeneratedKeys();
-			mySet.next();
 		} catch (SQLException e) {
 			throw new DaoException("Error in deleteComputer " + e.getMessage());
 		} finally {
@@ -142,9 +139,6 @@ public class ComputerDaoImpl implements ComputerDao {
 
 			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			myPreStmt.executeUpdate();
-
-			mySet = myPreStmt.getGeneratedKeys();
-			mySet.next();
 		} catch (SQLException e) {
 			throw new DaoException("Error in updateComputer " + e.getMessage());
 		} finally {
@@ -170,12 +164,14 @@ public class ComputerDaoImpl implements ComputerDao {
 
 			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			mySet = myPreStmt.executeQuery();
-			mySet.next();
+			if (mySet.next()) {
 
-			myComputer = new Computer(mySet.getInt("id"),
-					mySet.getString("name"), mySet.getDate("introduced"),
-					mySet.getDate("discontinued"), mySet.getInt("company_id"));
+				myComputer = new Computer(mySet.getInt("id"),
+						mySet.getString("name"), mySet.getDate("introduced"),
+						mySet.getDate("discontinued"),
+						mySet.getInt("company_id"));
 
+			}
 		} catch (SQLException e) {
 			throw new DaoException("Error in -> selectComputer "
 					+ e.getMessage());
@@ -203,9 +199,9 @@ public class ComputerDaoImpl implements ComputerDao {
 			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 			mySet = myPreStmt.executeQuery();
 
-			mySet.next();
-			number = mySet.getInt(1);
-
+			if (mySet.next()) {
+				number = mySet.getInt(1);
+			}
 		} catch (SQLException e) {
 			throw new DaoException("Error in -> countNumberComputers "
 					+ e.getMessage());
@@ -253,7 +249,8 @@ public class ComputerDaoImpl implements ComputerDao {
 				myList.add(myComputer);
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Error in -> selectComputers "+e.getMessage());
+			throw new DaoException("Error in -> selectComputers "
+					+ e.getMessage());
 		} finally {
 			myManager.closeAll(myPreStmt, mySet);
 		}

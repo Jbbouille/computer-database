@@ -17,73 +17,9 @@ import org.springframework.stereotype.Repository;
 public class CompanyDaoImpl implements CompanyDao {
 
 	static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
-	
+
 	@Autowired
 	private ConnectionManager myManager;
-
-	@Override
-	public void insertCompany(Company myCompany) throws DaoException {
-		Connection myCon = myManager.getConnection();
-		PreparedStatement myPreStmt = null;
-		String sql = "INSERT INTO computer-database-db.company (id, name) VALUES (NULL, ?)";
-		LOG.debug("requete sql non-prepare : " + sql);
-		
-		try {
-		myPreStmt = myCon.prepareStatement(sql);
-
-		myPreStmt.setString(1, myCompany.getName());
-
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		myPreStmt.executeUpdate();
-		
-		}catch (Exception e) {
-			throw new DaoException("Error in -> insertCompany :"+e);
-		}finally{
-			myManager.closeAll(myPreStmt, null);
-		}
-	}
-
-	@Override
-	public void deleteCompany(Company myCompany) throws DaoException {
-		Connection myCon = myManager.getConnection();
-		PreparedStatement myPreStmt = null;
-		String sql = "DELETE FROM computer-database-db.company WHERE company.id = ?";
-		LOG.debug("requete sql non-prepare : " + sql);
-		try {
-		myPreStmt = myCon.prepareStatement(sql);
-
-		myPreStmt.setInt(1, myCompany.getId());
-
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		myPreStmt.executeUpdate();
-		}catch (Exception e) {
-			throw new DaoException("Error in -> deleteCompany :"+e);
-		}finally{
-			myManager.closeAll(myPreStmt, null);
-		}
-	}
-
-	@Override
-	public void updateCompany(Company myCompany) throws DaoException {
-		Connection myCon = myManager.getConnection();
-		PreparedStatement myPreStmt = null;
-		String sql = "UPDATE comany SET id = ?, name = ? WHERE company.id = ?";
-		LOG.debug("requete sql non-prepare : " + sql);
-		try {
-		myPreStmt = myCon.prepareStatement(sql);
-
-		myPreStmt.setInt(1, myCompany.getId());
-		myPreStmt.setString(2, myCompany.getName());
-		myPreStmt.setInt(3, myCompany.getId());
-
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		myPreStmt.executeUpdate();
-		}catch (Exception e) {
-			throw new DaoException("Error in -> updateCompany :"+e);
-		}finally{
-			myManager.closeAll(myPreStmt, null);
-		}
-	}
 
 	@Override
 	public Company selectCompany(int id) throws DaoException {
@@ -93,20 +29,25 @@ public class CompanyDaoImpl implements CompanyDao {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT * FROM company WHERE id = ?";
-		LOG.debug("requete sql non-prepare : " + sql);
+		LOG.debug("requete sql non-prepare selectCompany : " + sql);
 		try {
-		myPreStmt = myCon.prepareStatement(sql);
+			myPreStmt = myCon.prepareStatement(sql);
 
-		myPreStmt.setInt(1, id);
+			myPreStmt.setInt(1, id);
 
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		mySet = myPreStmt.executeQuery();
-		mySet.next();
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
 
-		myCompany = new Company(mySet.getInt("id"), mySet.getString("name"));
-		}catch (Exception e) {
-			throw new DaoException("Error in -> selectCompany :"+e);
-		}finally{
+			mySet = myPreStmt.executeQuery();
+
+			LOG.debug("id = " + id);
+
+			if (mySet.next()) {
+				myCompany = new Company(mySet.getInt("id"),
+						mySet.getString("name"));
+			}
+		} catch (Exception e) {
+			throw new DaoException("Error in -> selectCompany :" + e);
+		} finally {
 			myManager.closeAll(myPreStmt, mySet);
 		}
 		return myCompany;
@@ -119,21 +60,20 @@ public class CompanyDaoImpl implements CompanyDao {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT * FROM company";
-		LOG.debug("requete sql non-prepare : " + sql);
+		LOG.debug("requete sql non-prepare selectCompanies : " + sql);
 		try {
-		myPreStmt = myCon.prepareStatement(sql);
+			myPreStmt = myCon.prepareStatement(sql);
 
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		mySet = myPreStmt.executeQuery();
-		while (mySet.next()) {
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
+			mySet = myPreStmt.executeQuery();
+			while (mySet.next()) {
+				myList.put(mySet.getInt("id"), new Company(mySet.getInt("id"),
+						mySet.getString("name")));
 
-			myList.put(mySet.getInt("id"), new Company(mySet.getInt("id"),
-					mySet.getString("name")));
-
-		}
-		}catch (Exception e) {
-			throw new DaoException("Error in -> selectCompanies :"+e);
-		}finally{
+			}
+		} catch (Exception e) {
+			throw new DaoException("Error in -> selectCompanies :" + e);
+		} finally {
 			myManager.closeAll(myPreStmt, mySet);
 		}
 		return myList;
@@ -149,20 +89,19 @@ public class CompanyDaoImpl implements CompanyDao {
 		String sql = "SELECT count(*) FROM computer";
 		LOG.debug("requete sql non-prepare : " + sql);
 		try {
-		myPreStmt = myCon.prepareStatement(sql);
+			myPreStmt = myCon.prepareStatement(sql);
 
-		LOG.debug("requete sql prepare : " + myPreStmt.toString());
-		mySet = myPreStmt.executeQuery();
+			LOG.debug("requete sql prepare : " + myPreStmt.toString());
+			mySet = myPreStmt.executeQuery();
 
-		mySet.next();
-		number = mySet.getInt(1);
-		
-		}catch (Exception e) {
-			throw new DaoException("Error in -> countCompanies :"+e);
-		}finally{
+			if (mySet.next()) {
+				number = mySet.getInt(1);
+			}
+		} catch (Exception e) {
+			throw new DaoException("Error in -> countCompanies :" + e);
+		} finally {
 			myManager.closeAll(myPreStmt, mySet);
 		}
-		
 		return number;
 	}
 }

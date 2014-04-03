@@ -26,45 +26,6 @@ public class CompanyServiceImpl implements CompanyService {
 	private CompanyDaoImpl myCompanyDao;
 
 	@Override
-	public void insertCompany(Company myCompany) {
-		myManager.startTransaction();
-		try {
-			myCompanyDao.insertCompany(myCompany);
-			closeThread();
-		} catch (DaoException e) {
-			LOG.error("Error in -> insertCompany"
-					+ Thread.currentThread().toString());
-			throw e;
-		}
-	}
-
-	@Override
-	public void deleteCompany(Company myCompany) {
-		myManager.startTransaction();
-		try {
-			myCompanyDao.deleteCompany(myCompany);
-			closeThread();
-		} catch (DaoException e) {
-			LOG.error("Error in -> deleteCompany"
-					+ Thread.currentThread().toString());
-			throw e;
-		}
-	}
-
-	@Override
-	public void updateCompany(Company myCompany) {
-		myManager.startTransaction();
-		try {
-			myCompanyDao.updateCompany(myCompany);
-			closeThread();
-		} catch (DaoException e) {
-			LOG.error("Error in -> updateCompany"
-					+ Thread.currentThread().toString());
-			throw e;
-		}
-	}
-
-	@Override
 	public Company selectCompany(int id) {
 		myManager.getConnection();
 		Company myCompany = null;

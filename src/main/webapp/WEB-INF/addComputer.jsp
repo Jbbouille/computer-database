@@ -13,9 +13,9 @@
 					<label for="name">Name</label> <input type="text"
 						class="form-control" name="name" placeholder="Enter name"
 						value="${name}">
-					<c:if test="${errorName != null}">
+					<c:if test="${errorMap.get('errorName') != null}">
 						<label class="error" for="name"> <c:out
-								value="${errorName}"></c:out>
+								value="${errorMap.get('errorName')}"></c:out>
 						</label>
 					</c:if>
 				</div>
@@ -24,9 +24,9 @@
 						class="form-control" name="introducedDate"
 						placeholder="date introduced" id="datepickerIntroduced"
 						value="${introducedDate}">
-					<c:if test="${errorIntroduced != null}">
+					<c:if test="${errorMap.get('errorIntroduced') != null}">
 						<label class="error" for="datepickerIntroduced"> <c:out
-								value="${errorIntroduced}"></c:out>
+								value="${errorMap.get('errorIntroduced')}"></c:out>
 						</label>
 					</c:if>
 				</div>
@@ -35,9 +35,9 @@
 						class="form-control" name="discontinuedDate"
 						placeholder="date discontinued" id="datepickerDiscontinued"
 						value="${discontinuedDate}">
-					<c:if test="${errorDiscontinued != null}">
+					<c:if test="${errorMap.get('errorDiscontinued') != null}">
 						<label class="error" for="datepickerDiscontinued"> <c:out
-								value="${errorDiscontinued}"></c:out>
+								value="${errorMap.get('errorDiscontinued')}"></c:out>
 						</label>
 					</c:if>
 				</div>
@@ -52,9 +52,9 @@
 							</option>
 						</c:forEach>
 					</select>
-					<c:if test="${errorCompany != null}">
+					<c:if test="${errorMap.get('errorCompany') != null}">
 						<label class="error" for="company"> <c:out
-								value="${errorCompany}"></c:out>
+								value="${errorMap.get('errorCompany')}"></c:out>
 						</label>
 					</c:if>
 				</div>

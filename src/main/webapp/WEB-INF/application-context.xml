@@ -8,4 +8,6 @@
 	<context:annotation-config />
 	<context:component-scan base-package="org.excilys.dao.impl" />
 	<context:component-scan base-package="org.excilys.service.impl" />
+	<context:component-scan base-package="org.excilys.mapper" />
+	<context:component-scan base-package="org.excilys.validator" />
 </beans>

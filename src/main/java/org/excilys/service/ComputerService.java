@@ -2,8 +2,7 @@ package org.excilys.service;
 
 import java.util.ArrayList;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.excilys.dto.ComputerDto;
 import org.excilys.model.Computer;
 
 public interface ComputerService {
@@ -13,21 +12,19 @@ public interface ComputerService {
 	public void deleteComputer(Computer myComputer);
 
 	public void updateComputer(Computer myComputer);
+	
+	public void closeThread();
 
-	public Computer selectComputer(int id);
+	public ComputerDto selectComputer(int id);
+	
+	public ArrayList<ComputerDto> selectComputers(String myLikeParam,
+			String myOrder, int startLimit, int numberOfRow);
 
 	public int countNumberOfComputers(String myName);
+	
+	public int getStartLimit(int idPage, int numberOfRow);
 
 	public double numberOfPage(int numberComputers, int numberOfRow);
 
-	public int getStartLimit(int idPage, int numberOfRow);
-
-	public ArrayList<Computer> selectComputers(String myLikeParam,
-			String myOrder, int startLimit, int numberOfRow);
-
 	public String getOrderBy(String myOrder, Boolean desc);
-
-	public HttpServletRequest validateForm(HttpServletRequest req);
-	
-	public void closeThread();
 }
