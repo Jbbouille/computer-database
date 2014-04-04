@@ -31,12 +31,6 @@ public class ModifyComputer {
 	@Autowired
 	private ModelMapper mM;
 
-	@Autowired
-	ComputerValidator compValid;
-
-	@Autowired
-	ServletContext srvContext;
-
 	@RequestMapping(method = RequestMethod.POST)
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
