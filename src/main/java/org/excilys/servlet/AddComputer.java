@@ -3,8 +3,8 @@ package org.excilys.servlet;
 import java.io.IOException;
 import java.util.HashMap;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,9 +14,13 @@ import org.excilys.service.impl.CompanyServiceImpl;
 import org.excilys.service.impl.ComputerServiceImpl;
 import org.excilys.validator.ComputerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-public class AddComputer extends HttpServlet {
+@Controller
+@RequestMapping("/addcomputer")
+public class AddComputer{
 
 	@Autowired
 	private ComputerServiceImpl myComputerServ;
@@ -29,13 +33,11 @@ public class AddComputer extends HttpServlet {
 
 	@Autowired
 	ComputerValidator compValid;
+	
+	@Autowired
+	ServletContext srvContext;
 
-	@Override
-	public void init() throws ServletException {
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
-
-	@Override
+	@RequestMapping(method = RequestMethod.POST)
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
@@ -64,19 +66,17 @@ public class AddComputer extends HttpServlet {
 			req.setAttribute("companies", myCompanyServ.selectCompanies());
 			req.setAttribute("errorMap", myMapErrors);
 
-			getServletContext()
-					.getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(
+			srvContext.getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(
 							req, resp);
 		}
 	}
-
-	@Override
+	@RequestMapping(method = RequestMethod.GET)
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
 		req.setAttribute("companies", myCompanyServ.selectCompanies());
 
-		getServletContext().getRequestDispatcher("/WEB-INF/addComputer.jsp")
+		srvContext.getRequestDispatcher("/WEB-INF/addComputer.jsp")
 				.forward(req, resp);
 	}
 }

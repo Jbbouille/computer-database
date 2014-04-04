@@ -3,8 +3,8 @@ package org.excilys.servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,9 +12,13 @@ import org.excilys.dto.ComputerDto;
 import org.excilys.service.impl.CompanyServiceImpl;
 import org.excilys.service.impl.ComputerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-public class Dashboard extends HttpServlet {
+@Controller
+@RequestMapping("/dashboard")
+public class Dashboard  {
 
 	private final static int NUMBER_OF_COMPUTER_BY_PAGE = 30;
 
@@ -23,13 +27,11 @@ public class Dashboard extends HttpServlet {
 
 	@Autowired
 	private CompanyServiceImpl myCompanyServ;
+	
+	@Autowired
+	ServletContext srvContext;
 
-	@Override
-	public void init() throws ServletException {
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
-
-	@Override
+	@RequestMapping(method = RequestMethod.GET)
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		int page;
@@ -72,7 +74,7 @@ public class Dashboard extends HttpServlet {
 		req.setAttribute("companies", myCompanyServ.selectCompanies());
 		req.setAttribute("currentPage", page);
 
-		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp")
+		srvContext.getRequestDispatcher("/WEB-INF/dashboard.jsp")
 				.forward(req, resp);
 	}
 }

@@ -2,8 +2,8 @@ package org.excilys.servlet;
 
 import java.io.IOException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,9 +14,13 @@ import org.excilys.service.impl.ComputerServiceImpl;
 import org.excilys.validator.ComputerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-public class DeleteComputer extends HttpServlet {
+@Controller
+@RequestMapping("/deletecomputer")
+public class DeleteComputer  {
 
 	@Autowired
 	private ComputerServiceImpl myComputerServ;
@@ -33,12 +37,10 @@ public class DeleteComputer extends HttpServlet {
 	@Autowired
 	private ModelMapper mM;
 
-	@Override
-	public void init() throws ServletException {
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
+	@Autowired
+	ServletContext srvContext;
 
-	@Override
+	@RequestMapping(method = RequestMethod.GET)
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String validation = compValid.idValidator(req.getParameter("id"));
@@ -50,7 +52,7 @@ public class DeleteComputer extends HttpServlet {
 		} else {
 			req.setAttribute("deleteError", validation);
 
-			getServletContext().getRequestDispatcher("/dashboard").forward(req,
+			srvContext.getRequestDispatcher("/dashboard").forward(req,
 					resp);
 		}
 	}

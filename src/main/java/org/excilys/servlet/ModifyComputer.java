@@ -3,8 +3,8 @@ package org.excilys.servlet;
 import java.io.IOException;
 import java.util.HashMap;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,9 +14,13 @@ import org.excilys.service.impl.CompanyServiceImpl;
 import org.excilys.service.impl.ComputerServiceImpl;
 import org.excilys.validator.ComputerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-public class ModifyComputer extends HttpServlet {
+@Controller
+@RequestMapping("/modifycomputer")
+public class ModifyComputer {
 
 	@Autowired
 	private ComputerServiceImpl myComputerServ;
@@ -30,12 +34,10 @@ public class ModifyComputer extends HttpServlet {
 	@Autowired
 	ComputerValidator compValid;
 
-	@Override
-	public void init() throws ServletException {
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
+	@Autowired
+	ServletContext srvContext;
 
-	@Override
+	@RequestMapping(method = RequestMethod.POST)
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
@@ -49,7 +51,7 @@ public class ModifyComputer extends HttpServlet {
 		myDto.setId(req.getParameter("idComputer"));
 
 		myMapErrors = compValid.validateForm(myDto, false);
-		
+
 		if (myMapErrors.get("error") == null) {
 			myComputerServ.updateComputer(mM.ComputerDtoToComputer(myDto));
 			resp.sendRedirect("dashboard");
@@ -65,12 +67,12 @@ public class ModifyComputer extends HttpServlet {
 			req.setAttribute("computer", myDto);
 			req.setAttribute("companies", myCompanyServ.selectCompanies());
 
-			getServletContext().getRequestDispatcher(
-					"/WEB-INF/modifyComputer.jsp").forward(req, resp);
+			srvContext.getRequestDispatcher("/WEB-INF/modifyComputer.jsp")
+					.forward(req, resp);
 		}
 	}
 
-	@Override
+	@RequestMapping(method = RequestMethod.GET)
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
@@ -82,8 +84,8 @@ public class ModifyComputer extends HttpServlet {
 			req.setAttribute("companies", myCompanyServ.selectCompanies());
 			req.setAttribute("computer", myComputerServ.selectComputer(id));
 
-			getServletContext().getRequestDispatcher(
-					"/WEB-INF/modifyComputer.jsp").forward(req, resp);
+			srvContext.getRequestDispatcher("/WEB-INF/modifyComputer.jsp")
+					.forward(req, resp);
 		} else {
 			resp.sendRedirect("dashboard");
 		}
