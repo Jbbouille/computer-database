@@ -84,7 +84,7 @@ public class ComputerValidator {
 	}
 
 	public String idValidator(String idDto) {
-		if (idDto != null) {
+		if (!idDto.equals("")) {
 			if (idDto.matches(intRegex)) {
 				int id = Integer.valueOf(idDto);
 				if (myComputerServ.selectComputer(id) == null) {

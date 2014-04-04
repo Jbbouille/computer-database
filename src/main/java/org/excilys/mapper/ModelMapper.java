@@ -39,6 +39,7 @@ public class ModelMapper {
 		ComputerDto myComputerDto = new ComputerDto();
 
 		myComputerDto.setCompanyId(String.valueOf(myComputer.getCompanyId()));
+
 		myComputerDto.setId(String.valueOf(myComputer.getId()));
 		myComputerDto.setName(myComputer.getName());
 

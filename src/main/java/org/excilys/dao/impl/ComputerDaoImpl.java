@@ -170,7 +170,6 @@ public class ComputerDaoImpl implements ComputerDao {
 						mySet.getString("name"), mySet.getDate("introduced"),
 						mySet.getDate("discontinued"),
 						mySet.getInt("company_id"));
-
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Error in -> selectComputer "

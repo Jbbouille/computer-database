@@ -93,9 +93,12 @@ public class ComputerServiceImpl implements ComputerService {
 	public ComputerDto selectComputer(int id) {
 		myManager.getConnection();
 		ComputerDto myComputer = null;
+		Computer myTest = null;
 		try {
-			myComputer = mM.computerToComputerDto(myComputerDao
-					.selectComputer(id));
+			myTest = myComputerDao.selectComputer(id);
+			if (myTest != null) {
+				myComputer = mM.computerToComputerDto(myTest);
+			}
 		} catch (DaoException e) {
 			LOG.error("Error in -> selectComputer -computerId-" + id + " " + e);
 			throw e;
