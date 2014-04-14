@@ -11,21 +11,22 @@
 			<form:form id="frm" commandName="computerDto" action="modifycomputer" method="POST">
 				<div class="form-group">
 					<label for="name">Name</label>
-					<form:input class="form-control" path="name" />
+					<form:input type="hidden" class="form-control" path="id" value="${computerDto.id}"/>
+					<form:input class="form-control" path="name" value="${computerDto.name}"/>
 					<form:errors path="name" cssClass="error" />
 				</div>
 				<div class="form-group">
 					<label for="introduced">Introduced</label>
-					<form:input class="form-control" path="introduced" id="datepickerIntroduced"/>
+					<form:input class="form-control" path="introduced" id="datepickerIntroduced" value="${computerDto.introduced}"/>
 					<form:errors path="introduced" cssClass="error" />
 				</div>
 				<div class="form-group">
 					<label for="discontinued">Discontinued</label>
-					<form:input class="form-control" path="discontinued" id="datepickerDiscontinued"/>
+					<form:input class="form-control" path="discontinued" id="datepickerDiscontinued" value="${computerDto.discontinued}"/>
 					<form:errors path="discontinued" cssClass="error" />
 				</div>
 				<label for="company">Company Name:</label>
-				<div class="controls">
+				<div class="controls" >
 					<form:select path="companyId">
 						<form:option value="-1" label="--- Select ---" />
 						<form:options items="${companies}"/>

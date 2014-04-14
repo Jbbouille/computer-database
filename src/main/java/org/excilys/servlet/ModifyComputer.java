@@ -1,22 +1,23 @@
 package org.excilys.servlet;
 
 import java.io.IOException;
-import java.util.HashMap;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.excilys.dto.ComputerDto;
 import org.excilys.mapper.ModelMapper;
 import org.excilys.service.impl.CompanyServiceImpl;
 import org.excilys.service.impl.ComputerServiceImpl;
-import org.excilys.validator.ComputerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/modifycomputer")
@@ -32,56 +33,46 @@ public class ModifyComputer {
 	private ModelMapper mM;
 
 	@RequestMapping(method = RequestMethod.POST)
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-
-		HashMap<String, String> myMapErrors;
-
-		ComputerDto myDto = new ComputerDto();
-		myDto.setCompanyId(req.getParameter("company"));
-		myDto.setDiscontinued(req.getParameter("discontinuedDate"));
-		myDto.setIntroduced(req.getParameter("introducedDate"));
-		myDto.setName(req.getParameter("name"));
-		myDto.setId(req.getParameter("idComputer"));
-
-		myMapErrors = compValid.validateForm(myDto, false);
-
-		if (myMapErrors.get("error") == null) {
-			myComputerServ.updateComputer(mM.ComputerDtoToComputer(myDto));
-			resp.sendRedirect("dashboard");
+	protected ModelAndView doPost(
+			@Valid @ModelAttribute("computerDto") ComputerDto myComputer,
+			BindingResult result) {
+		
+		ModelAndView mav = null;
+		
+		if (result.hasErrors()) {
+			mav = new ModelAndView("modifyComputer");
+			mav.addObject("companies", myCompanyServ.selectCompanies());
+			mav.addObject("computerDto", myComputer);
+			System.out.println(result.toString());
 		} else {
-			/*
-			 * If the value choose is not an integer, the JSP will throw
-			 * NumberException that's why we must set a default value.
-			 */
-			if (myMapErrors.get("errorCompany") != null) {
-				myDto.setCompanyId("-1");
-			}
-			req.setAttribute("errorMap", myMapErrors);
-			req.setAttribute("computer", myDto);
-			req.setAttribute("companies", myCompanyServ.selectCompanies());
-
-			srvContext.getRequestDispatcher("/WEB-INF/modifyComputer.jsp")
-					.forward(req, resp);
+			mav = new ModelAndView("redirect:dashboard");
+			myComputerServ.updateComputer(mM.ComputerDtoToComputer(myComputer));
 		}
+ 
+		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+	protected ModelAndView doGet(HttpServletRequest req, ModelMap map)
 			throws ServletException, IOException {
 
+		ModelAndView mav = null;
+		
 		Integer id = null;
 		if (req.getParameter("id") != null) {
-
+			
+			mav = new ModelAndView("modifyComputer");
+			
 			id = Integer.valueOf(req.getParameter("id"));
+				
+			map.addAttribute("companies", myCompanyServ.selectCompanies());
+			mav.addObject("computerDto", myComputerServ.selectComputer(id));
 
-			req.setAttribute("companies", myCompanyServ.selectCompanies());
-			req.setAttribute("computer", myComputerServ.selectComputer(id));
-
-			srvContext.getRequestDispatcher("/WEB-INF/modifyComputer.jsp")
-					.forward(req, resp);
 		} else {
-			resp.sendRedirect("dashboard");
+			mav = new ModelAndView("redirect:dashboard");
 		}
+		
+		return mav;
 	}
+	
 }
