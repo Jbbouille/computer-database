@@ -26,7 +26,7 @@
 				</div>
 				<label for="company">Company Name:</label>
 				<div class="controls">
-					<form:select path="companyId">
+					<form:select  class="form-control" path="companyId">
 						<form:option value="-1" label="--- Select ---" />
 						<form:options items="${companies}"/>
 					</form:select>

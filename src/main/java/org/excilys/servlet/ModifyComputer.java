@@ -1,8 +1,5 @@
 package org.excilys.servlet;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -36,9 +33,9 @@ public class ModifyComputer {
 	protected ModelAndView doPost(
 			@Valid @ModelAttribute("computerDto") ComputerDto myComputer,
 			BindingResult result) {
-		
+
 		ModelAndView mav = null;
-		
+
 		if (result.hasErrors()) {
 			mav = new ModelAndView("modifyComputer");
 			mav.addObject("companies", myCompanyServ.selectCompanies());
@@ -48,31 +45,30 @@ public class ModifyComputer {
 			mav = new ModelAndView("redirect:dashboard");
 			myComputerServ.updateComputer(mM.ComputerDtoToComputer(myComputer));
 		}
- 
+
 		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	protected ModelAndView doGet(HttpServletRequest req, ModelMap map)
-			throws ServletException, IOException {
+	protected ModelAndView doGet(HttpServletRequest req, ModelMap map) {
 
 		ModelAndView mav = null;
-		
+
 		Integer id = null;
 		if (req.getParameter("id") != null) {
-			
+
 			mav = new ModelAndView("modifyComputer");
-			
+
 			id = Integer.valueOf(req.getParameter("id"));
-				
+
 			map.addAttribute("companies", myCompanyServ.selectCompanies());
 			mav.addObject("computerDto", myComputerServ.selectComputer(id));
 
 		} else {
 			mav = new ModelAndView("redirect:dashboard");
 		}
-		
+
 		return mav;
 	}
-	
+
 }
