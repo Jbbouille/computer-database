@@ -55,7 +55,8 @@ public class ModifyComputer {
 		ModelAndView mav = null;
 
 		Integer id = null;
-		if (req.getParameter("id") != null) {
+		if (req.getParameter("id") != null
+				&& !(req.getParameter("id").equals(""))) {
 
 			mav = new ModelAndView("modifyComputer");
 

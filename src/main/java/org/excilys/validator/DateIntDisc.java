@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DateIntDisc {
 
-	String message() default "Please enter a date in the format yyyy-mm-dd.";
+	String message() default "{Pattern.computerDto.date}";
 
 	Class<?>[] groups() default {};
 

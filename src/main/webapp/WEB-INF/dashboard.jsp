@@ -2,16 +2,20 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="m" tagdir="/WEB-INF/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <section id="main">
 	<h1 id="homeTitle">
-		<c:out value="${numberOfComputers} Computers Found"></c:out>
+		<c:out value="${numberOfComputers} "></c:out>
+		<spring:message code="label.numberComputer" />
 	</h1>
 	<div id="actions">
 		<form action="dashboard" method="GET" class="form-inline">
 			<input type="search" id="searchbox" name="search"
-				placeholder="Search name" class="form-control" value="${search}">
-			<input type="submit" id="searchsubmit" value="Filter by name"
+				placeholder="<spring:message code="label.searchName" />"
+				class="form-control" value="${search}"> <input type="submit"
+				id="searchsubmit"
+				value="<spring:message code="label.filterByName" />"
 				class="btn btn-primary">
 		</form>
 		<div class="row">
@@ -24,8 +28,8 @@
 				</c:if>
 			</div>
 		</div>
-		<a class="btn btn-success" id="add" href="addcomputer">Add
-			Computer</a>
+		<a class="btn btn-success" id="add" href="addcomputer"><spring:message
+				code="label.addComputer" /></a>
 		<m:pagination currentPage="${currentPage}"
 			numberOfPages="${numberOfPages}" search="${search}"
 			orderBy="${orderby}" bool="${bool}"></m:pagination>
@@ -34,16 +38,17 @@
 		<thead>
 			<tr>
 				<th class="col-md-2"><a
-					href="dashboard?search=${search}&orderby=name&bool=${orderby=='name' ? !bool:'false'}">Computer
-						Name</a></th>
+					href="dashboard?search=${search}&orderby=name&bool=${orderby=='name' ? !bool:'false'}"><spring:message
+							code="label.computerName" /></a></th>
 				<th class="col-md-2"><a
-					href="dashboard?search=${search}&orderby=introduced&bool=${orderby=='introduced' ? !bool:'false'}">Introduced
-						Date</a></th>
+					href="dashboard?search=${search}&orderby=introduced&bool=${orderby=='introduced' ? !bool:'false'}"><spring:message
+							code="label.computerIntroduced" /></a></th>
 				<th class="col-md-2"><a
-					href="dashboard?search=${search}&orderby=discontinued&bool=${orderby=='discontinued' ? !bool:'false'}">Discontinued
-						Date</a></th>
+					href="dashboard?search=${search}&orderby=discontinued&bool=${orderby=='discontinued' ? !bool:'false'}"><spring:message
+							code="label.computerDiscontinued" /></a></th>
 				<th class="col-md-2"><a
-					href="dashboard?search=${search}&orderby=company&bool=${orderby=='company' ? !bool:'false'}">Company</a></th>
+					href="dashboard?search=${search}&orderby=company&bool=${orderby=='company' ? !bool:'false'}"><spring:message
+							code="label.computerCompany" /></a></th>
 				<th class="col-md-2">Action</th>
 			</tr>
 		</thead>
@@ -61,7 +66,8 @@
 					</c:if>
 					<td class="col-md-2"><a
 						href="deletecomputer?id=${computer.id}" class="btn btn-warning"
-						onClick="return confirm( 'Are you sure to delete' )">Delete</a>
+						onClick="return confirm( 'Are you sure to delete' )"><spring:message
+								code="label.delete" /></a>
 				</tr>
 			</c:forEach>
 		</tbody>

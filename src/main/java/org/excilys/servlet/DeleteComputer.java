@@ -32,17 +32,18 @@ public class DeleteComputer  {
 	private ApplicationContext appContext;
 
 	@Autowired
-	ComputerValidator compValid;
+	private ComputerValidator compValid;
 
 	@Autowired
 	private ModelMapper mM;
 
 	@Autowired
-	ServletContext srvContext;
+	private ServletContext srvContext;
 
 	@RequestMapping(method = RequestMethod.GET)
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		
 		String validation = compValid.idValidator(req.getParameter("id"));
 		if (validation == null) {
 			int id = Integer.valueOf(req.getParameter("id"));

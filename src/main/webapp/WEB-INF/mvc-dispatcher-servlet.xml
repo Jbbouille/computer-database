@@ -17,7 +17,6 @@
 	<context:component-scan base-package="org.excilys.validator" />
 	<context:component-scan base-package="org.excilys.servlet" />
 
-	<mvc:annotation-driven />
 	<mvc:annotation-driven validator="validator" />
 
 	<bean id="viewResolver"
@@ -30,10 +29,26 @@
 		</property>
 	</bean>
 
-	<!-- bind your messages.properties -->
-	<bean class="org.springframework.context.support.ResourceBundleMessageSource"
-		id="messageSource">
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename" value="messages" />
+	</bean>
+
+	<bean id="localeChangeInterceptor"
+		class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		<property name="paramName" value="lang" />
+	</bean>
+
+	<bean id="localeResolver"
+	class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="defaultLocale" value="fr" />
+	</bean>
+
+	<bean id="handlerMapping"
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="interceptors">
+			<ref bean="localeChangeInterceptor" />
+		</property>
 	</bean>
 
 	<bean id="validator"
@@ -42,5 +57,9 @@
 	</bean>
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<mvc:interceptors>
+		<ref bean="localeChangeInterceptor" />
+	</mvc:interceptors>
 
 </beans>

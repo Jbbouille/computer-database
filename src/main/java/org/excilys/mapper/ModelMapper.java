@@ -20,12 +20,12 @@ public class ModelMapper {
 
 		try {
 			if (!myComputerDto.getDiscontinued().equals("")) {
-				myComputer.setDiscontinued(Utilities.stringToDate(myComputerDto
+				myComputer.setDiscontinued(Utilities.stringToDateRegional(myComputerDto
 						.getDiscontinued()));
 			}
 
 			if (!myComputerDto.getIntroduced().equals("")) {
-				myComputer.setIntroduced(Utilities.stringToDate(myComputerDto
+				myComputer.setIntroduced(Utilities.stringToDateRegional(myComputerDto
 						.getIntroduced()));
 			}
 		} catch (ParseException e) {
@@ -44,14 +44,14 @@ public class ModelMapper {
 		myComputerDto.setName(myComputer.getName());
 
 		if (myComputer.getDiscontinued() != null) {
-			myComputerDto.setDiscontinued(Utilities.dateSQLtoString(myComputer
+			myComputerDto.setDiscontinued(Utilities.dateSQLtoStringRegional(myComputer
 					.getDiscontinued()));
 		} else {
 			myComputerDto.setDiscontinued("");
 		}
 
 		if (myComputer.getIntroduced() != null) {
-			myComputerDto.setIntroduced(Utilities.dateSQLtoString(myComputer
+			myComputerDto.setIntroduced(Utilities.dateSQLtoStringRegional(myComputer
 					.getIntroduced()));
 		} else {
 			myComputerDto.setIntroduced("");
