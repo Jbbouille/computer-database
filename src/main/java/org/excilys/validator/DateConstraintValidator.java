@@ -10,10 +10,10 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 
 public class DateConstraintValidator implements
 		ConstraintValidator<DateIntDisc, String> {
-	
+
 	@Autowired
 	private ResourceBundleMessageSource myMessage;
-	
+
 	@Autowired
 	private Utilities myUtil;
 
@@ -23,9 +23,10 @@ public class DateConstraintValidator implements
 
 	@Override
 	public boolean isValid(String arg0, ConstraintValidatorContext arg1) {
-		
-		String dateRegex = myMessage.getMessage("label.regex", null, LocaleContextHolder.getLocale());
-		
+
+		String dateRegex = myMessage.getMessage("label.regex", null,
+				LocaleContextHolder.getLocale());
+
 		if (!arg0.isEmpty()) {
 			if (arg0.matches(dateRegex)) {
 				try {
@@ -39,5 +40,4 @@ public class DateConstraintValidator implements
 		}
 		return true;
 	}
-
 }

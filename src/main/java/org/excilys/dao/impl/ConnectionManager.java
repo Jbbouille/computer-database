@@ -5,39 +5,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import org.excilys.exception.DaoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.jolbox.bonecp.BoneCPDataSource;
 
 @Component("connectionManager")
 public class ConnectionManager {
+	
+	@Autowired
+	private BoneCPDataSource boneCP;
 
 	public static final Logger LOG = LoggerFactory
 			.getLogger(ConnectionManager.class);
-
-	private BoneCPDataSource boneCP = new BoneCPDataSource();
 	
 	public ThreadLocal<Connection> myThreadLocal = new ThreadLocal<Connection>();
-
-	{
-		Context ctx = null;
-		DataSource ds = null;
-		try {
-			ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/computerdatabase");
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-		boneCP.setDatasourceBean(ds);
-	}
 	
 	public Connection getConnection() {
 		try {
