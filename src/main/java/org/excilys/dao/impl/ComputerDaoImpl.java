@@ -11,6 +11,7 @@ import org.excilys.dao.ComputerDao;
 import org.excilys.exception.DaoException;
 import org.excilys.model.Computer;
 import org.excilys.util.Utilities;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,8 +168,9 @@ public class ComputerDaoImpl implements ComputerDao {
 			if (mySet.next()) {
 
 				myComputer = new Computer(mySet.getInt("id"),
-						mySet.getString("name"), mySet.getDate("introduced"),
-						mySet.getDate("discontinued"),
+						mySet.getString("name"), new DateTime(
+								mySet.getDate("introduced")), new DateTime(
+								mySet.getDate("discontinued")),
 						mySet.getInt("company_id"));
 			}
 		} catch (SQLException e) {
@@ -241,8 +243,9 @@ public class ComputerDaoImpl implements ComputerDao {
 			while (mySet.next()) {
 
 				Computer myComputer = new Computer(mySet.getInt("id"),
-						mySet.getString("name"), mySet.getDate("introduced"),
-						mySet.getDate("discontinued"),
+						mySet.getString("name"), new DateTime(
+								mySet.getDate("introduced")), new DateTime(
+								mySet.getDate("discontinued")),
 						mySet.getInt("company_id"));
 
 				myList.add(myComputer);

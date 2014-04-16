@@ -21,7 +21,17 @@ public class ComputerDto {
 	private String discontinued;
 
 	@Range(min = -1, max = 42, message = "{Range.computerDto.companyId}")
-	private String companyId;
+	private int companyId;
+
+	private String companyName;
+
+	public int getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
+	}
 
 	public String getId() {
 		return id;
@@ -31,12 +41,12 @@ public class ComputerDto {
 		this.id = id;
 	}
 
-	public String getCompanyId() {
-		return companyId;
+	public String getCompanyName() {
+		return companyName;
 	}
 
-	public void setCompanyId(String companyId) {
-		this.companyId = companyId;
+	public void setCompanyName(String companyId) {
+		this.companyName = companyId;
 	}
 
 	public String getName() {

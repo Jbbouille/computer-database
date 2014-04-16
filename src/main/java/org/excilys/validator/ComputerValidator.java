@@ -1,6 +1,5 @@
 package org.excilys.validator;
 
-import java.text.ParseException;
 import java.util.HashMap;
 
 import org.excilys.dto.ComputerDto;
@@ -35,7 +34,7 @@ public class ComputerValidator {
 			if (myDto.getIntroduced().matches(dateRegex)) {
 				try {
 					Utilities.stringToDate(myDto.getIntroduced());
-				} catch (ParseException e) {
+				} catch (Exception e) {
 					result.put("errorIntroduced",
 							"Please enter a date in the format yyyy-mm-dd.");
 					result.put("error", "true");
@@ -51,7 +50,7 @@ public class ComputerValidator {
 			if (myDto.getDiscontinued().matches(dateRegex)) {
 				try {
 					Utilities.stringToDate(myDto.getDiscontinued());
-				} catch (ParseException e) {
+				} catch (Exception e) {
 					result.put("errorDiscontinued",
 							"Please enter a date in the format yyyy-mm-dd.");
 					result.put("error", "true");
@@ -68,8 +67,8 @@ public class ComputerValidator {
 			result.put("error", "true");
 		}
 
-		if (myDto.getCompanyId().matches(intRegex)) {
-			int idCompany = Integer.valueOf(myDto.getCompanyId());
+		if (myDto.getCompanyName().matches(intRegex)) {
+			int idCompany = Integer.valueOf(myDto.getCompanyName());
 			if (idCompany != -1) {
 				if (myCompanyServ.selectCompany(idCompany) == null) {
 					result.put("errorCompany", "Please enter a valid Company.");

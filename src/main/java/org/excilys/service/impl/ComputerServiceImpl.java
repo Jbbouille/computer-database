@@ -38,6 +38,9 @@ public class ComputerServiceImpl implements ComputerService {
 	@Autowired
 	private ModelMapper mM;
 
+	@Autowired
+	private CompanyServiceImpl myCompanyServ;
+
 	@Override
 	public void insertComputer(Computer myComputer) {
 		int id = 0;
@@ -97,7 +100,8 @@ public class ComputerServiceImpl implements ComputerService {
 		try {
 			myTest = myComputerDao.selectComputer(id);
 			if (myTest != null) {
-				myComputer = mM.computerToComputerDto(myTest);
+				myComputer = mM.computerToComputerDto(myTest,
+						myCompanyServ.selectCompanies());
 			}
 		} catch (DaoException e) {
 			LOG.error("Error in -> selectComputer -computerId-" + id + " " + e);
@@ -132,7 +136,8 @@ public class ComputerServiceImpl implements ComputerService {
 			myList = new ArrayList<>();
 			for (Computer computer : myComputerDao.selectComputers(myLikeParam,
 					myOrder, startLimit, numberOfRow)) {
-				myList.add(mM.computerToComputerDto(computer));
+				myList.add(mM.computerToComputerDto(computer,
+						myCompanyServ.selectCompanies()));
 			}
 		} catch (DaoException e) {
 			LOG.error("Error on the selectComputers " + e);

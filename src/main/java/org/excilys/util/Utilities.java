@@ -1,85 +1,75 @@
 package org.excilys.util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 public class Utilities {
 
-	public static String dateSQLtoString(Date myDate) {
-		SimpleDateFormat formatter = null;
+	public static String dateSQLtoString(DateTime myDate) {
 
-		formatter = new SimpleDateFormat("yyyy-MM-dd");
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 
-		formatter.setLenient(false);
-		return formatter.format(myDate);
+		return fmt.print(myDate);
 	}
 
-	public static Date stringToDate(String myString) throws ParseException {
-		Date myDate = null;
-		SimpleDateFormat formatter = null;
+	public static DateTime stringToDate(String myString)
+			throws UnsupportedOperationException, IllegalArgumentException {
 
-		formatter = new SimpleDateFormat("yyyy-MM-dd");
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 
-		formatter.setLenient(false);
-		myDate = formatter.parse(myString);
-		return myDate;
+		return fmt.parseDateTime(myString);
 	}
 
-	public static Date stringToDateRegional(String myString)
-			throws ParseException {
-		Date myDate = null;
-		SimpleDateFormat formatter = null;
+	public static DateTime stringToDateRegional(String myString)
+			throws UnsupportedOperationException, IllegalArgumentException {
+		DateTimeFormatter fmt = null;
 
 		String countryName = LocaleContextHolder.getLocale().getLanguage();
 
 		if (countryName != null) {
 			switch (countryName) {
 			case "fr":
-				formatter = new SimpleDateFormat("dd-MM-yyyy");
+				fmt = DateTimeFormat.forPattern("dd-MM-yyyy");
 				break;
 
 			case "en":
-				formatter = new SimpleDateFormat("yyyy-MM-dd");
+				fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 				break;
 
 			default:
-				formatter = new SimpleDateFormat("yyyy-MM-dd");
+				fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 				break;
 			}
 		} else {
-			formatter = new SimpleDateFormat("yyyy-MM-dd");
+			fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 		}
-		formatter.setLenient(false);
-		myDate = formatter.parse(myString);
-		return myDate;
+		return fmt.parseDateTime(myString);
 	}
 
-	public static String dateSQLtoStringRegional(Date myDate) {
-		SimpleDateFormat formatter = null;
+	public static String dateSQLtoStringRegional(DateTime myDate) {
+		DateTimeFormatter fmt = null;
 
 		String countryName = LocaleContextHolder.getLocale().getLanguage();
 
 		if (countryName != null) {
 			switch (countryName) {
 			case "fr":
-				formatter = new SimpleDateFormat("dd-MM-yyyy");
+				fmt = DateTimeFormat.forPattern("dd-MM-yyyy");
 				break;
 
 			case "en":
-				formatter = new SimpleDateFormat("yyyy-MM-dd");
+				fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 				break;
 
 			default:
-				formatter = new SimpleDateFormat("yyyy-MM-dd");
+				fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 				break;
 			}
 		} else {
-			formatter = new SimpleDateFormat("yyyy-MM-dd");
+			fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 		}
-		formatter.setLenient(false);
-		return formatter.format(myDate);
+		return fmt.print(myDate);
 	}
 }

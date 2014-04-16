@@ -1,7 +1,5 @@
 package org.excilys.validator;
 
-import java.text.ParseException;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -24,27 +22,26 @@ public class DateConstraintValidator implements
 		if (countryName != null) {
 			switch (countryName) {
 			case "fr":
-				dateRegex = "^([0-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-[0-9]{4}$";
-				System.out.println("Lang validate annotation" + countryName);
+				dateRegex = "^([0-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-(19[7-9][0-9]|20[0-2][0-9]|203[0-7])$";
 				break;
 
 			case "en":
-				dateRegex = "^(19|20)\\d\\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$";
+				dateRegex = "^(19[7-9][0-9]|20[0-2][0-9]|203[0-7])[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$";
 				break;
 
 			default:
-				dateRegex = "^(19|20)\\d\\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$";
+				dateRegex = "^(19[7-9][0-9]|20[0-2][0-9]|203[0-7])[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$";
 				break;
 			}
 		} else {
-			dateRegex = "^(19|20)\\d\\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$";
+			dateRegex = "^(19[7-9][0-9]|20[0-2][0-9]|203[0-7])[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$";
 		}
 		
 		if (!arg0.isEmpty()) {
 			if (arg0.matches(dateRegex)) {
 				try {
 					Utilities.stringToDateRegional(arg0);
-				} catch (ParseException e) {
+				} catch (Exception e) {
 					return false;
 				}
 			} else {

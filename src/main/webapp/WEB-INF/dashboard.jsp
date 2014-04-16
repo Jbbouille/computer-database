@@ -53,7 +53,6 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:set var="companie" value="${companies}"></c:set>
 			<c:forEach var="computer" items="${computers}">
 				<tr>
 					<td class="col-md-2"><a
@@ -61,13 +60,11 @@
 								value="${computer.name}" /></a></td>
 					<td class="col-md-2"><c:out value="${computer.introduced}" /></td>
 					<td class="col-md-2"><c:out value="${computer.discontinued}" /></td>
-					<c:if test="${computer.companyId != null }">
-						<td><c:out value="${companie.get(computer.companyId).name}" /></td>
-					</c:if>
+					<td class="col-md-2">${computer.companyName}</td>
 					<td class="col-md-2"><a
 						href="deletecomputer?id=${computer.id}" class="btn btn-warning"
-						onClick="return confirm( 'Are you sure to delete' )"><spring:message
-								code="label.delete" /></a>
+						onClick="return confirm( '<spring:message code="label.jsConfirmDelete" />' )"><spring:message
+								code="label.delete" /></a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
