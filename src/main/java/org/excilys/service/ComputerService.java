@@ -13,8 +13,6 @@ public interface ComputerService {
 
 	public void updateComputer(Computer myComputer);
 
-	public void closeThread();
-
 	public ComputerDto selectComputer(int id);
 
 	public ArrayList<ComputerDto> selectComputers(String myLikeParam,

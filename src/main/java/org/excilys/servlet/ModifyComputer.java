@@ -5,8 +5,8 @@ import javax.validation.Valid;
 
 import org.excilys.dto.ComputerDto;
 import org.excilys.mapper.ModelMapper;
-import org.excilys.service.impl.CompanyServiceImpl;
-import org.excilys.service.impl.ComputerServiceImpl;
+import org.excilys.service.CompanyService;
+import org.excilys.service.ComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,10 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class ModifyComputer {
 
 	@Autowired
-	private ComputerServiceImpl myComputerServ;
+	private ComputerService myComputerServ;
 
 	@Autowired
-	private CompanyServiceImpl myCompanyServ;
+	private CompanyService myCompanyServ;
 
 	@Autowired
 	private ModelMapper mM;

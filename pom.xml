@@ -89,6 +89,14 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Spring JDBC -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${version-spring}</version>
+			<scope>runtime</scope>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>Computer-Database</finalName>

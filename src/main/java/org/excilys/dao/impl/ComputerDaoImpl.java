@@ -15,17 +15,19 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
+import com.jolbox.bonecp.BoneCPDataSource;
 import com.mysql.jdbc.Statement;
 
 @Repository("computerDao")
 public class ComputerDaoImpl implements ComputerDao {
 
-	static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
-
+	static final Logger LOG = LoggerFactory.getLogger(ComputerDao.class);
+	
 	@Autowired
-	private ConnectionManager myManager;
+	BoneCPDataSource boneCP;
 
 	@Override
 	public int insertComputer(Computer myComputer) throws DaoException {
@@ -33,7 +35,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		int id = 0;
-		Connection myCon = myManager.getConnection();
+		Connection myCon = DataSourceUtils.getConnection(boneCP);
 		String sql = "INSERT INTO computer VALUES (null, ?, ?, ?, ?)";
 		LOG.debug("requete sql non-prepare : " + sql);
 
@@ -73,7 +75,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		} catch (SQLException e) {
 			throw new DaoException("Error in insertComuter " + e.getMessage());
 		} finally {
-			myManager.closeAll(myPreStmt, mySet);
+			ConnectionManager.closeAll(myPreStmt, mySet);
 		}
 		return id;
 	}
@@ -82,7 +84,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	public void deleteComputer(Computer myComputer) throws DaoException {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
-		Connection myCon = myManager.getConnection();
+		Connection myCon = DataSourceUtils.getConnection(boneCP);
 		String sql = "DELETE FROM computer WHERE computer.id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 
@@ -98,7 +100,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		} catch (SQLException e) {
 			throw new DaoException("Error in deleteComputer " + e.getMessage());
 		} finally {
-			myManager.closeAll(myPreStmt, mySet);
+			ConnectionManager.closeAll(myPreStmt, mySet);
 		}
 	}
 
@@ -106,7 +108,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	public void updateComputer(Computer myComputer) throws DaoException {
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
-		Connection myCon = myManager.getConnection();
+		Connection myCon = DataSourceUtils.getConnection(boneCP);
 		String sql = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE computer.id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 
@@ -143,14 +145,14 @@ public class ComputerDaoImpl implements ComputerDao {
 		} catch (SQLException e) {
 			throw new DaoException("Error in updateComputer " + e.getMessage());
 		} finally {
-			myManager.closeAll(myPreStmt, mySet);
+			ConnectionManager.closeAll(myPreStmt, mySet);
 		}
 	}
 
 	@Override
 	public Computer selectComputer(int id) throws DaoException {
 		Computer myComputer = null;
-		Connection myCon = myManager.getConnection();
+		Connection myCon = DataSourceUtils.getConnection(boneCP);
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 
@@ -177,7 +179,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			throw new DaoException("Error in -> selectComputer "
 					+ e.getMessage());
 		} finally {
-			myManager.closeAll(myPreStmt, mySet);
+			ConnectionManager.closeAll(myPreStmt, mySet);
 		}
 		return myComputer;
 	}
@@ -185,7 +187,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	@Override
 	public int countNumberComputers(String myName) throws DaoException {
 		int number = 0;
-		Connection myCon = myManager.getConnection();
+		Connection myCon = DataSourceUtils.getConnection(boneCP);
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		String sql = "SELECT count(*) FROM computer WHERE name like ?";
@@ -207,7 +209,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			throw new DaoException("Error in -> countNumberComputers "
 					+ e.getMessage());
 		} finally {
-			myManager.closeAll(myPreStmt, mySet);
+			ConnectionManager.closeAll(myPreStmt, mySet);
 		}
 		return number;
 	}
@@ -217,7 +219,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			String myOrder, int startLimit, int numberOfRow)
 			throws DaoException {
 		ArrayList<Computer> myList = new ArrayList<>();
-		Connection myCon = myManager.getConnection();
+		Connection myCon = DataSourceUtils.getConnection(boneCP);
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
 		StringBuilder sql = new StringBuilder();
@@ -254,7 +256,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			throw new DaoException("Error in -> selectComputers "
 					+ e.getMessage());
 		} finally {
-			myManager.closeAll(myPreStmt, mySet);
+			ConnectionManager.closeAll(myPreStmt, mySet);
 		}
 		return myList;
 	}

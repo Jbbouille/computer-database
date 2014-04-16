@@ -11,19 +11,22 @@ import org.excilys.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
+
+import com.jolbox.bonecp.BoneCPDataSource;
 
 @Repository("companyDao")
 public class CompanyDaoImpl implements CompanyDao {
 
-	static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
-
+	static final Logger LOG = LoggerFactory.getLogger(CompanyDao.class);
+	
 	@Autowired
-	private ConnectionManager myManager;
+	BoneCPDataSource boneCP;
 
 	@Override
 	public Company selectCompany(int id) throws DaoException {
-		Connection myCon = myManager.getConnection();
+		Connection myCon = DataSourceUtils.getConnection(boneCP);
 		Company myCompany = null;
 
 		PreparedStatement myPreStmt = null;
@@ -48,14 +51,14 @@ public class CompanyDaoImpl implements CompanyDao {
 		} catch (Exception e) {
 			throw new DaoException("Error in -> selectCompany :" + e);
 		} finally {
-			myManager.closeAll(myPreStmt, mySet);
+			ConnectionManager.closeAll(myPreStmt, mySet);
 		}
 		return myCompany;
 	}
 
 	@Override
 	public HashMap<Integer, Company> selectCompanies() throws DaoException {
-		Connection myCon = myManager.getConnection();
+		Connection myCon = DataSourceUtils.getConnection(boneCP);
 		HashMap<Integer, Company> myList = new HashMap<>();
 		PreparedStatement myPreStmt = null;
 		ResultSet mySet = null;
@@ -74,14 +77,14 @@ public class CompanyDaoImpl implements CompanyDao {
 		} catch (Exception e) {
 			throw new DaoException("Error in -> selectCompanies :" + e);
 		} finally {
-			myManager.closeAll(myPreStmt, mySet);
+			ConnectionManager.closeAll(myPreStmt, mySet);
 		}
 		return myList;
 	}
 
 	@Override
 	public int countCompanies() throws DaoException {
-		Connection myCon = myManager.getConnection();
+		Connection myCon = DataSourceUtils.getConnection(boneCP);
 		int number = 0;
 
 		PreparedStatement myPreStmt = null;
@@ -100,7 +103,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		} catch (Exception e) {
 			throw new DaoException("Error in -> countCompanies :" + e);
 		} finally {
-			myManager.closeAll(myPreStmt, mySet);
+			ConnectionManager.closeAll(myPreStmt, mySet);
 		}
 		return number;
 	}
