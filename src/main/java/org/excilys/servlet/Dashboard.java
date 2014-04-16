@@ -13,8 +13,10 @@ import org.excilys.service.CompanyService;
 import org.excilys.service.ComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -74,5 +76,11 @@ public class Dashboard  {
 
 		srvContext.getRequestDispatcher("/WEB-INF/dashboard.jsp")
 				.forward(req, resp);
+	}
+	
+	@ExceptionHandler(Exception.class)
+	public ModelAndView handleAllException(Exception ex) {
+		ModelAndView model = new ModelAndView("exceptionError");
+		return model;
 	}
 }

@@ -3,6 +3,7 @@ package org.excilys.servlet;
 import javax.validation.Valid;
 
 import org.excilys.dto.ComputerDto;
+import org.excilys.exception.DaoException;
 import org.excilys.mapper.ModelMapper;
 import org.excilys.service.CompanyService;
 import org.excilys.service.ComputerService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,7 +46,6 @@ public class AddComputer{
 			mav = new ModelAndView("redirect:dashboard");
 			myComputerServ.insertComputer(mM.ComputerDtoToComputer(myComputer));
 		}
- 
 		return mav;
 	}
 	
@@ -55,4 +56,11 @@ public class AddComputer{
 		mav.addObject("computerDto", new ComputerDto());
 		return mav;
 	}
+ 
+	@ExceptionHandler(Exception.class)
+	public ModelAndView handleAllException(Exception ex) {
+		ModelAndView model = new ModelAndView("exceptionError");
+		return model;
+	}
+	
 }
