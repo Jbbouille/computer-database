@@ -6,10 +6,14 @@ import org.excilys.dto.ComputerDto;
 import org.excilys.model.Company;
 import org.excilys.model.Computer;
 import org.excilys.util.Utilities;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("modelMapper")
 public class ModelMapper {
+	
+	@Autowired
+	private Utilities myUtil;
 
 	public Computer ComputerDtoToComputer(ComputerDto myComputerDto) {
 		Computer myComputer = new Computer();
@@ -22,12 +26,12 @@ public class ModelMapper {
 
 		try {
 			if (!myComputerDto.getDiscontinued().equals("")) {
-				myComputer.setDiscontinued(Utilities
+				myComputer.setDiscontinued(myUtil
 						.stringToDateRegional(myComputerDto.getDiscontinued()));
 			}
 
 			if (!myComputerDto.getIntroduced().equals("")) {
-				myComputer.setIntroduced(Utilities
+				myComputer.setIntroduced(myUtil
 						.stringToDateRegional(myComputerDto.getIntroduced()));
 			}
 		} catch (Exception e) {
@@ -45,14 +49,14 @@ public class ModelMapper {
 		myComputerDto.setName(myComputer.getName());
 
 		if (myComputer.getDiscontinued() != null) {
-			myComputerDto.setDiscontinued(Utilities
+			myComputerDto.setDiscontinued(myUtil
 					.dateSQLtoStringRegional(myComputer.getDiscontinued()));
 		} else {
 			myComputerDto.setDiscontinued("");
 		}
 
 		if (myComputer.getIntroduced() != null) {
-			myComputerDto.setIntroduced(Utilities
+			myComputerDto.setIntroduced(myUtil
 					.dateSQLtoStringRegional(myComputer.getIntroduced()));
 		} else {
 			myComputerDto.setIntroduced("");

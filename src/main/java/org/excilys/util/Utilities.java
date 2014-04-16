@@ -3,9 +3,16 @@ package org.excilys.util;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class Utilities {
+
+	@Autowired
+	private ResourceBundleMessageSource myMessage;
 
 	public static String dateSQLtoString(DateTime myDate) {
 
@@ -22,54 +29,18 @@ public class Utilities {
 		return fmt.parseDateTime(myString);
 	}
 
-	public static DateTime stringToDateRegional(String myString)
+	public DateTime stringToDateRegional(String myString)
 			throws UnsupportedOperationException, IllegalArgumentException {
-		DateTimeFormatter fmt = null;
+		DateTimeFormatter fmt = DateTimeFormat.forPattern(myMessage.getMessage(
+				"label.javaPattern", null, LocaleContextHolder.getLocale()));
 
-		String countryName = LocaleContextHolder.getLocale().getLanguage();
-
-		if (countryName != null) {
-			switch (countryName) {
-			case "fr":
-				fmt = DateTimeFormat.forPattern("dd-MM-yyyy");
-				break;
-
-			case "en":
-				fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-				break;
-
-			default:
-				fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-				break;
-			}
-		} else {
-			fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-		}
 		return fmt.parseDateTime(myString);
 	}
 
-	public static String dateSQLtoStringRegional(DateTime myDate) {
-		DateTimeFormatter fmt = null;
-
-		String countryName = LocaleContextHolder.getLocale().getLanguage();
-
-		if (countryName != null) {
-			switch (countryName) {
-			case "fr":
-				fmt = DateTimeFormat.forPattern("dd-MM-yyyy");
-				break;
-
-			case "en":
-				fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-				break;
-
-			default:
-				fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-				break;
-			}
-		} else {
-			fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-		}
+	public String dateSQLtoStringRegional(DateTime myDate) {
+		DateTimeFormatter fmt = DateTimeFormat.forPattern(myMessage.getMessage(
+				"label.javaPattern", null, LocaleContextHolder.getLocale()));
+		
 		return fmt.print(myDate);
 	}
 }
