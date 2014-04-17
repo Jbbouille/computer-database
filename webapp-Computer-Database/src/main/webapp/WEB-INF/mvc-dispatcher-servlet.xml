@@ -15,11 +15,9 @@
 
 
 	<context:annotation-config />
-	<context:component-scan base-package="org.excilys.service" />
 	<context:component-scan base-package="org.excilys.servlet" />
-	<context:component-scan base-package="org.excilys.mapper" />
-	<context:component-scan base-package="org.excilys.util" />
-	<context:component-scan base-package="org.excilys.validator" />
+
+	<import resource="classpath:bindingContext.xml" />
 
 	<mvc:annotation-driven validator="validator" />
 
@@ -31,11 +29,6 @@
 		<property name="suffix">
 			<value>.jsp</value>
 		</property>
-	</bean>
-
-	<bean id="messageSource"
-		class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basename" value="messages" />
 	</bean>
 
 	<bean id="validator"
@@ -65,12 +58,5 @@
 	<mvc:interceptors>
 		<ref bean="localeChangeInterceptor" />
 	</mvc:interceptors>
-
-	<bean id="txManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="mainDataSource" />
-	</bean>
-
-	<tx:annotation-driven transaction-manager="txManager" />
 
 </beans>
