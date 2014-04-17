@@ -1,10 +1,13 @@
 package org.excilys.servlet;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.excilys.dto.ComputerDto;
 import org.excilys.mapper.ModelMapper;
+import org.excilys.model.Company;
 import org.excilys.service.CompanyService;
 import org.excilys.service.ComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +66,11 @@ public class ModifyComputer {
 
 			id = Integer.valueOf(req.getParameter("id"));
 
-			map.addAttribute("companies", myCompanyServ.selectCompanies());
-			mav.addObject("computerDto", myComputerServ.selectComputer(id));
+			HashMap<Integer, Company> myMap = myCompanyServ.selectCompanies();
+
+			map.addAttribute("companies", myMap);
+			mav.addObject("computerDto", mM.computerToComputerDto(
+					myComputerServ.selectComputer(id), myMap));
 
 		} else {
 			mav = new ModelAndView("redirect:dashboard");

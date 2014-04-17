@@ -3,7 +3,6 @@ package org.excilys.servlet;
 import javax.validation.Valid;
 
 import org.excilys.dto.ComputerDto;
-import org.excilys.exception.DaoException;
 import org.excilys.mapper.ModelMapper;
 import org.excilys.service.CompanyService;
 import org.excilys.service.ComputerService;

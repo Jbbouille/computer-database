@@ -2,7 +2,6 @@ package org.excilys.service;
 
 import java.util.ArrayList;
 
-import org.excilys.dto.ComputerDto;
 import org.excilys.model.Computer;
 
 public interface ComputerService {
@@ -13,9 +12,9 @@ public interface ComputerService {
 
 	public void updateComputer(Computer myComputer);
 
-	public ComputerDto selectComputer(int id);
+	public Computer selectComputer(int id);
 
-	public ArrayList<ComputerDto> selectComputers(String myLikeParam,
+	public ArrayList<Computer> selectComputers(String myLikeParam,
 			String myOrder, int startLimit, int numberOfRow);
 
 	public int countNumberOfComputers(String myName);

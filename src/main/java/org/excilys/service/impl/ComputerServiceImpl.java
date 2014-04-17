@@ -1,15 +1,11 @@
 package org.excilys.service.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.excilys.dao.CompanyDao;
 import org.excilys.dao.ComputerDao;
 import org.excilys.dao.LogDao;
 import org.excilys.dao.impl.ConnectionManager;
-import org.excilys.dto.ComputerDto;
-import org.excilys.mapper.ModelMapper;
-import org.excilys.model.Company;
 import org.excilys.model.Computer;
 import org.excilys.service.ComputerService;
 import org.slf4j.Logger;
@@ -33,9 +29,6 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Autowired
 	private CompanyDao myCompanyDao;
-
-	@Autowired
-	private ModelMapper mM;
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
@@ -61,15 +54,8 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public ComputerDto selectComputer(int id) {
-		ComputerDto myComputer = null;
-		Computer myTest = null;
-		myTest = myComputerDao.selectComputer(id);
-		if (myTest != null) {
-			myComputer = mM.computerToComputerDto(myTest,
-					myCompanyDao.selectCompanies());
-		}
-		return myComputer;
+	public Computer selectComputer(int id) {
+		return myComputerDao.selectComputer(id);
 	}
 
 	@Override
@@ -82,16 +68,10 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public ArrayList<ComputerDto> selectComputers(String myLikeParam,
+	public ArrayList<Computer> selectComputers(String myLikeParam,
 			String myOrder, int startLimit, int numberOfRow) {
-		ArrayList<ComputerDto> myList = null;
-		HashMap<Integer, Company> myComp = myCompanyDao.selectCompanies();
-		myList = new ArrayList<>();
-		for (Computer computer : myComputerDao.selectComputers(myLikeParam,
-				myOrder, startLimit, numberOfRow)) {
-			myList.add(mM.computerToComputerDto(computer, myComp));
-		}
-		return myList;
+		return myComputerDao.selectComputers(myLikeParam, myOrder, startLimit,
+				numberOfRow);
 	}
 
 	@Override
