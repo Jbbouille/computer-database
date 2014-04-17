@@ -59,13 +59,10 @@ public class ModifyComputer {
 		ModelAndView mav = null;
 
 		Integer id = null;
-		if (req.getParameter("id") != null
-				&& !(req.getParameter("id").equals(""))) {
+		if (req.getParameter("id") != null && !(req.getParameter("id").equals(""))) {
 
 			mav = new ModelAndView("modifyComputer");
-
 			id = Integer.valueOf(req.getParameter("id"));
-
 			HashMap<Integer, Company> myMap = myCompanyServ.selectCompanies();
 
 			map.addAttribute("companies", myMap);

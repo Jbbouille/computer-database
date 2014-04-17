@@ -3,7 +3,7 @@ package org.excilys.validator;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.excilys.util.Utilities;
+import org.excilys.util.BindingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -15,7 +15,7 @@ public class DateConstraintValidator implements
 	private ResourceBundleMessageSource myMessage;
 
 	@Autowired
-	private Utilities myUtil;
+	private BindingUtil myUtil;
 
 	@Override
 	public void initialize(DateIntDisc arg0) {

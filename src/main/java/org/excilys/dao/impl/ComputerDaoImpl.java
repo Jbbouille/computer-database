@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import org.excilys.dao.ComputerDao;
 import org.excilys.exception.DaoException;
 import org.excilys.model.Computer;
-import org.excilys.util.Utilities;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import com.mysql.jdbc.Statement;
 public class ComputerDaoImpl implements ComputerDao {
 
 	static final Logger LOG = LoggerFactory.getLogger(ComputerDao.class);
-	
+
 	@Autowired
 	BoneCPDataSource boneCP;
 
@@ -49,15 +50,14 @@ public class ComputerDaoImpl implements ComputerDao {
 			if (myComputer.getDiscontinued() == null)
 				myPreStmt.setNull(3, Types.NULL);
 			else
-				myPreStmt
-						.setString(3, Utilities.dateSQLtoString(myComputer
-								.getDiscontinued()));
+				myPreStmt.setString(3,
+						dateSQLtoString(myComputer.getDiscontinued()));
 
 			if (myComputer.getIntroduced() == null)
 				myPreStmt.setNull(2, Types.NULL);
 			else
 				myPreStmt.setString(2,
-						Utilities.dateSQLtoString(myComputer.getIntroduced()));
+						dateSQLtoString(myComputer.getIntroduced()));
 
 			if (myComputer.getCompanyId() == -1)
 				myPreStmt.setNull(4, Types.NULL);
@@ -123,15 +123,14 @@ public class ComputerDaoImpl implements ComputerDao {
 			if (myComputer.getDiscontinued() == null)
 				myPreStmt.setNull(4, Types.NULL);
 			else
-				myPreStmt
-						.setString(4, Utilities.dateSQLtoString(myComputer
-								.getDiscontinued()));
+				myPreStmt.setString(4,
+						dateSQLtoString(myComputer.getDiscontinued()));
 
 			if (myComputer.getIntroduced() == null)
 				myPreStmt.setNull(3, Types.NULL);
 			else
 				myPreStmt.setString(3,
-						Utilities.dateSQLtoString(myComputer.getIntroduced()));
+						dateSQLtoString(myComputer.getIntroduced()));
 
 			if (myComputer.getCompanyId() == -1)
 				myPreStmt.setNull(5, Types.NULL);
@@ -259,5 +258,10 @@ public class ComputerDaoImpl implements ComputerDao {
 			ConnectionManager.closeAll(myPreStmt, mySet);
 		}
 		return myList;
+	}
+
+	private String dateSQLtoString(DateTime myDate) {
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
+		return fmt.print(myDate);
 	}
 }

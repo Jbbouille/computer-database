@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.excilys.dto.ComputerDto;
 import org.excilys.model.Company;
 import org.excilys.model.Computer;
-import org.excilys.util.Utilities;
+import org.excilys.util.BindingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class ModelMapper {
 	
 	@Autowired
-	private Utilities myUtil;
+	private BindingUtil myUtil;
 
 	public Computer ComputerDtoToComputer(ComputerDto myComputerDto) {
 		Computer myComputer = new Computer();

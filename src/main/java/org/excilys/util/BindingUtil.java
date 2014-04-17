@@ -9,25 +9,10 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class Utilities {
+public class BindingUtil {
 
 	@Autowired
 	private ResourceBundleMessageSource myMessage;
-
-	public static String dateSQLtoString(DateTime myDate) {
-
-		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-
-		return fmt.print(myDate);
-	}
-
-	public static DateTime stringToDate(String myString)
-			throws UnsupportedOperationException, IllegalArgumentException {
-
-		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-
-		return fmt.parseDateTime(myString);
-	}
 
 	public DateTime stringToDateRegional(String myString)
 			throws UnsupportedOperationException, IllegalArgumentException {
@@ -40,7 +25,7 @@ public class Utilities {
 	public String dateSQLtoStringRegional(DateTime myDate) {
 		DateTimeFormatter fmt = DateTimeFormat.forPattern(myMessage.getMessage(
 				"label.javaPattern", null, LocaleContextHolder.getLocale()));
-		
+
 		return fmt.print(myDate);
 	}
 }
