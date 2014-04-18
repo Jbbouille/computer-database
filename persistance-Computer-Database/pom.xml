@@ -44,6 +44,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
+	<!-- Core of ComputerDatabase -->
 		<dependency>
 			<groupId>org.excilys</groupId>
 			<artifactId>core-Computer-Database</artifactId>

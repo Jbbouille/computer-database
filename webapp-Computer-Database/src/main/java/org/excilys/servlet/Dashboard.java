@@ -3,6 +3,7 @@ package org.excilys.servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -51,7 +52,7 @@ public class Dashboard {
 		int numberOfComputer;
 		ArrayList<ComputerDto> myList = new ArrayList<>();
 
-		HashMap<Integer, Company> myComp = myCompanyServ.selectCompanies();
+		List<Company> myComp = myCompanyServ.selectCompanies();
 
 		if (req.getParameter("bool") == null)
 			desc = false;
@@ -80,7 +81,7 @@ public class Dashboard {
 		else
 			page = Integer.valueOf(req.getParameter("page"));
 
-		ArrayList<Computer> myListComputers = myComputerServ.selectComputers(
+		List<Computer> myListComputers = myComputerServ.selectComputers(
 				search, myComputerServ.getOrderBy(orderBy, desc),
 				myComputerServ.getStartLimit(page, NUMBER_OF_COMPUTER_BY_PAGE),
 				NUMBER_OF_COMPUTER_BY_PAGE);
@@ -102,9 +103,5 @@ public class Dashboard {
 				resp);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ModelAndView handleAllException(Exception ex) {
-		ModelAndView model = new ModelAndView("exceptionError");
-		return model;
-	}
+
 }

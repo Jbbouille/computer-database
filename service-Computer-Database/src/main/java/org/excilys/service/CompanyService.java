@@ -1,6 +1,6 @@
 package org.excilys.service;
 
-import java.util.HashMap;
+import java.util.List;
 
 import org.excilys.model.Company;
 
@@ -8,7 +8,5 @@ public interface CompanyService {
 
 	public Company selectCompany(int id);
 
-	public HashMap<Integer, Company> selectCompanies();
-	
-	public int countCompanies();
+	public List<Company> selectCompanies();
 }

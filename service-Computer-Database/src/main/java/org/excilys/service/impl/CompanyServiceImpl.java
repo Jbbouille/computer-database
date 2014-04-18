@@ -1,6 +1,6 @@
 package org.excilys.service.impl;
 
-import java.util.HashMap;
+import java.util.List;
 
 import org.excilys.dao.CompanyDao;
 import org.excilys.dao.impl.ConnectionManager;
@@ -24,25 +24,12 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	@Transactional(readOnly = true)
 	public Company selectCompany(int id) {
-
-		Company myCompany = null;
-		myCompany = myCompanyDao.selectCompany(id);
-		return myCompany;
+		return myCompanyDao.selectCompany(id);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public HashMap<Integer, Company> selectCompanies() {
-		HashMap<Integer, Company> myMap = null;
-		myMap = myCompanyDao.selectCompanies();
-		return myMap;
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public int countCompanies() {
-		int number = 0;
-		number = myCompanyDao.countCompanies();
-		return number;
+	public List<Company> selectCompanies() {
+		return myCompanyDao.selectCompanies();
 	}
 }

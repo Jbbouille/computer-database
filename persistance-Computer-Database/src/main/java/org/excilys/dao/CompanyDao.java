@@ -1,6 +1,6 @@
 package org.excilys.dao;
 
-import java.util.HashMap;
+import java.util.List;
 
 import org.excilys.exception.DaoException;
 import org.excilys.model.Company;
@@ -33,14 +33,5 @@ public interface CompanyDao {
 	 * @throws DaoException
 	 *             Throw Dao Custom Exception in case of SqlException....
 	 */
-	public HashMap<Integer, Company> selectCompanies() throws DaoException;
-
-	/**
-	 * countCompanies count the number of companies and return it into and int.
-	 * 
-	 * @return Return the number of company in an int object
-	 * @throws DaoException
-	 *             Throw Dao Custom Exception in case of SqlException....
-	 */
-	public int countCompanies() throws DaoException;
+	public List<Company> selectCompanies() throws DaoException;
 }

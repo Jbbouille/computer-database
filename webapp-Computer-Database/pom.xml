@@ -14,12 +14,14 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	<packaging>war</packaging>
 	<dependencies>
 
 		<!-- Hibernate Validator -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- Containers Spring -->
@@ -33,7 +35,7 @@
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
-			<scope>runtime</scope>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- Api servlet use in runtime for servlet -->
@@ -43,15 +45,16 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- binding of computer Database -->
 		<dependency>
 			<groupId>org.excilys</groupId>
 			<artifactId>binding-Computer-Database</artifactId>
 		</dependency>
 
+		<!-- Service of computer Database -->
 		<dependency>
 			<groupId>org.excilys</groupId>
 			<artifactId>service-Computer-Database</artifactId>
 		</dependency>
 	</dependencies>
-	<packaging>war</packaging>
 </project>

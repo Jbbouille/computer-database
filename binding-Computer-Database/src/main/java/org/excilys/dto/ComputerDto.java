@@ -6,8 +6,17 @@ import org.excilys.validator.DateIntDisc;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
+/**
+ * The DTo of computer containing the name of the company instead of the id
+ * 
+ * @author excilys
+ * 
+ */
 public class ComputerDto {
 
+	/**
+	 * Paramater of the DTO validate by the validator
+	 */
 	private String id;
 
 	@NotEmpty(message = "{NotEmpty.computerDto.name}")
@@ -25,6 +34,10 @@ public class ComputerDto {
 
 	private String companyName;
 
+	/**
+	 * Getter, Setter & constructor of the bean
+	 * 
+	 */
 	public int getCompanyId() {
 		return companyId;
 	}

@@ -1,6 +1,6 @@
 package org.excilys.dao;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.excilys.exception.DaoException;
 import org.excilys.model.Computer;
@@ -88,7 +88,7 @@ public interface ComputerDao {
 	 * @throws DaoException
 	 *             in case of SqlException
 	 */
-	public ArrayList<Computer> selectComputers(String myLikeParam,
+	public List<Computer> selectComputers(String myLikeParam,
 			String myOrder, int startLimit, int numberOfRow)
 			throws DaoException;
 }

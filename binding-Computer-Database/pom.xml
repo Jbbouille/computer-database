@@ -29,6 +29,7 @@
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
 
+		<!-- Core of Computer Database -->
 		<dependency>
 			<groupId>org.excilys</groupId>
 			<artifactId>core-Computer-Database</artifactId>

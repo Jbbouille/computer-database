@@ -23,36 +23,32 @@
 	<dependencyManagement>
 		<dependencies>
 
+			<!-- Computer DataBase Dependency -->
 			<dependency>
 				<groupId>org.excilys</groupId>
 				<artifactId>core-Computer-Database</artifactId>
 				<version>${version-computerDatabase}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.excilys</groupId>
 				<artifactId>persistance-Computer-Database</artifactId>
 				<version>${version-computerDatabase}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.excilys</groupId>
 				<artifactId>service-Computer-Database</artifactId>
 				<version>${version-computerDatabase}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.excilys</groupId>
 				<artifactId>binding-Computer-Database</artifactId>
 				<version>${version-computerDatabase}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.excilys</groupId>
 				<artifactId>webapp-Computer-Database</artifactId>
 				<version>${version-computerDatabase}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.excilys</groupId>
 				<artifactId>core-Computer-Database</artifactId>
@@ -138,6 +134,7 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${version-logback}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>

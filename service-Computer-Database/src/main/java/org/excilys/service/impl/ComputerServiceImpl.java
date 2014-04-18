@@ -1,6 +1,6 @@
 package org.excilys.service.impl;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.excilys.dao.CompanyDao;
 import org.excilys.dao.ComputerDao;
@@ -68,7 +68,7 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public ArrayList<Computer> selectComputers(String myLikeParam,
+	public List<Computer> selectComputers(String myLikeParam,
 			String myOrder, int startLimit, int numberOfRow) {
 		return myComputerDao.selectComputers(myLikeParam, myOrder, startLimit,
 				numberOfRow);

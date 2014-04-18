@@ -1,6 +1,7 @@
 package org.excilys.servlet;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -63,11 +64,11 @@ public class ModifyComputer {
 
 			mav = new ModelAndView("modifyComputer");
 			id = Integer.valueOf(req.getParameter("id"));
-			HashMap<Integer, Company> myMap = myCompanyServ.selectCompanies();
+			List<Company> myList = myCompanyServ.selectCompanies();
 
-			map.addAttribute("companies", myMap);
+			map.addAttribute("companies", myList);
 			mav.addObject("computerDto", mM.computerToComputerDto(
-					myComputerServ.selectComputer(id), myMap));
+					myComputerServ.selectComputer(id), myList));
 
 		} else {
 			mav = new ModelAndView("redirect:dashboard");
@@ -76,9 +77,5 @@ public class ModifyComputer {
 		return mav;
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ModelAndView handleAllException(Exception ex) {
-		ModelAndView model = new ModelAndView("exceptionError");
-		return model;
-	}
+	
 }

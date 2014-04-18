@@ -1,6 +1,6 @@
 package org.excilys.mapper;
 
-import java.util.HashMap;
+import java.util.List;
 
 import org.excilys.dto.ComputerDto;
 import org.excilys.model.Company;
@@ -11,15 +11,14 @@ import org.springframework.stereotype.Component;
 
 @Component("modelMapper")
 public class ModelMapper {
-	
+
 	@Autowired
 	private BindingUtil myUtil;
 
 	public Computer ComputerDtoToComputer(ComputerDto myComputerDto) {
 		Computer myComputer = new Computer();
 
-		myComputer
-				.setCompanyId(Integer.valueOf(myComputerDto.getCompanyId()));
+		myComputer.setCompanyId(Integer.valueOf(myComputerDto.getCompanyId()));
 		if (myComputerDto.getId() != null)
 			myComputer.setId(Integer.valueOf(myComputerDto.getId()));
 		myComputer.setName(myComputerDto.getName());
@@ -42,7 +41,7 @@ public class ModelMapper {
 	}
 
 	public ComputerDto computerToComputerDto(Computer myComputer,
-			HashMap<Integer, Company> myMap) {
+			List<Company> myList) {
 		ComputerDto myComputerDto = new ComputerDto();
 
 		myComputerDto.setId(String.valueOf(myComputer.getId()));
@@ -62,13 +61,26 @@ public class ModelMapper {
 			myComputerDto.setIntroduced("");
 		}
 
-		if (myMap.get(myComputer.getCompanyId()) != null) {
-			myComputerDto.setCompanyName(myMap.get(myComputer.getCompanyId()).toString());
-			myComputerDto.setCompanyId(myComputer.getCompanyId());
-		}else {
+		Company myComp = getCompany(myComputer.getCompanyId(), myList);
+
+		if (myComp != null) {
+			myComputerDto.setCompanyName(myComp.getName());
+			myComputerDto.setCompanyId(myComp.getId());
+		} else {
 			myComputerDto.setCompanyName("");
 		}
 
 		return myComputerDto;
+	}
+
+	private Company getCompany(int id, List<Company> myList) {
+
+		for (Company company : myList) {
+			if (company.getId() == id) {
+				return company;
+			}
+		}
+
+		return null;
 	}
 }
