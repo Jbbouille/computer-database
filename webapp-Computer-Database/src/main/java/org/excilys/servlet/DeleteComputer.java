@@ -1,19 +1,16 @@
 package org.excilys.servlet;
 
-import java.io.IOException;
-
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.excilys.model.Computer;
 import org.excilys.service.ComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -27,20 +24,19 @@ public class DeleteComputer {
 	private ServletContext srvContext;
 
 	@RequestMapping(method = RequestMethod.GET)
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected ModelAndView doGet(ModelMap myMap,
+			@RequestParam(value = "id", required = false) Integer id) {
 
-		if (!req.getParameter("id").equals("")) {
-			int id = Integer.valueOf(req.getParameter("id"));
-			Computer myComputer = myComputerServ.selectComputer(id);
-			myComputerServ.deleteComputer(myComputer);
-			resp.sendRedirect("dashboard");
-		} else {
-			req.setAttribute("deleteError",
+		Computer myComputer = myComputerServ.selectComputer(id);
+
+		if (myComputer == null) {
+			myMap.addAttribute("deleteError",
 					"Could Not delete Computer that not exist");
-
-			srvContext.getRequestDispatcher("/dashboard").forward(req, resp);
+		} else {
+			myComputerServ.deleteComputer(myComputer);
 		}
+
+		return new ModelAndView("redirect:dashboard");
 	}
 
 	@ExceptionHandler(Exception.class)

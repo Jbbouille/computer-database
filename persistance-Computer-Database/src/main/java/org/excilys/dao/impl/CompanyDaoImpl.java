@@ -19,14 +19,16 @@ import com.jolbox.bonecp.BoneCPDataSource;
 public class CompanyDaoImpl implements CompanyDao {
 
 	static final Logger LOG = LoggerFactory.getLogger(CompanyDao.class);
-	
+
 	@Autowired
 	BoneCPDataSource boneCP;
+
+	@Autowired
+	JdbcTemplate myTemplate;
 
 	@Override
 	public Company selectCompany(int id) throws DaoException {
 		List<Company> myList = new ArrayList<Company>();
-		JdbcTemplate myTemplate = new JdbcTemplate(boneCP);
 
 		String sql = "SELECT * FROM computer WHERE id = ?";
 
@@ -41,14 +43,12 @@ public class CompanyDaoImpl implements CompanyDao {
 	@Override
 	public List<Company> selectCompanies() throws DaoException {
 		List<Company> myList = new ArrayList<Company>();
-		JdbcTemplate myTemplate = new JdbcTemplate(boneCP);
 
 		String sql = "SELECT * FROM company";
 
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		myList = myTemplate.query(sql,
-				new CompanyRowMapper());
+		myList = myTemplate.query(sql, new CompanyRowMapper());
 
 		return myList;
 	}

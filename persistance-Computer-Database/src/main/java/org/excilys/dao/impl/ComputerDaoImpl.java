@@ -32,6 +32,9 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Autowired
 	BoneCPDataSource boneCP;
+	
+	@Autowired
+	JdbcTemplate myTemplate;
 
 	@Override
 	public int insertComputer(final Computer myComputer) throws DaoException {
@@ -39,8 +42,6 @@ public class ComputerDaoImpl implements ComputerDao {
 		final String sql = "INSERT INTO computer VALUES (null, ?, ?, ?, ?)";
 
 		LOG.debug("requete sql non-prepare : " + sql);
-
-		JdbcTemplate myTemplate = new JdbcTemplate(boneCP);
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -76,7 +77,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Override
 	public void deleteComputer(Computer myComputer) throws DaoException {
-		JdbcTemplate myTemplate = new JdbcTemplate(boneCP);
+		
 		String sql = "DELETE FROM computer WHERE computer.id = ?";
 		myTemplate.update(sql, new Object[] { myComputer.getId() });
 	}
@@ -86,7 +87,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		String sql = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE computer.id = ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 
-		JdbcTemplate myTemplate = new JdbcTemplate(boneCP);
+		
 		Object[] myObjectTable = new Object[6];
 
 		myObjectTable[0] = myComputer.getId();
@@ -117,7 +118,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	@Override
 	public Computer selectComputer(int id) throws DaoException {
 		List<Computer> myList = new ArrayList<Computer>();
-		JdbcTemplate myTemplate = new JdbcTemplate(boneCP);
+		
 
 		String sql = "SELECT * FROM computer WHERE id = ?";
 
@@ -126,12 +127,17 @@ public class ComputerDaoImpl implements ComputerDao {
 		myList = myTemplate.query(sql, new Object[] { id },
 				new ComputerRowMapper());
 
-		return myList.get(0);
+		if (myList.size() == 0) {
+			return null;
+		} else {
+			return myList.get(0);
+		}
+
 	}
 
 	@Override
 	public int countNumberComputers(String myName) throws DaoException {
-		JdbcTemplate myTemplate = new JdbcTemplate(boneCP);
+		
 		String sql = "SELECT count(*) FROM computer WHERE name like ?";
 		LOG.debug("requete sql non-prepare : " + sql);
 		return myTemplate.queryForObject(sql,
@@ -142,7 +148,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	public List<Computer> selectComputers(String myLikeParam, String myOrder,
 			int startLimit, int numberOfRow) throws DaoException {
 		List<Computer> myList = new ArrayList<Computer>();
-		JdbcTemplate myTemplate = new JdbcTemplate(boneCP);
+		
 		Object[] myObjectTable = new Object[4];
 		StringBuilder sql = new StringBuilder();
 		sql.append(

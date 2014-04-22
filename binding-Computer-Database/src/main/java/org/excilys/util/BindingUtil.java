@@ -34,9 +34,58 @@ public class BindingUtil {
 
 	public Company getCompanyWithId(int id, List<Company> myList) {
 		for (Company company : myList) {
-			if (company.getId() == id) return company;
+			if (company.getId() == id)
+				return company;
 
 		}
 		return null;
+	}
+
+	public Object[] validateParameter(String desc, String orderBy, String page) {
+		Object[] myListObject = new Object[3];
+		
+		if (desc != null) {
+			if (!desc.equals("false") || !desc.equals("true")) {
+				myListObject[0] = false;
+			} else {
+				myListObject[0] = Boolean.valueOf(desc);
+			}
+		} else {
+			myListObject[0] = false;
+		}
+
+		if (orderBy != null) {
+			switch (orderBy) {
+			case "name":
+				myListObject[1] = "name";
+				break;
+			case "introduced":
+				myListObject[1] = "introduced";
+				break;
+			case "discontinued":
+				myListObject[1] = "discontinued";
+				break;
+			case "company":
+				myListObject[1] = "company";
+				break;
+			default:
+				myListObject[1] = "name";
+				break;
+			}
+		} else {
+			myListObject[1] = "name";
+		}
+
+		if (page != null) {
+			if (page.matches("\\d+")) {
+				myListObject[2] = Integer.valueOf(page);
+			} else {
+				myListObject[2] = 1;
+			}
+		} else {
+			myListObject[2] = 1;
+		}
+
+		return myListObject;
 	}
 }

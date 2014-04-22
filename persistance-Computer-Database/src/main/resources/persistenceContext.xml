@@ -24,4 +24,8 @@ http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 		<property name="password" value="excilys" />
 	</bean>
 
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="mainDataSource"></property>
+	</bean>
+
 </beans>

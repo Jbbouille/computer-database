@@ -19,9 +19,11 @@ public class LogDaoImpl implements LogDao {
 	@Autowired
 	BoneCPDataSource boneCP;
 
+	@Autowired
+	JdbcTemplate myTemplate;
+
 	@Override
 	public void insertLog(String text) throws DaoException {
-		JdbcTemplate myTemplate = new JdbcTemplate(boneCP);
 		String sql = "INSERT INTO log VALUES (null, ?, null)";
 		LOG.debug("requete sql non-prepare : " + sql);
 

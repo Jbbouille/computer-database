@@ -1,22 +1,22 @@
 package org.excilys.servlet;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.excilys.dto.ComputerDto;
 import org.excilys.mapper.ModelMapper;
 import org.excilys.model.Company;
 import org.excilys.service.CompanyService;
 import org.excilys.service.ComputerService;
+import org.excilys.util.BindingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -35,64 +35,44 @@ public class Dashboard {
 
 	@Autowired
 	private ModelMapper mM;
+	
+	@Autowired
+	private BindingUtil mBU;
 
 	@RequestMapping(method = RequestMethod.GET)
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		int page;
-		String search;
-		String orderBy;
-		boolean desc;
+	protected ModelAndView doGet(ModelMap myMap, @RequestParam(value = "bool", required = false) String desc,
+			@RequestParam(value = "search", required = false, defaultValue = "") String search,
+			@RequestParam(value = "orderby", required = false) String orderBy,
+			@RequestParam(value = "page", required = false) String page){
+		
 		Double myNumberOfPage;
 		int numberOfComputer;
-		List<ComputerDto> myList;
+		List<ComputerDto> myListDto;
+		
+		Object[] myObjs = mBU.validateParameter(desc, orderBy, page);
 
 		List<Company> myComp = myCompanyServ.selectCompanies();
-
-		if (req.getParameter("bool") == null)
-			desc = false;
-		else
-			desc = Boolean.valueOf(req.getParameter("bool"));
-
-		if (req.getParameter("orderby") == null)
-			orderBy = "name";
-		else
-			orderBy = req.getParameter("orderby");
-
-		if (req.getParameter("search") == null)
-			search = "";
-		else
-			search = req.getParameter("search");
-
+		
 		numberOfComputer = myComputerServ.countNumberOfComputers(search);
-
-		myNumberOfPage = myComputerServ.numberOfPage(numberOfComputer,
+		
+		myNumberOfPage = myComputerServ.numberOfPage(myComputerServ.countNumberOfComputers(search),
 				NUMBER_OF_COMPUTER_BY_PAGE);
 
-		if ((req.getParameter("page") == null)
-				|| Double.valueOf(req.getParameter("page")) > myNumberOfPage
-				|| Double.valueOf(req.getParameter("page")) < 0)
-			page = 1;
-		else
-			page = Integer.valueOf(req.getParameter("page"));
-
-		myList = mM.toComputerDtoList(myComputerServ.selectComputers(
-				search, myComputerServ.getOrderBy(orderBy, desc),
-				myComputerServ.getStartLimit(page, NUMBER_OF_COMPUTER_BY_PAGE),
+		myListDto = mM.toComputerDtoList(myComputerServ.selectComputers(search,
+				myComputerServ.getOrderBy((String) myObjs[1], (Boolean)myObjs[0]),
+				myComputerServ.getStartLimit((Integer) myObjs[2], NUMBER_OF_COMPUTER_BY_PAGE),
 				NUMBER_OF_COMPUTER_BY_PAGE), myComp);
-		
-		req.setAttribute("computers", myList);
-		req.setAttribute("search", search);
-		req.setAttribute("numberOfComputers", numberOfComputer);
-		req.setAttribute("numberOfPages", myNumberOfPage);
-		req.setAttribute("orderby", orderBy);
-		req.setAttribute("bool", desc);
-		req.setAttribute("companies", myComp);
-		req.setAttribute("currentPage", page);
 
-		srvContext.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(req,
-				resp);
+		myMap.addAttribute("computers", myListDto);
+		myMap.addAttribute("search", search);
+		myMap.addAttribute("numberOfComputers", numberOfComputer);
+		myMap.addAttribute("numberOfPages", myNumberOfPage);
+		myMap.addAttribute("orderby", myObjs[1]);
+		myMap.addAttribute("bool", myObjs[0]);
+		myMap.addAttribute("companies", myComp);
+		myMap.addAttribute("currentPage", myObjs[2]);
+
+	return new ModelAndView("dashboard");
 	}
-
 
 }

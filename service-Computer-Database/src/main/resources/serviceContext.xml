@@ -14,7 +14,7 @@ http://www.springframework.org/schema/tx
 http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 
-	<import resource="classpath:bindingContext.xml" />
+	<import resource="classpath:persistenceContext.xml" />
 
 	<context:annotation-config />
 	<context:component-scan base-package="org.excilys.service" />
