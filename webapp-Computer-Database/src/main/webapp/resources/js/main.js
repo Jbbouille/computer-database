@@ -1,5 +1,4 @@
 $(function() {
-
 	function readCookie(name) {
 		var nameEQ = name + "=";
 		var ca = document.cookie.split(';');
@@ -17,13 +16,16 @@ $(function() {
 
 	var pattern = '';
 	var errorMessage = '';
+	var errorMin = '';
 
 	if (cookie == 'fr') {
 		pattern = 'dd-mm-yy';
-		errorMessage = 'Entrez une date dans le format dd-mm-yyyy.';
+		errorMessage = 'Entrez une date dans le format '+pattern+'.';
+		errorMin = 'Entrez minimum 2 caract&#232;res.';
 	} else {
 		pattern = 'yy-mm-dd';
-		errorMessage = 'Please enter a date in the format yyyy-mm-dd.';
+		errorMessage = 'Please enter a date in the format '+pattern+'.';
+		errorMin = 'Please enter at least 2 characteres';
 	}
 
 	$(document).ready(function() {
@@ -47,8 +49,12 @@ $(function() {
 				discontinued : {
 					dateControl : true
 				}
+			}, messages : {
+				name : {
+					minlength : jQuery.format(errorMin)
+				}
 			}
-		});
+		});	
 	});
 
 });
