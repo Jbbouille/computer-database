@@ -8,8 +8,8 @@
 		<artifactId>Computer-Database</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>binding-Computer-Database</artifactId>
-	<name>binding-Computer-Database</name>
+	<artifactId>bindings</artifactId>
+	<name>bindings</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,7 +32,7 @@
 		<!-- Core of Computer Database -->
 		<dependency>
 			<groupId>org.excilys</groupId>
-			<artifactId>core-Computer-Database</artifactId>
+			<artifactId>core</artifactId>
 		</dependency>
 	</dependencies>
 </project>

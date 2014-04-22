@@ -8,136 +8,133 @@
 	<name>Computer-Database Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<version-spring>4.0.3.RELEASE</version-spring>
-		<version-junit>3.8.1</version-junit>
-		<version-logback>1.1.1</version-logback>
-		<version-bonecp>0.8.0.RELEASE</version-bonecp>
-		<version-mysql>5.1.30</version-mysql>
-		<version-appache>6.0.39</version-appache>
-		<version-jstl>1.2</version-jstl>
-		<version-hibernate>5.1.0.Final</version-hibernate>
-		<version-joda>2.3</version-joda>
-		<version-computerDatabase>0.0.1-SNAPSHOT</version-computerDatabase>
+		<springVersion>4.0.3.RELEASE</springVersion>
+		<logbackVersion>1.1.1</logbackVersion>
+		<bonecpVersion>0.8.0.RELEASE</bonecpVersion>
+		<mysqlVersion>5.1.30</mysqlVersion>
+		<apacheVersion>6.0.39</apacheVersion>
+		<jstlVersion>1.2</jstlVersion>
+		<validatorVersion>5.1.0.Final</validatorVersion>
+		<jodaVersion>2.3</jodaVersion>
+		<computerDatabaseVersion>0.0.1-SNAPSHOT</computerDatabaseVersion>
+		<hibernateVersion>3.5.4-Final</hibernateVersion>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
-
 			<!-- Computer DataBase Dependency -->
 			<dependency>
 				<groupId>org.excilys</groupId>
+				<artifactId>core</artifactId>
+				<version>${computerDatabaseVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.excilys</groupId>
+				<artifactId>persistence</artifactId>
+				<version>${computerDatabaseVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.excilys</groupId>
+				<artifactId>service</artifactId>
+				<version>${computerDatabaseVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.excilys</groupId>
+				<artifactId>bindings</artifactId>
+				<version>${computerDatabaseVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.excilys</groupId>
+				<artifactId>webapp</artifactId>
+				<version>${computerDatabaseVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.excilys</groupId>
 				<artifactId>core-Computer-Database</artifactId>
-				<version>${version-computerDatabase}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.excilys</groupId>
-				<artifactId>persistance-Computer-Database</artifactId>
-				<version>${version-computerDatabase}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.excilys</groupId>
-				<artifactId>service-Computer-Database</artifactId>
-				<version>${version-computerDatabase}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.excilys</groupId>
-				<artifactId>binding-Computer-Database</artifactId>
-				<version>${version-computerDatabase}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.excilys</groupId>
-				<artifactId>webapp-Computer-Database</artifactId>
-				<version>${version-computerDatabase}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.excilys</groupId>
-				<artifactId>core-Computer-Database</artifactId>
-				<version>${version-computerDatabase}</version>
+				<version>${computerDatabaseVersion}</version>
 			</dependency>
 
 			<!-- Use by the dataSource -->
 			<dependency>
 				<groupId>com.jolbox</groupId>
 				<artifactId>bonecp</artifactId>
-				<version>${version-bonecp}</version>
+				<version>${bonecpVersion}</version>
 			</dependency>
 
 			<!-- Api mysql use in runtime for datasource -->
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
-				<version>${version-mysql}</version>
+				<version>${mysqlVersion}</version>
 			</dependency>
 
 			<!-- Api servlet use in runtime for servlet -->
 			<dependency>
 				<groupId>org.apache.tomcat</groupId>
 				<artifactId>servlet-api</artifactId>
-				<version>${version-appache}</version>
+				<version>${apacheVersion}</version>
 			</dependency>
 
 			<!-- Use during the view process -->
 			<dependency>
 				<groupId>jstl</groupId>
 				<artifactId>jstl</artifactId>
-				<version>${version-jstl}</version>
+				<version>${jstlVersion}</version>
 			</dependency>
 
 			<!-- Containers Spring -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-webmvc</artifactId>
-				<version>${version-spring}</version>
+				<version>${springVersion}</version>
 			</dependency>
 
 			<!-- Hibernate Validator -->
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
-				<version>${version-hibernate}</version>
+				<version>${validatorVersion}</version>
 			</dependency>
 
 			<!-- Joda-Time -->
 			<dependency>
 				<groupId>joda-time</groupId>
 				<artifactId>joda-time</artifactId>
-				<version>${version-joda}</version>
+				<version>${jodaVersion}</version>
 			</dependency>
 
 			<!-- Spring JDBC -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jdbc</artifactId>
-				<version>${version-spring}</version>
+				<version>${springVersion}</version>
+			</dependency>
+
+			<!-- Hibernate Core -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate</artifactId>
+				<version>${hibernateVersion}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
+	
 	<dependencies>
-
-		<!-- Use during the test of the application -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${version-junit}</version>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- Logback is use for logginf process -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
-			<version>${version-logback}</version>
+			<version>${logbackVersion}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>${version-logback}</version>
+			<version>${logbackVersion}</version>
 			<scope>runtime</scope>
 		</dependency>
-
 	</dependencies>
+	
 	<build>
 		<finalName>Computer-Database</finalName>
 		<plugins>
@@ -153,10 +150,10 @@
 		</plugins>
 	</build>
 	<modules>
-		<module>core-Computer-Database</module>
-		<module>persistance-Computer-Database</module>
-		<module>service-Computer-Database</module>
-		<module>binding-Computer-Database</module>
-		<module>webapp-Computer-Database</module>
+		<module>core</module>
+		<module>persistence</module>
+		<module>service</module>
+		<module>bindings</module>
+		<module>webapp</module>
 	</modules>
 </project>

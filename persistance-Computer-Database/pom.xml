@@ -8,8 +8,8 @@
 		<artifactId>Computer-Database</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>persistance-Computer-Database</artifactId>
-	<name>persistance-Computer-Database</name>
+	<artifactId>persistence</artifactId>
+	<name>persistence</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,10 +44,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
-	<!-- Core of ComputerDatabase -->
+		<!-- Core of ComputerDatabase -->
 		<dependency>
 			<groupId>org.excilys</groupId>
-			<artifactId>core-Computer-Database</artifactId>
+			<artifactId>core</artifactId>
 		</dependency>
+
+		<!-- Hibernate Annotation && Comons-Annotation -->
 	</dependencies>
 </project>

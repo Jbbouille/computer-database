@@ -8,8 +8,8 @@
 		<artifactId>Computer-Database</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>webapp-Computer-Database</artifactId>
-	<name>webapp-Computer-Database</name>
+	<artifactId>webapp</artifactId>
+	<name>webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,13 +48,13 @@
 		<!-- binding of computer Database -->
 		<dependency>
 			<groupId>org.excilys</groupId>
-			<artifactId>binding-Computer-Database</artifactId>
+			<artifactId>bindings</artifactId>
 		</dependency>
 
 		<!-- Service of computer Database -->
 		<dependency>
 			<groupId>org.excilys</groupId>
-			<artifactId>service-Computer-Database</artifactId>
+			<artifactId>service</artifactId>
 		</dependency>
 	</dependencies>
 </project>

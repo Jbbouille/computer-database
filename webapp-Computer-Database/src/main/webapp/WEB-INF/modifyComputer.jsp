@@ -32,7 +32,7 @@
 						<form:option value="-1" label="--- Select ---" />
 						<form:options items="${companies}"/>
 					</form:select>
-					<form:errors path="companyId" cssClass="error" />
+					<form:errors path="companyId" cssClass="error"/>
 				</div>
 				<br>
 				<button type="submit" class="btn btn-default"><spring:message code="label.submit" /></button>

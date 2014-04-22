@@ -39,7 +39,6 @@ public class AddComputer{
 			mav = new ModelAndView("addComputer");
 			mav.addObject("companies", myCompanyServ.selectCompanies());
 			mav.addObject("computerDto", myComputer);
-			System.out.println(result.toString());
 		} else {
 			mav = new ModelAndView("redirect:dashboard");
 			myComputerServ.insertComputer(mM.ComputerDtoToComputer(myComputer));
