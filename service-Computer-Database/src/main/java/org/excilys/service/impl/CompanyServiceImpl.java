@@ -3,7 +3,6 @@ package org.excilys.service.impl;
 import java.util.List;
 
 import org.excilys.dao.CompanyDao;
-import org.excilys.dao.impl.ConnectionManager;
 import org.excilys.model.Company;
 import org.excilys.service.CompanyService;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CompanyServiceImpl implements CompanyService {
 
 	public static final Logger LOG = LoggerFactory
-			.getLogger(ConnectionManager.class);
+			.getLogger(CompanyServiceImpl.class);
 
 	@Autowired
 	private CompanyDao myCompanyDao;

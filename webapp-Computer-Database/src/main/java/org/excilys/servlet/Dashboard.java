@@ -1,8 +1,6 @@
 package org.excilys.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -13,15 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.excilys.dto.ComputerDto;
 import org.excilys.mapper.ModelMapper;
 import org.excilys.model.Company;
-import org.excilys.model.Computer;
 import org.excilys.service.CompanyService;
 import org.excilys.service.ComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -50,7 +45,7 @@ public class Dashboard {
 		boolean desc;
 		Double myNumberOfPage;
 		int numberOfComputer;
-		ArrayList<ComputerDto> myList = new ArrayList<>();
+		List<ComputerDto> myList;
 
 		List<Company> myComp = myCompanyServ.selectCompanies();
 
@@ -81,15 +76,11 @@ public class Dashboard {
 		else
 			page = Integer.valueOf(req.getParameter("page"));
 
-		List<Computer> myListComputers = myComputerServ.selectComputers(
+		myList = mM.toComputerDtoList(myComputerServ.selectComputers(
 				search, myComputerServ.getOrderBy(orderBy, desc),
 				myComputerServ.getStartLimit(page, NUMBER_OF_COMPUTER_BY_PAGE),
-				NUMBER_OF_COMPUTER_BY_PAGE);
-
-		for (Computer computer : myListComputers) {
-			myList.add(mM.computerToComputerDto(computer, myComp));
-		}
-
+				NUMBER_OF_COMPUTER_BY_PAGE), myComp);
+		
 		req.setAttribute("computers", myList);
 		req.setAttribute("search", search);
 		req.setAttribute("numberOfComputers", numberOfComputer);

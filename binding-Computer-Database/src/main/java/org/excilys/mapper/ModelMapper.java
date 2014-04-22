@@ -1,5 +1,6 @@
 package org.excilys.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.excilys.dto.ComputerDto;
@@ -15,7 +16,7 @@ public class ModelMapper {
 	@Autowired
 	private BindingUtil myUtil;
 
-	public Computer ComputerDtoToComputer(ComputerDto myComputerDto) {
+	public Computer toComputer(ComputerDto myComputerDto) {
 		Computer myComputer = new Computer();
 
 		myComputer.setCompanyId(Integer.valueOf(myComputerDto.getCompanyId()));
@@ -40,7 +41,7 @@ public class ModelMapper {
 		return myComputer;
 	}
 
-	public ComputerDto computerToComputerDto(Computer myComputer,
+	public ComputerDto toComputerDto(Computer myComputer,
 			List<Company> myList) {
 		ComputerDto myComputerDto = new ComputerDto();
 
@@ -61,7 +62,7 @@ public class ModelMapper {
 			myComputerDto.setIntroduced("");
 		}
 
-		Company myComp = getCompany(myComputer.getCompanyId(), myList);
+		Company myComp = myUtil.getCompanyWithId(myComputer.getCompanyId(), myList);
 
 		if (myComp != null) {
 			myComputerDto.setCompanyName(myComp.getName());
@@ -72,15 +73,20 @@ public class ModelMapper {
 
 		return myComputerDto;
 	}
-
-	private Company getCompany(int id, List<Company> myList) {
-
-		for (Company company : myList) {
-			if (company.getId() == id) {
-				return company;
-			}
+	
+	public List<ComputerDto> toComputerDtoList(List<Computer> myComputers, List<Company> myCompanies) {
+		List<ComputerDto> myList = new ArrayList<>();
+		for (Computer item : myComputers) {
+			myList.add(toComputerDto(item, myCompanies));
 		}
-
-		return null;
+		return myList;
+	}
+	
+	public List<Computer> toComputerList(List<ComputerDto> myComputers, List<Company> myCompanies) {
+		List<Computer> myList = new ArrayList<>();
+		for (ComputerDto item : myComputers) {
+			myList.add(toComputer(item));
+		}
+		return myList;
 	}
 }

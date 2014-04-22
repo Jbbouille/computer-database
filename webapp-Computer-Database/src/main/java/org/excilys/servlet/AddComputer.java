@@ -41,7 +41,7 @@ public class AddComputer{
 			mav.addObject("computerDto", myComputer);
 		} else {
 			mav = new ModelAndView("redirect:dashboard");
-			myComputerServ.insertComputer(mM.ComputerDtoToComputer(myComputer));
+			myComputerServ.insertComputer(mM.toComputer(myComputer));
 		}
 		return mav;
 	}

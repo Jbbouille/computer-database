@@ -1,5 +1,8 @@
 package org.excilys.util;
 
+import java.util.List;
+
+import org.excilys.model.Company;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -27,5 +30,13 @@ public class BindingUtil {
 				"label.javaPattern", null, LocaleContextHolder.getLocale()));
 
 		return fmt.print(myDate);
+	}
+
+	public Company getCompanyWithId(int id, List<Company> myList) {
+		for (Company company : myList) {
+			if (company.getId() == id) return company;
+
+		}
+		return null;
 	}
 }

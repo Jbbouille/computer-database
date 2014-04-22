@@ -48,7 +48,7 @@ public class ModifyComputer {
 			System.out.println(result.toString());
 		} else {
 			mav = new ModelAndView("redirect:dashboard");
-			myComputerServ.updateComputer(mM.ComputerDtoToComputer(myComputer));
+			myComputerServ.updateComputer(mM.toComputer(myComputer));
 		}
 
 		return mav;
@@ -67,7 +67,7 @@ public class ModifyComputer {
 			List<Company> myList = myCompanyServ.selectCompanies();
 
 			map.addAttribute("companies", myList);
-			mav.addObject("computerDto", mM.computerToComputerDto(
+			mav.addObject("computerDto", mM.toComputerDto(
 					myComputerServ.selectComputer(id), myList));
 
 		} else {
