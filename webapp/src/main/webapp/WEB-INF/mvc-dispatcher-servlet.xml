@@ -19,6 +19,8 @@ http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	<mvc:annotation-driven validator="validator" />
 
+	<import resource="classpath:bindingContext.xml" />
+
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">

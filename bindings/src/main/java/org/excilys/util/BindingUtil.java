@@ -45,7 +45,7 @@ public class BindingUtil {
 		Object[] myListObject = new Object[3];
 		
 		if (desc != null) {
-			if (!desc.equals("false") || !desc.equals("true")) {
+			if (!desc.equals("false") && !desc.equals("true")) {
 				myListObject[0] = false;
 			} else {
 				myListObject[0] = Boolean.valueOf(desc);
@@ -53,7 +53,7 @@ public class BindingUtil {
 		} else {
 			myListObject[0] = false;
 		}
-
+		
 		if (orderBy != null) {
 			switch (orderBy) {
 			case "name":

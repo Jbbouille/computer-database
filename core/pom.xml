@@ -21,5 +21,15 @@
 			<artifactId>joda-time</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- Hibernate Core -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+		<!-- Jadira Time Hibernate -->
+		<dependency>
+			<groupId>org.jadira.usertype</groupId>
+			<artifactId>usertype.core</artifactId>
+		</dependency>
 	</dependencies>
 </project>

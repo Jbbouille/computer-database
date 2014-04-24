@@ -30,7 +30,7 @@
 				<div class="controls" >
 					<form:select  class="form-control" path="companyId">
 						<form:option value="-1" label="--- Select ---" />
-						<form:options items="${companies}"/>
+						<form:options items="${companies}" itemLabel="name" itemValue="id"/>
 					</form:select>
 					<form:errors path="companyId" cssClass="error"/>
 				</div>

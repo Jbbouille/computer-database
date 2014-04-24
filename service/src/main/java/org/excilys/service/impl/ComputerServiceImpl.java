@@ -7,8 +7,6 @@ import org.excilys.dao.ComputerDao;
 import org.excilys.dao.LogDao;
 import org.excilys.model.Computer;
 import org.excilys.service.ComputerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,9 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ComputerServiceImpl implements ComputerService {
-
-	public static final Logger LOG = LoggerFactory
-			.getLogger(ComputerServiceImpl.class);
 
 	@Autowired
 	private ComputerDao myComputerDao;
@@ -32,9 +27,8 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void insertComputer(Computer myComputer) {
-		int id = 0;
-		id = myComputerDao.insertComputer(myComputer);
-		myLogDao.insertLog("insert of a computer id :" + id);
+		myComputerDao.insertComputer(myComputer);
+		myLogDao.insertLog("insert of a computer id :" + myComputer.getId());
 	}
 
 	@Override
@@ -54,7 +48,8 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	@Transactional(readOnly = true)
 	public Computer selectComputer(int id) {
-		return myComputerDao.selectComputer(id);
+		Computer myComputer = myComputerDao.selectComputer(id);
+		return myComputer;
 	}
 
 	@Override
@@ -67,10 +62,11 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Computer> selectComputers(String myLikeParam,
-			String myOrder, int startLimit, int numberOfRow) {
-		return myComputerDao.selectComputers(myLikeParam, myOrder, startLimit,
-				numberOfRow);
+	public List<Computer> selectComputers(String myLikeParam, String myOrder,
+			int startLimit, int numberOfRow) {
+		List<Computer> myList = myComputerDao.selectComputers(myLikeParam,
+				myOrder, startLimit, numberOfRow);
+		return myList;
 	}
 
 	@Override
@@ -89,28 +85,28 @@ public class ComputerServiceImpl implements ComputerService {
 
 		switch (myOrder.toLowerCase()) {
 		case "name":
-			myStringBuilder.append("computer.name");
+			myStringBuilder.append("cu.name");
 
 			break;
 		case "introduced":
-			myStringBuilder.append("computer.introduced");
+			myStringBuilder.append("cu.introduced");
 
 			break;
 		case "discontinued":
-			myStringBuilder.append("computer.discontinued");
+			myStringBuilder.append("cu.discontinued");
 
 			break;
 		case "company":
-			myStringBuilder.append("company.name");
+			myStringBuilder.append("ca.name");
 
 			break;
 		default:
-			myStringBuilder.append("computer.name");
+			myStringBuilder.append("cu.name");
 			break;
 		}
 
 		if (desc)
-			myStringBuilder.append(" DESC");
+			myStringBuilder.append(" desc");
 
 		return myStringBuilder.toString();
 	}

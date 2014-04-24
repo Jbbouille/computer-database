@@ -50,6 +50,16 @@
 			<artifactId>core</artifactId>
 		</dependency>
 
-		<!-- Hibernate Annotation && Comons-Annotation -->
+		<!-- Hibernate Core -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+		
+		<!-- Spring ORM -->
+		<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+			</dependency>
 	</dependencies>
 </project>
