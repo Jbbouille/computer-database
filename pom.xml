@@ -17,8 +17,9 @@
 		<validatorVersion>5.1.0.Final</validatorVersion>
 		<jodaVersion>2.3</jodaVersion>
 		<computerDatabaseVersion>0.0.1-SNAPSHOT</computerDatabaseVersion>
-		<hibernateVersion>3.5.4-Final</hibernateVersion>
+		<hibernateVersion>4.3.5.Final</hibernateVersion>
 		<slf4jVersion>1.7.6</slf4jVersion>
+		<jadiraVersion>3.1.0.GA</jadiraVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -120,8 +121,22 @@
 			<!-- Hibernate Core -->
 			<dependency>
 				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate</artifactId>
+				<artifactId>hibernate-core</artifactId>
 				<version>${hibernateVersion}</version>
+			</dependency>
+
+			<!-- Spring ORM -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${springVersion}</version>
+			</dependency>
+
+			<!-- Jadira Time Hibernate -->
+			<dependency>
+				<groupId>org.jadira.usertype</groupId>
+				<artifactId>usertype.core</artifactId>
+				<version>${jadiraVersion}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -144,6 +159,7 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4jVersion}</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 

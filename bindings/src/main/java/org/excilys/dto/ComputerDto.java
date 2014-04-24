@@ -88,4 +88,9 @@ public class ComputerDto {
 
 	public ComputerDto() {
 	}
+	
+	@Override
+	public String toString() {
+		return "Name :"+name+" intro : "+introduced+" dicon : "+discontinued+" companyId : "+companyId+" companyName : "+companyName;
+	}
 }

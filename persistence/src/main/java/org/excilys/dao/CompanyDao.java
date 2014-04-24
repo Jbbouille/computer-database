@@ -15,18 +15,6 @@ import org.excilys.model.Company;
 public interface CompanyDao {
 
 	/**
-	 * selectComany is the DAO method that take an idComany and return the
-	 * Company object corresponding.
-	 * 
-	 * @param id
-	 *            Take the companyId to return
-	 * @return Return the Company object Corresponding to the id
-	 * @throws DaoException
-	 *             Throw Dao Custom Exception in case of SqlException....
-	 */
-	public Company selectCompany(int id) throws DaoException;
-
-	/**
 	 * selectCompanies is the method that returns all companies.
 	 * 
 	 * @return And HashMap object that contain all Companies

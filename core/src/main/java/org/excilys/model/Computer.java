@@ -1,14 +1,38 @@
 package org.excilys.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+@Entity
+@Table(name = "computer")
 public class Computer {
 
+	@Id
+	@Column(name = "id")
 	private int id;
+
+	@Column(name = "name")
 	private String name;
+
+	@Column(name = "introduced")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime introduced;
+
+	@Column(name = "discontinued")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime discontinued;
-	private int companyId;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "company_id")
+	private Company companyId;
 
 	public int getId() {
 		return id;
@@ -34,11 +58,11 @@ public class Computer {
 		this.discontinued = discontinued;
 	}
 
-	public int getCompanyId() {
+	public Company getCompanyId() {
 		return companyId;
 	}
 
-	public void setCompanyId(int companyId) {
+	public void setCompanyId(Company companyId) {
 		this.companyId = companyId;
 	}
 
@@ -50,8 +74,8 @@ public class Computer {
 		this.name = name;
 	}
 
-	public Computer(int id, String name, DateTime introduced, DateTime discontinued,
-			int companyId) {
+	public Computer(int id, String name, DateTime introduced,
+			DateTime discontinued, Company companyId) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -62,21 +86,24 @@ public class Computer {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == null) return false;
+		if (obj == null)
+			return false;
 		Computer comp = (Computer) obj;
-		if(this.id == comp.id ) return true;
-		else return false;
+		if (this.id == comp.id)
+			return true;
+		else
+			return false;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return this.companyId;
+		return this.companyId.getId();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Computer -- id :" + id + ", Name :" + name + ", Introduced :"
-				+ introduced + ", Discontinued :" + discontinued;
+				+ introduced + ", Discontinued :" + discontinued +" Company :"+companyId;
 	}
 
 	public Computer() {

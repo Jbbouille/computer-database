@@ -19,30 +19,31 @@ public class ModelMapper {
 	public Computer toComputer(ComputerDto myComputerDto) {
 		Computer myComputer = new Computer();
 
-		myComputer.setCompanyId(Integer.valueOf(myComputerDto.getCompanyId()));
+		if (myComputerDto.getId() != null && myComputerDto.getCompanyId() != -1) {
+			Company myComp = new Company();
+			myComp.setId(myComputerDto.getCompanyId());
+			myComp.setName(myComputerDto.getName());
+			myComputer.setCompanyId(myComp);
+		}
+
 		if (myComputerDto.getId() != null)
 			myComputer.setId(Integer.valueOf(myComputerDto.getId()));
 		myComputer.setName(myComputerDto.getName());
 
-		try {
-			if (!myComputerDto.getDiscontinued().equals("")) {
-				myComputer.setDiscontinued(myUtil
-						.stringToDateRegional(myComputerDto.getDiscontinued()));
-			}
+		if (!myComputerDto.getDiscontinued().equals("")) {
+			myComputer.setDiscontinued(myUtil
+					.stringToDateRegional(myComputerDto.getDiscontinued()));
+		}
 
-			if (!myComputerDto.getIntroduced().equals("")) {
-				myComputer.setIntroduced(myUtil
-						.stringToDateRegional(myComputerDto.getIntroduced()));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (!myComputerDto.getIntroduced().equals("")) {
+			myComputer.setIntroduced(myUtil.stringToDateRegional(myComputerDto
+					.getIntroduced()));
 		}
 
 		return myComputer;
 	}
 
-	public ComputerDto toComputerDto(Computer myComputer,
-			List<Company> myList) {
+	public ComputerDto toComputerDto(Computer myComputer, List<Company> myList) {
 		ComputerDto myComputerDto = new ComputerDto();
 
 		myComputerDto.setId(String.valueOf(myComputer.getId()));
@@ -62,27 +63,27 @@ public class ModelMapper {
 			myComputerDto.setIntroduced("");
 		}
 
-		Company myComp = myUtil.getCompanyWithId(myComputer.getCompanyId(), myList);
-
-		if (myComp != null) {
-			myComputerDto.setCompanyName(myComp.getName());
-			myComputerDto.setCompanyId(myComp.getId());
+		if (myComputer.getCompanyId() != null) {
+			myComputerDto.setCompanyName(myComputer.getCompanyId().getName());
+			myComputerDto.setCompanyId(myComputer.getCompanyId().getId());
 		} else {
 			myComputerDto.setCompanyName("");
 		}
 
 		return myComputerDto;
 	}
-	
-	public List<ComputerDto> toComputerDtoList(List<Computer> myComputers, List<Company> myCompanies) {
+
+	public List<ComputerDto> toComputerDtoList(List<Computer> myComputers,
+			List<Company> myCompanies) {
 		List<ComputerDto> myList = new ArrayList<>();
 		for (Computer item : myComputers) {
 			myList.add(toComputerDto(item, myCompanies));
 		}
 		return myList;
 	}
-	
-	public List<Computer> toComputerList(List<ComputerDto> myComputers, List<Company> myCompanies) {
+
+	public List<Computer> toComputerList(List<ComputerDto> myComputers,
+			List<Company> myCompanies) {
 		List<Computer> myList = new ArrayList<>();
 		for (ComputerDto item : myComputers) {
 			myList.add(toComputer(item));
