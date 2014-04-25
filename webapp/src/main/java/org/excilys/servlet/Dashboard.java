@@ -35,32 +35,35 @@ public class Dashboard {
 
 	@Autowired
 	private ModelMapper mM;
-	
+
 	@Autowired
 	private BindingUtil mBU;
 
 	@RequestMapping(method = RequestMethod.GET)
-	protected ModelAndView doGet(ModelMap myMap, @RequestParam(value = "bool", required = false) String desc,
+	protected ModelAndView doGet(
+			ModelMap myMap,
+			@RequestParam(value = "bool", required = false) String desc,
 			@RequestParam(value = "search", required = false, defaultValue = "") String search,
 			@RequestParam(value = "orderby", required = false) String orderBy,
-			@RequestParam(value = "page", required = false) String page){
-		
+			@RequestParam(value = "page", required = false) String page) {
+
 		Double myNumberOfPage;
 		int numberOfComputer;
 		List<ComputerDto> myListDto;
-		
+
 		Object[] myObjs = mBU.validateParameter(desc, orderBy, page);
 
 		List<Company> myComp = myCompanyServ.selectCompanies();
-		
+
 		numberOfComputer = myComputerServ.countNumberOfComputers(search);
-		
-		myNumberOfPage = myComputerServ.numberOfPage(myComputerServ.countNumberOfComputers(search),
+
+		myNumberOfPage = myComputerServ.numberOfPage(
+				myComputerServ.countNumberOfComputers(search),
 				NUMBER_OF_COMPUTER_BY_PAGE);
 
 		myListDto = mM.toComputerDtoList(myComputerServ.selectComputers(search,
-				myComputerServ.getOrderBy((String) myObjs[1], (Boolean)myObjs[0]),
-				myComputerServ.getStartLimit((Integer) myObjs[2], NUMBER_OF_COMPUTER_BY_PAGE),
+				myObjs[1] + " " + myObjs[0], myComputerServ.getStartLimit(
+						(Integer) myObjs[2], NUMBER_OF_COMPUTER_BY_PAGE),
 				NUMBER_OF_COMPUTER_BY_PAGE), myComp);
 
 		myMap.addAttribute("computers", myListDto);
@@ -72,7 +75,7 @@ public class Dashboard {
 		myMap.addAttribute("companies", myComp);
 		myMap.addAttribute("currentPage", myObjs[2]);
 
-	return new ModelAndView("dashboard");
+		return new ModelAndView("dashboard");
 	}
 
 }

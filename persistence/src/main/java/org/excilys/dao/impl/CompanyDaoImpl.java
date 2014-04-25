@@ -23,7 +23,7 @@ public class CompanyDaoImpl implements CompanyDao {
 	@Override
 	public List<Company> selectCompanies() throws DaoException {
 		Session mSession = sf.openSession();
-		List<Company> myList = mSession.createQuery("from Company").list();
+		List<Company> myList = mSession.createCriteria(Company.class).list();
 		mSession.close();
 		return myList;
 	}

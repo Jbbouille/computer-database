@@ -8,6 +8,7 @@
 	<name>Computer-Database Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
+		<computerDatabaseVersion>0.0.1-SNAPSHOT</computerDatabaseVersion>
 		<springVersion>4.0.3.RELEASE</springVersion>
 		<logbackVersion>1.1.1</logbackVersion>
 		<bonecpVersion>0.8.0.RELEASE</bonecpVersion>
@@ -16,10 +17,10 @@
 		<jstlVersion>1.2</jstlVersion>
 		<validatorVersion>5.1.0.Final</validatorVersion>
 		<jodaVersion>2.3</jodaVersion>
-		<computerDatabaseVersion>0.0.1-SNAPSHOT</computerDatabaseVersion>
 		<hibernateVersion>4.3.5.Final</hibernateVersion>
 		<slf4jVersion>1.7.6</slf4jVersion>
 		<jadiraVersion>3.1.0.GA</jadiraVersion>
+		<querydslVersion>3.3.2</querydslVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -138,6 +139,23 @@
 				<artifactId>usertype.core</artifactId>
 				<version>${jadiraVersion}</version>
 			</dependency>
+
+			<!-- JPA QueryDSL -->
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-jpa</artifactId>
+				<version>${querydslVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-core</artifactId>
+				<version>${querydslVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-apt</artifactId>
+				<version>${querydslVersion}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -174,6 +192,22 @@
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>maven-apt-plugin</artifactId>
+				<version>1.0.4</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/generated-sources/java</outputDirectory>
+							<processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

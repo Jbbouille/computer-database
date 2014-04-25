@@ -103,7 +103,8 @@ public class Computer {
 	@Override
 	public String toString() {
 		return "Computer -- id :" + id + ", Name :" + name + ", Introduced :"
-				+ introduced + ", Discontinued :" + discontinued +" Company :"+companyId;
+				+ introduced + ", Discontinued :" + discontinued + " Company :"
+				+ companyId;
 	}
 
 	public Computer() {

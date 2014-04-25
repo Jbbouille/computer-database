@@ -43,7 +43,7 @@ public class BindingUtil {
 
 	public Object[] validateParameter(String desc, String orderBy, String page) {
 		Object[] myListObject = new Object[3];
-		
+
 		if (desc != null) {
 			if (!desc.equals("false") && !desc.equals("true")) {
 				myListObject[0] = false;
@@ -53,7 +53,7 @@ public class BindingUtil {
 		} else {
 			myListObject[0] = false;
 		}
-		
+
 		if (orderBy != null) {
 			switch (orderBy) {
 			case "name":
@@ -69,11 +69,11 @@ public class BindingUtil {
 				myListObject[1] = "company";
 				break;
 			default:
-				myListObject[1] = "name";
+				myListObject[1] = "id";
 				break;
 			}
 		} else {
-			myListObject[1] = "name";
+			myListObject[1] = "id";
 		}
 
 		if (page != null) {

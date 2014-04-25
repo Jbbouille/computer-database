@@ -78,36 +78,4 @@ public class ComputerServiceImpl implements ComputerService {
 	public int getStartLimit(int idPage, int numberOfRow) {
 		return ((idPage - 1) * numberOfRow);
 	}
-
-	@Override
-	public String getOrderBy(String myOrder, Boolean desc) {
-		StringBuilder myStringBuilder = new StringBuilder();
-
-		switch (myOrder.toLowerCase()) {
-		case "name":
-			myStringBuilder.append("name");
-
-			break;
-		case "introduced":
-			myStringBuilder.append("introduced");
-
-			break;
-		case "discontinued":
-			myStringBuilder.append("discontinued");
-
-			break;
-		case "company":
-			myStringBuilder.append("name");
-
-			break;
-		default:
-			myStringBuilder.append("name");
-			break;
-		}
-
-		if (desc)
-			myStringBuilder.append(" desc");
-
-		return myStringBuilder.toString();
-	}
 }

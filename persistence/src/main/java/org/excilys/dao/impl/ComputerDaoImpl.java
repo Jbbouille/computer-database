@@ -5,14 +5,15 @@ import java.util.List;
 import org.excilys.dao.ComputerDao;
 import org.excilys.exception.DaoException;
 import org.excilys.model.Computer;
+import org.excilys.model.QCompany;
+import org.excilys.model.QComputer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.mysema.query.jpa.hibernate.HibernateQuery;
+import com.mysema.query.types.OrderSpecifier;
 
 @Repository("computerDao")
 public class ComputerDaoImpl implements ComputerDao {
@@ -44,27 +45,30 @@ public class ComputerDaoImpl implements ComputerDao {
 
 		Session mSession = sf.getCurrentSession();
 
-		List<Computer> myList = mSession.createCriteria(Computer.class)
-				.add(Restrictions.idEq(id)).list();
+		HibernateQuery query = new HibernateQuery(mSession);
+		QComputer computer = QComputer.computer;
 
-		return myList.get(0);
+		Computer myComputer = query.from(computer).where(computer.id.eq(id))
+				.uniqueResult(computer);
+
+		return myComputer;
 	}
 
 	@Override
 	public int countNumberComputers(String myLikeParam) throws DaoException {
-
 		Session mSession = sf.getCurrentSession();
 
-		int myCount = ((Long) mSession
-				.createCriteria(Computer.class)
-				.createAlias("companyId", "ca", JoinType.LEFT_OUTER_JOIN)
-				.add(Restrictions.or(
-						(Restrictions.ilike("name", "%" + myLikeParam + "%")),
-						(Restrictions.ilike("ca.name", "%" + myLikeParam + "%"))))
-				.setProjection(Projections.rowCount()).uniqueResult())
-				.intValue();
+		HibernateQuery query = new HibernateQuery(mSession);
+		QComputer computer = QComputer.computer;
+		QCompany company = QCompany.company;
 
-		return myCount;
+		Long myCount = query
+				.from(computer)
+				.leftJoin(computer.companyId, company)
+				.where(computer.name.like("%" + myLikeParam + "%").or(
+						company.name.like("%" + myLikeParam + "%"))).count();
+
+		return myCount.intValue();
 	}
 
 	@Override
@@ -73,22 +77,57 @@ public class ComputerDaoImpl implements ComputerDao {
 
 		Session mSession = sf.getCurrentSession();
 
-		Order orderBy;
+		HibernateQuery query = new HibernateQuery(mSession);
+		QComputer computer = QComputer.computer;
+		QCompany company = QCompany.company;
 
-		if (myOrder.contains("desc")) {
-			orderBy = Order.desc(myOrder.replace(" desc", ""));
-		} else {
-			orderBy = Order.asc(myOrder);
+		OrderSpecifier<?> orderBy = null;
+
+		String order = myOrder.replace(" false", "").replace(" true", "");
+
+		System.out.println("myorder" + myOrder + " /" + order);
+
+		switch (order) {
+		case "name":
+			if (myOrder.contains("true")) {
+				orderBy = computer.name.desc();
+			} else {
+				orderBy = computer.name.asc();
+			}
+			break;
+		case "introduced":
+			if (myOrder.contains("true")) {
+				orderBy = computer.introduced.desc();
+			} else {
+				orderBy = computer.introduced.asc();
+			}
+			break;
+		case "discontinued":
+			if (myOrder.contains("true")) {
+				orderBy = computer.discontinued.desc();
+			} else {
+				orderBy = computer.discontinued.asc();
+			}
+			break;
+		case "ca.name":
+			if (myOrder.contains("true")) {
+				orderBy = company.name.desc();
+			} else {
+				orderBy = company.name.asc();
+			}
+			break;
+		case "id":
+			orderBy = computer.id.asc();
+			break;
 		}
 
-		List<Computer> myList = mSession
-				.createCriteria(Computer.class)
-				.createAlias("companyId", "ca", JoinType.LEFT_OUTER_JOIN)
-				.add(Restrictions.or(
-						(Restrictions.ilike("name", "%" + myLikeParam + "%")),
-						(Restrictions.ilike("ca.name", "%" + myLikeParam + "%"))))
-				.addOrder(orderBy).setFirstResult(startLimit)
-				.setMaxResults(numberOfRow).list();
+		List<Computer> myList = query
+				.from(computer)
+				.leftJoin(computer.companyId, company)
+				.where(computer.name.like("%" + myLikeParam + "%").or(
+						company.name.like("%" + myLikeParam + "%")))
+				.orderBy(orderBy).offset(startLimit).limit(numberOfRow)
+				.list(computer);
 
 		return myList;
 	}

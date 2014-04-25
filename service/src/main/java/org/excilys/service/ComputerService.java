@@ -22,6 +22,4 @@ public interface ComputerService {
 	public int getStartLimit(int idPage, int numberOfRow);
 
 	public double numberOfPage(int numberComputers, int numberOfRow);
-
-	public String getOrderBy(String myOrder, Boolean desc);
 }

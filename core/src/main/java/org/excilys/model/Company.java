@@ -10,51 +10,51 @@ import javax.persistence.Table;
 @Table(name = "company")
 public class Company {
 
-	@Id
-	@Column(name = "id")
-	private int id;
-	
-	@Column(name = "name")
-	private String name;
+@Id
+@Column(name = "id")
+private int id;
 
-	public int getId() {
-		return id;
-	}
+@Column(name = "name")
+private String name;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+public int getId() {
+return id;
+}
 
-	public String getName() {
-		return name;
-	}
+public void setId(int id) {
+this.id = id;
+}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+public String getName() {
+return name;
+}
 
-	public Company(int id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
+public void setName(String name) {
+this.name = name;
+}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-		Company comp = (Company) obj;
-		if (this.id == comp.id)
-			return true;
-		else
-			return false;
-	}
+public Company(int id, String name) {
+super();
+this.id = id;
+this.name = name;
+}
 
-	@Override
-	public String toString() {
-		return name;
-	}
+@Override
+public boolean equals(Object obj) {
+if (obj == null)
+return false;
+Company comp = (Company) obj;
+if (this.id == comp.id)
+return true;
+else
+return false;
+}
 
-	public Company() {
-	}
+@Override
+public String toString() {
+return name;
+}
+
+public Company() {
+}
 }
