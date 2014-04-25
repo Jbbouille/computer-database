@@ -7,6 +7,10 @@ import org.excilys.exception.DaoException;
 import org.excilys.model.Computer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -40,23 +44,27 @@ public class ComputerDaoImpl implements ComputerDao {
 
 		Session mSession = sf.getCurrentSession();
 
-		List<Computer> myList = mSession
-				.createQuery("from Computer where id = :id")
-				.setParameter("id", id).list();
+		List<Computer> myList = mSession.createCriteria(Computer.class)
+				.add(Restrictions.idEq(id)).list();
+
 		return myList.get(0);
 	}
 
 	@Override
-	public int countNumberComputers(String myName) throws DaoException {
+	public int countNumberComputers(String myLikeParam) throws DaoException {
 
 		Session mSession = sf.getCurrentSession();
 
-		String sql = "SELECT count(*) FROM Computer WHERE name like :computerName";
+		int myCount = ((Long) mSession
+				.createCriteria(Computer.class)
+				.createAlias("companyId", "ca", JoinType.LEFT_OUTER_JOIN)
+				.add(Restrictions.or(
+						(Restrictions.ilike("name", "%" + myLikeParam + "%")),
+						(Restrictions.ilike("ca.name", "%" + myLikeParam + "%"))))
+				.setProjection(Projections.rowCount()).uniqueResult())
+				.intValue();
 
-		Long myCount = (Long) mSession.createQuery(sql)
-				.setParameter("computerName", "%" + myName + "%")
-				.uniqueResult();
-		return myCount.intValue();
+		return myCount;
 	}
 
 	@Override
@@ -65,14 +73,23 @@ public class ComputerDaoImpl implements ComputerDao {
 
 		Session mSession = sf.getCurrentSession();
 
-		StringBuilder sql = new StringBuilder();
-		sql.append(
-				"SELECT cu FROM Computer as cu LEFT JOIN cu.companyId as ca WHERE cu.name like :parmLike OR ca.name like :parmLike ORDER BY ")
-				.append(myOrder);
+		Order orderBy;
 
-		List<Computer> myList = mSession.createQuery(sql.toString())
-				.setParameter("parmLike", "%" + myLikeParam + "%")
-				.setFirstResult(startLimit).setMaxResults(numberOfRow).list();
+		if (myOrder.contains("desc")) {
+			orderBy = Order.desc(myOrder.replace(" desc", ""));
+		} else {
+			orderBy = Order.asc(myOrder);
+		}
+
+		List<Computer> myList = mSession
+				.createCriteria(Computer.class)
+				.createAlias("companyId", "ca", JoinType.LEFT_OUTER_JOIN)
+				.add(Restrictions.or(
+						(Restrictions.ilike("name", "%" + myLikeParam + "%")),
+						(Restrictions.ilike("ca.name", "%" + myLikeParam + "%"))))
+				.addOrder(orderBy).setFirstResult(startLimit)
+				.setMaxResults(numberOfRow).list();
+
 		return myList;
 	}
 }

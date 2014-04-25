@@ -85,23 +85,23 @@ public class ComputerServiceImpl implements ComputerService {
 
 		switch (myOrder.toLowerCase()) {
 		case "name":
-			myStringBuilder.append("cu.name");
+			myStringBuilder.append("name");
 
 			break;
 		case "introduced":
-			myStringBuilder.append("cu.introduced");
+			myStringBuilder.append("introduced");
 
 			break;
 		case "discontinued":
-			myStringBuilder.append("cu.discontinued");
+			myStringBuilder.append("discontinued");
 
 			break;
 		case "company":
-			myStringBuilder.append("ca.name");
+			myStringBuilder.append("name");
 
 			break;
 		default:
-			myStringBuilder.append("cu.name");
+			myStringBuilder.append("name");
 			break;
 		}
 
