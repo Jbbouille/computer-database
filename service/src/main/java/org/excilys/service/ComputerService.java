@@ -3,6 +3,7 @@ package org.excilys.service;
 import java.util.List;
 
 import org.excilys.model.Computer;
+import org.springframework.data.domain.PageRequest;
 
 public interface ComputerService {
 
@@ -12,14 +13,9 @@ public interface ComputerService {
 
 	public void updateComputer(Computer myComputer);
 
-	public Computer selectComputer(int id);
+	public Computer selectComputer(Integer id);
 
-	public List<Computer> selectComputers(String myLikeParam,
-			String myOrder, int startLimit, int numberOfRow);
+	public List<Computer> selectComputers(String myLikeParam, PageRequest page);
 
-	public int countNumberOfComputers(String myName);
-
-	public int getStartLimit(int idPage, int numberOfRow);
-
-	public double numberOfPage(int numberComputers, int numberOfRow);
+	public int countNumberOfComputers(String myName, PageRequest page);
 }

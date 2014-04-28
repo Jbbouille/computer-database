@@ -21,6 +21,7 @@
 		<slf4jVersion>1.7.6</slf4jVersion>
 		<jadiraVersion>3.1.0.GA</jadiraVersion>
 		<querydslVersion>3.3.2</querydslVersion>
+		<springDataJpaVersion>1.5.2.RELEASE</springDataJpaVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -156,6 +157,13 @@
 				<artifactId>querydsl-apt</artifactId>
 				<version>${querydslVersion}</version>
 			</dependency>
+
+			<!-- Spring Data JPA -->
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-jpa</artifactId>
+				<version>${springDataJpaVersion}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -192,22 +200,6 @@
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.mysema.maven</groupId>
-				<artifactId>maven-apt-plugin</artifactId>
-				<version>1.0.4</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>process</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target/generated-sources/java</outputDirectory>
-							<processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

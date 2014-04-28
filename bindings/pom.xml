@@ -34,5 +34,11 @@
 			<groupId>org.excilys</groupId>
 			<artifactId>core</artifactId>
 		</dependency>
+
+		<!-- Spring Data JPA -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+		</dependency>
 	</dependencies>
 </project>

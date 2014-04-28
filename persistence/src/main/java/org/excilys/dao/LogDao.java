@@ -1,8 +1,8 @@
 package org.excilys.dao;
 
-import org.excilys.exception.DaoException;
+import org.excilys.model.Log;
+import org.springframework.data.repository.CrudRepository;
 
-public interface LogDao {
+public interface LogDao extends CrudRepository<Log, Integer>{
 
-	public void insertLog(String text) throws DaoException;
 }

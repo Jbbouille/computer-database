@@ -1,5 +1,6 @@
 package org.excilys.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.excilys.dao.CompanyDao;
@@ -21,7 +22,15 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public List<Company> selectCompanies() {
-		List<Company> myList = myCompanyDao.selectCompanies();
-		return myList;
+		Iterable<Company> myList = myCompanyDao.findAll();
+
+		List<Company> companies = new ArrayList<>();
+		
+		for (Company company : myList) {
+			companies.add(company);
+			myList.iterator().next();
+		}
+		
+		return companies;
 	}
 }

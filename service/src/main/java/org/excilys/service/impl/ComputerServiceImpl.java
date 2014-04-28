@@ -6,8 +6,11 @@ import org.excilys.dao.CompanyDao;
 import org.excilys.dao.ComputerDao;
 import org.excilys.dao.LogDao;
 import org.excilys.model.Computer;
+import org.excilys.model.Log;
 import org.excilys.service.ComputerService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,55 +30,52 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void insertComputer(Computer myComputer) {
-		myComputerDao.insertComputer(myComputer);
-		myLogDao.insertLog("insert of a computer id :" + myComputer.getId());
+		myComputerDao.save(myComputer);
+		Log myLog = new Log("insert of a computer id :" + myComputer.getId(),
+				new DateTime());
+		myLogDao.save(myLog);
 	}
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void deleteComputer(Computer myComputer) {
-		myComputerDao.deleteComputer(myComputer);
-		myLogDao.insertLog("delete of a computer id :" + myComputer.getId());
+		myComputerDao.delete(myComputer);
+		Log myLog = new Log("delete of a computer id :" + myComputer.getId(),
+				new DateTime());
+		myLogDao.save(myLog);
 	}
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void updateComputer(Computer myComputer) {
-		myComputerDao.updateComputer(myComputer);
-		myLogDao.insertLog("update of a computer id :" + myComputer.getId());
+		myComputerDao.save(myComputer);
+		Log myLog = new Log("update of a computer id :" + myComputer.getId(),
+				new DateTime());
+		myLogDao.save(myLog);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Computer selectComputer(int id) {
-		Computer myComputer = myComputerDao.selectComputer(id);
+	public Computer selectComputer(Integer id) {
+		Computer myComputer = myComputerDao.findOne(id);
 		return myComputer;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public int countNumberOfComputers(String myName) {
-		int number = 0;
-		number = myComputerDao.countNumberComputers(myName);
-		return number;
+	public int countNumberOfComputers(String myLikeParam, PageRequest page) {
+		Long number = myComputerDao
+				.findByNameContainingOrCompanyIdNameContaining(myLikeParam,
+						myLikeParam, page).getTotalElements();
+		return number.intValue();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Computer> selectComputers(String myLikeParam, String myOrder,
-			int startLimit, int numberOfRow) {
-		List<Computer> myList = myComputerDao.selectComputers(myLikeParam,
-				myOrder, startLimit, numberOfRow);
+	public List<Computer> selectComputers(String myLikeParam, PageRequest page) {
+		List<Computer> myList = myComputerDao
+				.findByNameContainingOrCompanyIdNameContaining(myLikeParam,
+						myLikeParam, page).getContent();
 		return myList;
-	}
-
-	@Override
-	public double numberOfPage(int numberComputers, int numberOfRow) {
-		return Math.ceil(numberComputers / numberOfRow) + 1;
-	}
-
-	@Override
-	public int getStartLimit(int idPage, int numberOfRow) {
-		return ((idPage - 1) * numberOfRow);
 	}
 }

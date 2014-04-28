@@ -16,6 +16,7 @@ http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	<context:annotation-config />
 	<context:component-scan base-package="org.excilys.servlet" />
+	<context:component-scan base-package="org.excilys.wrapper" />
 
 	<mvc:annotation-driven validator="validator" />
 

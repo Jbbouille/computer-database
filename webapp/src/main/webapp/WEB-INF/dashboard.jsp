@@ -6,54 +6,44 @@
 
 <section id="main">
 	<h1 id="homeTitle">
-		<c:out value="${numberOfComputers} "></c:out>
+		<c:out value="${wrap.numberOfComputer} "></c:out>
 		<spring:message code="label.numberComputer" />
 	</h1>
 	<div id="actions">
 		<form action="dashboard" method="GET" class="form-inline">
 			<input type="search" id="searchbox" name="search"
 				placeholder="<spring:message code="label.searchName" />"
-				class="form-control" value="${search}"> <input type="submit"
+				class="form-control" value="${wrap.search}"> <input type="submit"
 				id="searchsubmit"
 				value="<spring:message code="label.filterByName" />"
 				class="btn btn-primary">
 		</form>
-		<div class="row">
-			<div class="col-md-8"></div>
-			<div class="col-md-4">
-				<c:if test="${deleteError != null}">
-					<label class="error" for="company"> <c:out
-							value="${deleteError}"></c:out>
-					</label>
-				</c:if>
-			</div>
-		</div>
 		<a class="btn btn-success" id="add" href="addcomputer"><spring:message
 				code="label.addComputer" /></a>
-		<m:pagination currentPage="${currentPage}"
-			numberOfPages="${numberOfPages}" search="${search}"
-			orderBy="${orderby}" bool="${bool}"></m:pagination>
+		<m:pagination currentPage="${wrap.currentPage}"
+			numberOfPages="${wrap.numberOfPage}" search="${wrap.search}"
+			orderBy="${wrap.orderBy}" bool="${wrap.bool}"></m:pagination>
 	</div>
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
 				<th class="col-md-2"><a
-					href="dashboard?search=${search}&orderby=name&bool=${orderby=='name' ? !bool:'false'}"><spring:message
+					href="dashboard?search=${wrap.search}&orderby=name&bool=${wrap.orderBy=='name' ? !wrap.bool:'false'}"><spring:message
 							code="label.computerName" /></a></th>
 				<th class="col-md-2"><a
-					href="dashboard?search=${search}&orderby=introduced&bool=${orderby=='introduced' ? !bool:'false'}"><spring:message
+					href="dashboard?search=${wrap.search}&orderby=introduced&bool=${wrap.orderBy=='introduced' ? !wrap.bool:'false'}"><spring:message
 							code="label.computerIntroduced" /></a></th>
 				<th class="col-md-2"><a
-					href="dashboard?search=${search}&orderby=discontinued&bool=${orderby=='discontinued' ? !bool:'false'}"><spring:message
+					href="dashboard?search=${wrap.search}&orderby=discontinued&bool=${wrap.orderBy=='discontinued' ? !wrap.bool:'false'}"><spring:message
 							code="label.computerDiscontinued" /></a></th>
 				<th class="col-md-2"><a
-					href="dashboard?search=${search}&orderby=company&bool=${orderby=='company' ? !bool:'false'}"><spring:message
+					href="dashboard?search=${wrap.search}&orderby=companyId&bool=${wrap.orderBy=='companyId' ? !wrap.bool:'false'}"><spring:message
 							code="label.computerCompany" /></a></th>
 				<th class="col-md-2">Action</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="computer" items="${computers}">
+			<c:forEach var="computer" items="${wrap.computerDTOs}">
 				<tr>
 					<td class="col-md-2"><a
 						href="modifycomputer?id=${computer.id}"><c:out
