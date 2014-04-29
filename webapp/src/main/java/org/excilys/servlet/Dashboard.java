@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class Dashboard {
 	
 	@Autowired
-	PageWrapper mPageWrapper;
+	private PageWrapper mPageWrapper;
 
 	@RequestMapping(method = RequestMethod.GET)
 	protected ModelAndView doGet(

@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,11 +29,13 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/jquery.ui.datepicker-fr.js"></script>
 <script type="text/javascript">
-		$(function() {
-			 $.datepicker.setDefaults($.datepicker.regional['<spring:message code="label.regional" />']);
-			 $(".datepicker").datepicker();
-			 $(".datepicker").datepicker('option', 'dateFormat', '<spring:message code="label.pattern" />');
-		});
+	$(function() {
+		$.datepicker
+				.setDefaults($.datepicker.regional['<spring:message code="label.regional" />']);
+		$(".datepicker").datepicker();
+		$(".datepicker").datepicker('option', 'dateFormat',
+				'<spring:message code="label.pattern" />');
+	});
 </script>
 </head>
 <body>
@@ -46,7 +51,6 @@
 				</button>
 				<a class="navbar-brand" href="#">Computer Database</a>
 			</div>
-
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
@@ -57,9 +61,14 @@
 								code="label.addComputer" /></a></li>
 					<li><a href="?lang=en">en</a></li>
 					<li><a href="?lang=fr">fr</a></li>
+					<sec:authorize access="hasRole('ROLE_USER')">
+						<c:if test="${pageContext.request.userPrincipal.name != null}">
+							<li><a> User : ${pageContext.request.userPrincipal.name}
+							</a>
+							<li><a class="btn btn-default" href="<c:url value="/j_spring_security_logout" />">Logout</a></li>
+						</c:if>
+					</sec:authorize>
 				</ul>
 			</div>
-			<!-- /.navbar-collapse -->
 		</div>
-		<!-- /.container-fluid -->
 	</nav>

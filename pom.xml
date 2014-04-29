@@ -22,6 +22,7 @@
 		<jadiraVersion>3.1.0.GA</jadiraVersion>
 		<querydslVersion>3.3.2</querydslVersion>
 		<springDataJpaVersion>1.5.2.RELEASE</springDataJpaVersion>
+		<springSecurity>3.2.3.RELEASE</springSecurity>
 	</properties>
 
 	<dependencyManagement>
@@ -163,6 +164,23 @@
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-jpa</artifactId>
 				<version>${springDataJpaVersion}</version>
+			</dependency>
+
+			<!-- Spring Security -->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${springSecurity}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${springSecurity}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-taglibs</artifactId>
+				<version>${springSecurity}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
