@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@taglib uri="http://www.springframework.org/security/tags"
-	prefix="sec"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -61,7 +60,7 @@
 								code="label.addComputer" /></a></li>
 					<li><a href="?lang=en">en</a></li>
 					<li><a href="?lang=fr">fr</a></li>
-					<sec:authorize access="hasRole('ROLE_USER')">
+					<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
 						<c:if test="${pageContext.request.userPrincipal.name != null}">
 							<li><a> User : ${pageContext.request.userPrincipal.name}
 							</a>

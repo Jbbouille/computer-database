@@ -12,12 +12,15 @@
 		<intercept-url pattern="/addcomputer**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/modifycomputer**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/deletecomputer**" access="hasRole('ROLE_ADMIN')" />
-		
+
 		<form-login login-page="/login" authentication-failure-url="/login?error"
-			username-parameter="username" password-parameter="password" default-target-url="/dashboard" />
-		
-		<logout logout-success-url="/login" delete-cookies="true"
+			username-parameter="username" password-parameter="password"
+			default-target-url="/dashboard" />
+
+		<logout logout-success-url="/login" delete-cookies="JSESSIONID"
 			invalidate-session="true" />
+
+		<remember-me key="uniqueAndSecret" />
 	</http>
 
 	<authentication-manager>
@@ -25,6 +28,7 @@
 			<jdbc-user-service data-source-ref="mainDataSource"
 				users-by-username-query="select username,password, enabled from users where username=?"
 				authorities-by-username-query="select username, role from user_roles where username =?  " />
+			<password-encoder hash="sha-256" />
 		</authentication-provider>
 	</authentication-manager>
 

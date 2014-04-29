@@ -1,5 +1,5 @@
 <jsp:include page="include/header.jsp" />
-<%@ taglib prefix="m" tagdir="/WEB-INF/pages/tags"%>
+<%@ taglib prefix="m" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
@@ -49,19 +49,14 @@
 			<tbody>
 				<c:forEach var="computer" items="${wrap.computerDTOs}">
 					<tr>
-						<sec:authorize access="hasRole('ROLE_ADMIN')">
-							<td class="col-md-2"><a
-								href="modifycomputer?id=${computer.id}"><c:out
-										value="${computer.name}" /></a></td>
-						</sec:authorize>
-						<sec:authorize access="hasRole('ROLE_USER')">
-							<td class="col-md-2"><c:out value="${computer.name}" /></td>
-						</sec:authorize>
+						
+							<td class="col-md-2"><sec:authorize access="hasRole('ROLE_ADMIN')"><a
+								href="modifycomputer?id=${computer.id}"></sec:authorize><c:out
+										value="${computer.name}" /><sec:authorize access="hasRole('ROLE_ADMIN')"></a></sec:authorize></td>
 						<td class="col-md-2"><c:out value="${computer.introduced}" /></td>
 						<td class="col-md-2"><c:out value="${computer.discontinued}" /></td>
 						<td class="col-md-2">${computer.companyName}</td>
-						<td class="col-md-2"><sec:authorize
-								access="hasRole('ROLE_ADMIN')">
+						<td class="col-md-2"><sec:authorize access="hasRole('ROLE_ADMIN')">
 								<a href="deletecomputer?id=${computer.id}"
 									class="btn btn-warning"
 									onClick="return confirm( '<spring:message code="label.jsConfirmDelete" />' )"><spring:message
