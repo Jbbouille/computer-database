@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -23,6 +24,7 @@
 		<querydslVersion>3.3.2</querydslVersion>
 		<springDataJpaVersion>1.5.2.RELEASE</springDataJpaVersion>
 		<springSecurity>3.2.3.RELEASE</springSecurity>
+		<cxfVersion>2.7.11</cxfVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -55,7 +57,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.excilys</groupId>
-				<artifactId>core-Computer-Database</artifactId>
+				<artifactId>webService</artifactId>
 				<version>${computerDatabaseVersion}</version>
 			</dependency>
 
@@ -182,6 +184,21 @@
 				<artifactId>spring-security-taglibs</artifactId>
 				<version>${springSecurity}</version>
 			</dependency>
+
+			<!-- CXF Apache -->
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-transports-http</artifactId>
+				<version>${cxfVersion}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-frontend-jaxws</artifactId>
+				<version>${cxfVersion}</version>
+			</dependency>
+
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -227,5 +244,6 @@
 		<module>service</module>
 		<module>bindings</module>
 		<module>webapp</module>
+		<module>webService</module>
 	</modules>
 </project>

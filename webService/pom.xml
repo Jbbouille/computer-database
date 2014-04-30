@@ -8,13 +8,10 @@
 		<artifactId>Computer-Database</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>webapp</artifactId>
-	<name>webapp</name>
-	<url>http://maven.apache.org</url>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+	<artifactId>webService</artifactId>
 	<packaging>war</packaging>
+	<name>webService Maven Webapp</name>
+	<url>http://maven.apache.org</url>
 	<dependencies>
 		<!-- Hibernate Validator -->
 		<dependency>
@@ -56,12 +53,16 @@
 			<artifactId>service</artifactId>
 		</dependency>
 
-		<!-- WebService of computer Database -->
-		<dependency>
-			<groupId>org.excilys</groupId>
-			<artifactId>webService</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+			<!-- CXF Apache -->
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-transports-http</artifactId>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			</dependency>
 
 		<!-- Spring Security -->
 		<dependency>
@@ -77,4 +78,7 @@
 			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
 	</dependencies>
+	<build>
+		<finalName>webService</finalName>
+	</build>
 </project>

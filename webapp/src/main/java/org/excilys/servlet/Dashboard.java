@@ -1,5 +1,7 @@
 package org.excilys.servlet;
 
+import java.net.MalformedURLException;
+
 import org.excilys.wrapper.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,13 +24,13 @@ public class Dashboard {
 			@RequestParam(value = "bool", required = false) String desc,
 			@RequestParam(value = "search", required = false, defaultValue = "") String search,
 			@RequestParam(value = "orderby", required = false) String orderBy,
-			@RequestParam(value = "page", required = false) String page) {
+			@RequestParam(value = "page", required = false) String page) throws MalformedURLException {
 
+		mPageWrapper.setMyServ();
 		mPageWrapper.setBool(desc);
 		mPageWrapper.setSearch(search);
 		mPageWrapper.setOrderBy(orderBy);
 		mPageWrapper.setCurrentPage(page);
-		mPageWrapper.setPageRequest();
 		mPageWrapper.setNumberOfComputer();
 		mPageWrapper.setNumberOfPage();
 		mPageWrapper.setCompanies();

@@ -1,26 +1,24 @@
 package org.excilys.wrapper;
 
-import java.util.List;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 
 import org.excilys.dto.ComputerDto;
 import org.excilys.mapper.ModelMapper;
 import org.excilys.model.Company;
-import org.excilys.service.CompanyService;
-import org.excilys.service.ComputerService;
+import org.excilys.webservice.MyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class PageWrapper {
 
-	@Autowired
-	private ComputerService myComputerServ;
-
-	@Autowired
-	private CompanyService myCompanyServ;
+	private MyService myServ;
 
 	@Autowired
 	private ModelMapper mM;
@@ -34,12 +32,20 @@ public class PageWrapper {
 	private PageRequest pageRequest;
 	private int numberOfComputer;
 	private int numberOfPage;
-	private List<ComputerDto> computerDTOs;
-	private List<Company> companies;
+	private ArrayList<ComputerDto> computerDTOs;
+	private ArrayList<Company> companies;
 
 	public PageWrapper() {
 	}
-
+	
+	public void setMyServ() throws MalformedURLException {
+		URL url = new URL("http://localhost:8080/webService/MyService?wsdl");
+		QName mName = new QName("http://impl.webservice.excilys.org/", "MyServiceImplService");
+		Service service = Service.create(url, mName);
+		MyService myService = service.getPort(MyService.class);
+		this.myServ = myService;
+	}
+	
 	public boolean isBool() {
 		return bool;
 	}
@@ -116,25 +122,12 @@ public class PageWrapper {
 		return pageRequest;
 	}
 
-	public void setPageRequest() {
-		Sort mSort;
-		if (bool) {
-			mSort = new Sort(Direction.DESC, orderBy);
-		} else {
-			mSort = new Sort(Direction.ASC, orderBy);
-		}
-
-		this.pageRequest = new PageRequest((this.currentPage - 1), NUMBER_OF_COMPUTER_BY_PAGE,
-				mSort);
-	}
-
 	public int getNumberOfComputer() {
 		return numberOfComputer;
 	}
 
 	public void setNumberOfComputer() {
-		this.numberOfComputer = myComputerServ.countNumberOfComputers(search,
-				pageRequest);
+		this.numberOfComputer = myServ.countNumberOfComputers(search, bool, orderBy, currentPage, NUMBER_OF_COMPUTER_BY_PAGE);
 	}
 
 	public int getNumberOfPage() {
@@ -146,20 +139,20 @@ public class PageWrapper {
 				/ NUMBER_OF_COMPUTER_BY_PAGE) + 1);
 	}
 
-	public List<ComputerDto> getComputerDTOs() {
+	public ArrayList<ComputerDto> getComputerDTOs() {
 		return computerDTOs;
 	}
 
 	public void setComputerDTOs() {
 		this.computerDTOs = mM.toComputerDtoList(
-				myComputerServ.selectComputers(search, pageRequest), companies);
+				myServ.selectComputers(search, bool, orderBy, currentPage, NUMBER_OF_COMPUTER_BY_PAGE), companies);
 	}
 
-	public List<Company> getCompanies() {
+	public ArrayList<Company> getCompanies() {
 		return companies;
 	}
 
 	public void setCompanies() {
-		companies = myCompanyServ.selectCompanies();
+		companies = myServ.selectCompanies();
 	}
 }

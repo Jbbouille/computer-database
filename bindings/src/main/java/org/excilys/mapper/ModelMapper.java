@@ -73,18 +73,18 @@ public class ModelMapper {
 		return myComputerDto;
 	}
 
-	public List<ComputerDto> toComputerDtoList(List<Computer> myComputers,
-			List<Company> myCompanies) {
-		List<ComputerDto> myList = new ArrayList<>();
+	public ArrayList<ComputerDto> toComputerDtoList(List<Computer> myComputers,
+			ArrayList<Company> myCompanies) {
+		ArrayList<ComputerDto> myList = new ArrayList<>();
 		for (Computer item : myComputers) {
 			myList.add(toComputerDto(item, myCompanies));
 		}
 		return myList;
 	}
 
-	public List<Computer> toComputerList(List<ComputerDto> myComputers,
-			List<Company> myCompanies) {
-		List<Computer> myList = new ArrayList<>();
+	public ArrayList<Computer> toComputerList(List<ComputerDto> myComputers,
+			ArrayList<Company> myCompanies) {
+		ArrayList<Computer> myList = new ArrayList<>();
 		for (ComputerDto item : myComputers) {
 			myList.add(toComputer(item));
 		}

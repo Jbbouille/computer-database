@@ -1,5 +1,6 @@
 package org.excilys.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.excilys.dao.CompanyDao;
@@ -11,6 +12,8 @@ import org.excilys.service.ComputerService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,19 +66,49 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public int countNumberOfComputers(String myLikeParam, PageRequest page) {
+	public int countNumberOfComputers(String myLikeParam, Boolean bool,
+			String orderBy, int currentPage, int NUMBER_OF_COMPUTER_BY_PAGE) {
 		Long number = myComputerDao
-				.findByNameContainingOrCompanyIdNameContaining(myLikeParam,
-						myLikeParam, page).getTotalElements();
+				.findByNameContainingOrCompanyIdNameContaining(
+						myLikeParam,
+						myLikeParam,
+						getPageRequest(bool, orderBy, currentPage,
+								NUMBER_OF_COMPUTER_BY_PAGE)).getTotalElements();
 		return number.intValue();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Computer> selectComputers(String myLikeParam, PageRequest page) {
+	public ArrayList<Computer> selectComputers(String myLikeParam,
+			Boolean bool, String orderBy, int currentPage,
+			int NUMBER_OF_COMPUTER_BY_PAGE) {
 		List<Computer> myList = myComputerDao
-				.findByNameContainingOrCompanyIdNameContaining(myLikeParam,
-						myLikeParam, page).getContent();
-		return myList;
+				.findByNameContainingOrCompanyIdNameContaining(
+						myLikeParam,
+						myLikeParam,
+						getPageRequest(bool, orderBy, currentPage,
+								NUMBER_OF_COMPUTER_BY_PAGE)).getContent();
+		
+		ArrayList<Computer> myReturnList = new ArrayList<>();
+		for (Computer computer : myList) {
+			myReturnList.add(computer);
+		}
+		
+		return myReturnList;
+	}
+
+	@Override
+	public PageRequest getPageRequest(Boolean bool, String orderBy,
+			int currentPage, int NUMBER_OF_COMPUTER_BY_PAGE) {
+
+		Sort mSort;
+		if (bool) {
+			mSort = new Sort(Direction.DESC, orderBy);
+		} else {
+			mSort = new Sort(Direction.ASC, orderBy);
+		}
+
+		return new PageRequest((currentPage - 1), NUMBER_OF_COMPUTER_BY_PAGE,
+				mSort);
 	}
 }
