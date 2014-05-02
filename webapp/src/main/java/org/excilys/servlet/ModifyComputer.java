@@ -1,18 +1,16 @@
 package org.excilys.servlet;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
 
 import org.excilys.dto.ComputerDto;
 import org.excilys.mapper.ModelMapper;
 import org.excilys.model.Company;
-import org.excilys.webservice.MyService;
+import org.excilys.service.CompanyService;
+import org.excilys.service.ComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,7 +24,11 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/modifycomputer")
 public class ModifyComputer {
 
-	private MyService myServ;
+	@Autowired
+	private ComputerService computerServ;
+	
+	@Autowired
+	private CompanyService companyServ;
 
 	@Autowired
 	private ModelMapper mM;
@@ -36,18 +38,16 @@ public class ModifyComputer {
 			@Valid @ModelAttribute("computerDto") ComputerDto myComputer,
 			BindingResult result) throws MalformedURLException {
 
-		setMyServ();
-		
 		ModelAndView mav = null;
 
 		if (result.hasErrors()) {
 			mav = new ModelAndView("modifyComputer");
-			mav.addObject("companies", myServ.selectCompanies());
+			mav.addObject("companies", companyServ.selectCompanies());
 			mav.addObject("computerDto", myComputer);
 			System.out.println(result.toString());
 		} else {
 			mav = new ModelAndView("redirect:dashboard");
-			myServ.updateComputer(mM.toComputer(myComputer));
+			computerServ.updateComputer(mM.toComputer(myComputer));
 		}
 
 		return mav;
@@ -56,8 +56,6 @@ public class ModifyComputer {
 	@RequestMapping(method = RequestMethod.GET)
 	protected ModelAndView doGet(HttpServletRequest req, ModelMap map) throws MalformedURLException {
 
-		setMyServ();
-		
 		ModelAndView mav = null;
 
 		Integer id = null;
@@ -65,25 +63,16 @@ public class ModifyComputer {
 
 			mav = new ModelAndView("modifyComputer");
 			id = Integer.valueOf(req.getParameter("id"));
-			List<Company> myList = myServ.selectCompanies();
+			List<Company> myList = companyServ.selectCompanies();
 
 			map.addAttribute("companies", myList);
 			mav.addObject("computerDto", mM.toComputerDto(
-					myServ.selectComputer(id), myList));
+					computerServ.selectComputer(id), myList));
 
 		} else {
 			mav = new ModelAndView("redirect:dashboard");
 		}
 
 		return mav;
-	}
-
-	public void setMyServ() throws MalformedURLException {
-		URL url = new URL("http://localhost:8080/webService/MyService?wsdl");
-		QName mName = new QName("http://impl.webservice.excilys.org/", "MyServiceImplService");
-		Service service = Service.create(url, mName);
-		MyService myService = service.getPort(MyService.class);
-		this.myServ = myService;
-	}
-	
+	}	
 }

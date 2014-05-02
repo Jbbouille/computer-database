@@ -16,13 +16,6 @@
 	</properties>
 	<dependencies>
 
-		<!-- Containers Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-
 		<!-- Spring JDBC -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -50,30 +43,10 @@
 			<artifactId>core</artifactId>
 		</dependency>
 
-		<!-- Hibernate Core -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-		</dependency>
-
 		<!-- Spring ORM -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-		</dependency>
-
-		<!-- JPA QueryDSL -->
-		<dependency>
-			<groupId>com.mysema.querydsl</groupId>
-			<artifactId>querydsl-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.mysema.querydsl</groupId>
-			<artifactId>querydsl-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.mysema.querydsl</groupId>
-			<artifactId>querydsl-apt</artifactId>
 		</dependency>
 
 		<!-- Spring Data JPA -->

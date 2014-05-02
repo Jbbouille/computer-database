@@ -1,13 +1,11 @@
 package org.excilys.servlet;
 
 import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
 
 import org.excilys.model.Computer;
-import org.excilys.webservice.MyService;
+import org.excilys.service.CompanyService;
+import org.excilys.service.ComputerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,22 +18,24 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/deletecomputer")
 public class DeleteComputer {
 
-	private MyService myServ;
+	@Autowired
+	private ComputerService computerServ;
+	
+	@Autowired
+	private CompanyService companyServ;
 
 	@RequestMapping(method = RequestMethod.GET)
 	protected ModelAndView doGet(ModelMap myMap,
 			@RequestParam(value = "id", required = false) Integer id)
 			throws MalformedURLException {
 
-		setMyServ();
-
-		Computer myComputer = myServ.selectComputer(id);
+		Computer myComputer = computerServ.selectComputer(id);
 
 		if (myComputer == null) {
 			myMap.addAttribute("deleteError",
 					"Could Not delete Computer that not exist");
 		} else {
-			myServ.deleteComputer(myComputer);
+			computerServ.deleteComputer(myComputer);
 		}
 
 		return new ModelAndView("redirect:dashboard");
@@ -45,14 +45,5 @@ public class DeleteComputer {
 	public ModelAndView handleAllException(Exception ex) {
 		ModelAndView model = new ModelAndView("exceptionError");
 		return model;
-	}
-
-	public void setMyServ() throws MalformedURLException {
-		URL url = new URL("http://localhost:8080/webService/MyService?wsdl");
-		QName mName = new QName("http://impl.webservice.excilys.org/",
-				"MyServiceImplService");
-		Service service = Service.create(url, mName);
-		MyService myService = service.getPort(MyService.class);
-		this.myServ = myService;
 	}
 }

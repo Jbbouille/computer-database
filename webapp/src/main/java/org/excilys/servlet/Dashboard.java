@@ -26,7 +26,6 @@ public class Dashboard {
 			@RequestParam(value = "orderby", required = false) String orderBy,
 			@RequestParam(value = "page", required = false) String page) throws MalformedURLException {
 
-		mPageWrapper.setMyServ();
 		mPageWrapper.setBool(desc);
 		mPageWrapper.setSearch(search);
 		mPageWrapper.setOrderBy(orderBy);

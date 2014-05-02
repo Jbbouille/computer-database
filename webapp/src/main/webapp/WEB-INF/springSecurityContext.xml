@@ -19,8 +19,6 @@ http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
 		<logout logout-success-url="/login" delete-cookies="JSESSIONID"
 			invalidate-session="true" />
-
-		<remember-me key="uniqueAndSecret" />
 	</http>
 
 	<authentication-manager>

@@ -1,24 +1,24 @@
 package org.excilys.wrapper;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
 
 import org.excilys.dto.ComputerDto;
 import org.excilys.mapper.ModelMapper;
 import org.excilys.model.Company;
-import org.excilys.webservice.MyService;
+import org.excilys.service.CompanyService;
+import org.excilys.service.ComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class PageWrapper {
-
-	private MyService myServ;
+	
+	@Autowired
+	private ComputerService computerServ;
+	
+	@Autowired
+	private CompanyService companyServ;
 
 	@Autowired
 	private ModelMapper mM;
@@ -36,14 +36,6 @@ public class PageWrapper {
 	private ArrayList<Company> companies;
 
 	public PageWrapper() {
-	}
-	
-	public void setMyServ() throws MalformedURLException {
-		URL url = new URL("http://localhost:8080/webService/MyService?wsdl");
-		QName mName = new QName("http://impl.webservice.excilys.org/", "MyServiceImplService");
-		Service service = Service.create(url, mName);
-		MyService myService = service.getPort(MyService.class);
-		this.myServ = myService;
 	}
 	
 	public boolean isBool() {
@@ -127,7 +119,7 @@ public class PageWrapper {
 	}
 
 	public void setNumberOfComputer() {
-		this.numberOfComputer = myServ.countNumberOfComputers(search, bool, orderBy, currentPage, NUMBER_OF_COMPUTER_BY_PAGE);
+		this.numberOfComputer = computerServ.countNumberOfComputers(search, bool, orderBy, currentPage, NUMBER_OF_COMPUTER_BY_PAGE);
 	}
 
 	public int getNumberOfPage() {
@@ -145,7 +137,7 @@ public class PageWrapper {
 
 	public void setComputerDTOs() {
 		this.computerDTOs = mM.toComputerDtoList(
-				myServ.selectComputers(search, bool, orderBy, currentPage, NUMBER_OF_COMPUTER_BY_PAGE), companies);
+				computerServ.selectComputers(search, bool, orderBy, currentPage, NUMBER_OF_COMPUTER_BY_PAGE), companies);
 	}
 
 	public ArrayList<Company> getCompanies() {
@@ -153,6 +145,6 @@ public class PageWrapper {
 	}
 
 	public void setCompanies() {
-		companies = myServ.selectCompanies();
+		companies = companyServ.selectCompanies();
 	}
 }

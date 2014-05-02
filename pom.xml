@@ -26,6 +26,7 @@
 		<springSecurity>3.2.3.RELEASE</springSecurity>
 		<cxfVersion>2.7.11</cxfVersion>
 		<jacksonVersion>1.9.13</jacksonVersion>
+		<commonsLoggingVersion>99-empty</commonsLoggingVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -204,8 +205,6 @@
 				<artifactId>jackson-jaxrs</artifactId>
 				<version>${jacksonVersion}</version>
 			</dependency>
-
-
 		</dependencies>
 	</dependencyManagement>
 
