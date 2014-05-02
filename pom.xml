@@ -25,6 +25,7 @@
 		<springDataJpaVersion>1.5.2.RELEASE</springDataJpaVersion>
 		<springSecurity>3.2.3.RELEASE</springSecurity>
 		<cxfVersion>2.7.11</cxfVersion>
+		<jacksonVersion>1.9.13</jacksonVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -191,11 +192,17 @@
 				<artifactId>cxf-rt-transports-http</artifactId>
 				<version>${cxfVersion}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-frontend-jaxrs</artifactId>
 				<version>${cxfVersion}</version>
+			</dependency>
+
+			<!-- Jackson -->
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-jaxrs</artifactId>
+				<version>${jacksonVersion}</version>
 			</dependency>
 
 

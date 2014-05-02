@@ -13,13 +13,19 @@
 
 	<import resource="classpath:serviceContext.xml" />
 
+	<bean id="jacksonJsonProvider" class="org.excilys.jsonprovider.CustomJsonProvider" />
+
+	<bean id="myWebService" class="org.excilys.webservice.impl.MyServiceImpl" />
+
 	<jaxrs:server id="service" address="/service">
 		<jaxrs:serviceBeans>
 			<ref bean="myWebService" />
 		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<ref bean="jacksonJsonProvider" />
+		</jaxrs:providers>
 	</jaxrs:server>
 
-	<bean id="myWebService" class="org.excilys.webservice.impl.MyServiceImpl" />
 
 	<context:component-scan base-package="org.excilys.webservice" />
 

@@ -17,38 +17,38 @@ import org.excilys.model.Computer;
 import org.springframework.stereotype.Service;
 
 @Path("/v1")
-@Produces("application/xml")
+@Produces("application/json")
 @Service("myWebService")
 public interface MyService {
 
 	@POST
 	@Path("/computer")
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	void insertComputer(Computer myComputer);
 
 	@DELETE
 	@Path("/computer")
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	void deleteComputer(Computer myComputer);
 
 	@PUT
 	@Path("/computer")
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	void updateComputer(Computer myComputer);
 
 	@GET
 	@Path("/user/{id}")
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	Computer selectComputer(@PathParam("id") Integer id);
 
 	@GET
 	@Path("/computers/{like}/{bool}/{orderby}/{currentpage}/{cbpage}")
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	ArrayList<Computer> selectComputers(@PathParam("like") String myLikeParam,
 			@PathParam("bool") Boolean bool,
 			@PathParam("orderby") String orderBy,
@@ -57,8 +57,8 @@ public interface MyService {
 
 	@GET
 	@Path("/countcomputers/{like}/{bool}/{orderby}/{currentpage}/{cbpage}")
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	int countNumberOfComputers(@PathParam("like") String myLikeParam,
 			@PathParam("bool") Boolean bool,
 			@PathParam("orderby") String orderBy,
@@ -67,7 +67,7 @@ public interface MyService {
 
 	@GET
 	@Path("/companies")
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	ArrayList<Company> selectCompanies();
 }
