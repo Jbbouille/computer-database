@@ -13,32 +13,12 @@
 	<name>webService Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
-		<!-- Hibernate Validator -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<scope>compile</scope>
-		</dependency>
 
 		<!-- Containers Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<scope>runtime</scope>
-		</dependency>
-
-		<!-- Use during the view process -->
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<scope>compile</scope>
-		</dependency>
-
-		<!-- Api servlet use in runtime for servlet -->
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>servlet-api</artifactId>
-			<scope>compile</scope>
 		</dependency>
 
 		<!-- binding of computer Database -->
@@ -61,7 +41,7 @@
 
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-frontend-jaxws</artifactId>
+				<artifactId>cxf-rt-frontend-jaxrs</artifactId>
 			</dependency>
 
 		<!-- Spring Security -->
@@ -79,6 +59,6 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>webService</finalName>
+		<finalName>webservice</finalName>
 	</build>
 </project>

@@ -2,38 +2,72 @@ package org.excilys.webservice;
 
 import java.util.ArrayList;
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.jws.soap.SOAPBinding.Style;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.excilys.model.Company;
 import org.excilys.model.Computer;
+import org.springframework.stereotype.Service;
 
-@WebService
-@SOAPBinding(style = Style.RPC)
+@Path("/v1")
+@Produces("application/xml")
+@Service("myWebService")
 public interface MyService {
 
-	@WebMethod
+	@POST
+	@Path("/computer")
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	void insertComputer(Computer myComputer);
 
-	@WebMethod
+	@DELETE
+	@Path("/computer")
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	void deleteComputer(Computer myComputer);
 
-	@WebMethod
+	@PUT
+	@Path("/computer")
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	void updateComputer(Computer myComputer);
 
-	@WebMethod
-	Computer selectComputer(Integer id);
+	@GET
+	@Path("/user/{id}")
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	Computer selectComputer(@PathParam("id") Integer id);
 
-	@WebMethod
-	ArrayList<Computer> selectComputers(String myLikeParam, Boolean bool,
-			String orderBy, int currentPage, int NUMBER_OF_COMPUTER_BY_PAGE);
+	@GET
+	@Path("/computers/{like}/{bool}/{orderby}/{currentpage}/{cbpage}")
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	ArrayList<Computer> selectComputers(@PathParam("like") String myLikeParam,
+			@PathParam("bool") Boolean bool,
+			@PathParam("orderby") String orderBy,
+			@PathParam("currentpage") int currentPage,
+			@PathParam("cbpage") int NUMBER_OF_COMPUTER_BY_PAGE);
 
-	@WebMethod
-	int countNumberOfComputers(String myName, Boolean bool, String orderBy,
-			int currentPage, int NUMBER_OF_COMPUTER_BY_PAGE);
+	@GET
+	@Path("/countcomputers/{like}/{bool}/{orderby}/{currentpage}/{cbpage}")
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	int countNumberOfComputers(@PathParam("like") String myLikeParam,
+			@PathParam("bool") Boolean bool,
+			@PathParam("orderby") String orderBy,
+			@PathParam("currentpage") int currentPage,
+			@PathParam("cbpage") int NUMBER_OF_COMPUTER_BY_PAGE);
 
-	@WebMethod
+	@GET
+	@Path("/companies")
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	ArrayList<Company> selectCompanies();
 }

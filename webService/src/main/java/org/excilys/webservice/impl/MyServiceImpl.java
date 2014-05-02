@@ -2,8 +2,6 @@ package org.excilys.webservice.impl;
 
 import java.util.ArrayList;
 
-import javax.jws.WebService;
-
 import org.excilys.model.Company;
 import org.excilys.model.Computer;
 import org.excilys.service.CompanyService;
@@ -11,7 +9,6 @@ import org.excilys.service.ComputerService;
 import org.excilys.webservice.MyService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@WebService(endpointInterface = "org.excilys.webservice.MyService")
 public class MyServiceImpl implements MyService {
 
 	@Autowired
